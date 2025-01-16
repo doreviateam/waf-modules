@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Paramètres API INSEE -->
+        <record id="insee_consumer_key" model="ir.config_parameter">
+            <field name="key">insee.consumer.key</field>
+            <field name="value">False</field>
+        </record>
+
+        <record id="insee_consumer_secret" model="ir.config_parameter">
+            <field name="key">insee.consumer.secret</field>
+            <field name="value">False</field>
+        </record>
+
+        <!-- Intervalle de mise à jour (en jours) -->
+        <record id="insee_update_interval" model="ir.config_parameter">
+            <field name="key">insee.update.interval</field>
+            <field name="value">7</field>
+        </record>
+    </data>
+</odoo>

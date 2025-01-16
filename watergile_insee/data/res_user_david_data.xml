@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ajouter David au groupe manager INSEE -->
+    <function model="res.users" name="write">
+        <value eval="[ref('watergile_partner.user_david')]"/>
+        <value eval="{'groups_id': [(4, ref('watergile_insee.group_watergile_insee_manager'))]}"/>
+    </function>
+</odoo>

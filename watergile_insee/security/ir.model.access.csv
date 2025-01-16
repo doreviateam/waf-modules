@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_insee_sync_service_user,insee.sync.service.user,model_insee_sync_service,base.group_user,1,0,0,0
+access_insee_sync_service_manager,insee.sync.service.manager,model_insee_sync_service,watergile_insee.group_watergile_insee_manager,1,1,1,1
+access_insee_sync_result_user,insee.sync.result.user,model_insee_sync_result,base.group_user,1,0,0,0
+access_insee_sync_result_manager,insee.sync.result.manager,model_insee_sync_result,watergile_insee.group_watergile_insee_manager,1,1,1,1

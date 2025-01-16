@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   
+    <!-- Sous-menu pour la synchronisation dans Watergile >> Configuration -->
+    <menuitem id="menu_insee_sync"
+        name="Synch INSEE"
+        action="action_insee_verify"
+        parent="watergile_partner.menu_configuration"
+        sequence="30"/>
+
+</odoo>

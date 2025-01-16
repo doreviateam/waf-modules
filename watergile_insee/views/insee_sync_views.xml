@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Formulaire de vérification -->
+    <record id="view_insee_verify_form" model="ir.ui.view">
+        <field name="name">insee.sync.service.form</field>
+        <field name="model">insee.sync.service</field>
+        <field name="arch" type="xml">
+            <form string="Doreviateam - Vérification SIRET">
+                <sheet>
+                    <!-- Zone de recherche -->
+                    <group string="Recherche">
+                        <field name="siret" placeholder="Saisissez le numéro SIRET"/>
+                        <field name="siret_valid" invisible="1"/>
+                        <field name="has_result" invisible="1"/>
+                        <field name="siret_message" 
+                               readonly="1" 
+                               invisible="not siret"
+                               class="text-success" 
+                               style="{'color': siret_valid ? 'green' : 'red'}"/>
+                    </group>
+
+                    <!-- Zone de résultats -->
+                    <field name="result_ids" readonly="1">
+                        <tree>
+                            <field name="company_name"/>
+                            <field name="enseigne" string="Enseigne"/>
+                            <field name="vat" string="TVA"/>
+                            <field name="activity_code" string="Activité"/>
+                            <field name="address" string="Adresse"/>
+                            <field name="zip_code" string="CP"/>
+                            <field name="city" string="Ville"/>
+                        </tree>
+                    </field>
+                </sheet>
+
+                <footer>
+                    <button string="Vérifier" 
+                            name="verify_siret" 
+                            type="object"
+                            invisible="has_result"
+                            class="btn-primary"/>
+                    <button string="Fermer" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_insee_verify" model="ir.actions.act_window">
+        <field name="name">Doreviateam - Vérification SIRET</field>
+        <field name="res_model">insee.sync.service</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_insee_verify_form"/>
+    </record>
+</odoo>
