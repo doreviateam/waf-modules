@@ -70,11 +70,11 @@
         </field>
     </record>
 
-    <!-- Action -->
-    <record id="action_partner_blaz" model="ir.actions.act_window">
+    <record id="action_view_partner_blaz" model="ir.actions.act_window">
         <field name="name">Blaz</field>
         <field name="res_model">partner.blaz</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'search_default_active': 1}</field>
     </record>
+
+    
 </odoo>

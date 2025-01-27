@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire pour la ligne de commande détaillée -->
+    <record id="view_pre_sale_order_line_form" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.form</field>
+        <field name="model">pre.sale.order.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="float-end ms-3">
+                        <field name="partner_id" invisible="1"/>
+                        <field name="sale_order_id" required="1"/>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="quantity"/>
+                            <field name="delivery_date"/>
+                            <field name="delivery_address_id" 
+                                   options="{'no_create': True}"
+                                   context="{'show_address': 1}"/>
+                        </group>
+                        <group>
+                            <field name="remaining_quantity"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Commentaire">
+                            <field name="comment"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir le formulaire de dispatch en modal -->
+    <record id="action_pre_sale_order_line_form" model="ir.actions.act_window">
+        <field name="name">Ajouter une ligne</field>
+        <field name="res_model">pre.sale.order.line</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Action pour ouvrir le formulaire de livraison en modal -->
+    <record id="action_pre_sale_order_line_delivery_form" model="ir.actions.act_window">
+        <field name="name">Planifier une livraison</field>
+        <field name="res_model">pre.sale.order.line.delivery</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Vue principale du document de vente -->
+    <record id="view_order_form_inherit_preso" model="ir.ui.view">
+        <field name="name">sale.order.form.preso</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <data>
+                <!-- Champs en-tête -->
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="is_preso" widget="boolean_toggle" 
+                           string="Planifier les livraisons"
+                           invisible="state != 'draft'"/>
+                    <field name="delivery_status" widget="badge" 
+                           decoration-info="delivery_status == 'none'"
+                           decoration-warning="delivery_status == 'partial'"
+                           decoration-success="delivery_status == 'planned'"
+                           invisible="not is_preso"/>
+                </xpath>
+
+                <!-- Modification du titre de la page des lignes -->
+                <xpath expr="//notebook/page[@name='order_lines']" position="attributes">
+                    <attribute name="string">Commande</attribute>
+                </xpath>
+
+                <!-- Pages -->
+                <notebook position="inside">
+                    <!-- Page Dispatch -->
+                    <page string="Dispatch" invisible="not is_preso">
+                        <field name="pre_sale_order_line_ids" nolabel="1" invisible="state != 'draft'">
+                            <tree>
+                                <field name="sale_order_line_id" optional="hide"/>
+                                <field name="product_id"/>
+                                <field name="partner_id" string="Destinataire"/>
+                                <field name="delivery_address_id" string="Adresse"/>
+                                <field name="quantity" string="Dispatch" sum="Total Dispatch"/>
+                                <field name="state" widget="badge"
+                                       decoration-info="state == 'draft'"
+                                       decoration-warning="state == 'partial'"
+                                       decoration-success="state == 'done'"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <!-- Page Livraisons -->
+                    <page string="Livraisons" invisible="not is_preso">
+                        <field name="delivery_ids">
+                            <tree>
+                                <field name="delivery_date"/>
+                                <field name="delivery_time" widget="float_time"/>
+                                <field name="partner_id"/>
+                                <field name="delivery_address_id"/>
+                                <field name="product_id"/>
+                                <field name="quantity" sum="Total"/>
+                                <field name="state" widget="badge"
+                                       decoration-info="state == 'draft'"
+                                       decoration-warning="state == 'confirmed'"
+                                       decoration-success="state == 'done'"
+                                       decoration-danger="state == 'cancel'"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <!-- Page Mouvements -->
+                    <page string="Mouvements" invisible="not is_preso">
+                        <field name="movement_ids" readonly="1">
+                            <tree decoration-info="debit > 0.0" 
+                                  decoration-danger="credit > 0.0">
+                                <field name="create_date" string="Date"/>
+                                <field name="product_id"/>
+                                <field name="description"/>
+                                <field name="debit" sum="Total Débit"/>
+                                <field name="credit" sum="Total Crédit"/>
+                                <field name="running_balance"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </data>
+        </field>
+    </record>
+</odoo>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-    <!-- Menu principal Watergile -->
-    <menuitem id="menu_watergile_root"
-              name="Watergile"
-              web_icon="watergile_web,static/description/icon.png"
-              sequence="50"/>
-</odoo>

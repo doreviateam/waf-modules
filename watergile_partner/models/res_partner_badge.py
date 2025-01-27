@@ -1,35 +1,44 @@
+# -*- coding: utf-8 -*-
+###############################################################################
+#
+#    Dorevia
+#    Copyright (C) 2025 Dorevia (<https://www.doreviateam.com>).
+#
+###############################################################################
+"""
+Gestion des badges pour les partenaires.
+
+Ce module permet de gérer les badges qui peuvent être attribués aux partenaires,
+notamment :
+- La définition des badges (nom, description, couleur)
+- L'association des badges aux partenaires
+"""
+
 from odoo import models, fields, api
+
 
 class ResPartnerBadge(models.Model):
     _name = 'res.partner.badge'
     _description = 'Badge pour les partenaires'
 
-    name = fields.Char(string='Nom', help="Nom du badge")
+    #
+    # Champs
+    #
+    name = fields.Char(string='Nom', required=True, help="Nom du badge")
     active = fields.Boolean(string='Actif', default=True, help="Active le badge")
     description = fields.Text(string='Description', help="Description du badge")
     color = fields.Char(string='Couleur', help="Couleur du badge")
-    partner_ids = fields.Many2many(comodel_name='res.partner', 
-                                   relation='res_partner_badge_rel',
-                                   column1='badge_id',
-                                   column2='partner_id',
+    partner_ids = fields.Many2many(comodel_name='res.partner', relation='res_partner_badge_rel', column1='badge_id', column2='partner_id', 
                                    string='Partenaires', help="Partenaires associés au badge")
     
     
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    badge_ids = fields.Many2many(comodel_name='res.partner.badge', # OK
-                                 relation='res_partner_badge_rel',
-                                 column1='partner_id',
-                                 column2='badge_id',
+    badge_ids = fields.Many2many(comodel_name='res.partner.badge', relation='res_partner_badge_rel', column1='partner_id', column2='badge_id', 
                                  string='Badges', help="Badges associés au partenaire")
-    
-    # company_info_display = fields.Char(string='Information', compute='_compute_company_type_display', store=True, index=True, help="Information complémentaire de l'entité")
-    
     # Calcule l'attribution de badge en fontion de la relation hierarchique entre une entité et sa mère 
-    company_badge_display = fields.Char(string='Badge', # OK
-                                        compute='_compute_company_badge_display', store=True, index=True, help="Badge de l'entité")
-
+    company_badge_display = fields.Char(string='Badge', compute='_compute_company_badge_display', store=True, index=True, help="Badge de l'entité")
     badge_color = fields.Char(string='Couleur du badge', compute='_compute_company_badge_display', store=True)
     
     hierarchy_relation = fields.Selection([ # OK
@@ -65,14 +74,14 @@ class ResPartner(models.Model):
                 record.badge_color = 'warning'  # Orange
 
             # Agence : parent type 'other', type 'agency'
-            elif record.parent_id and record.parent_id.hierarchy_relation == 'other' and record.hierarchy_relation == 'agency':
+            elif record.parent_id and record.parent_id.hierarchy_relation == 'headquarters' and record.hierarchy_relation == 'agency':
                 record.company_badge_display = 'Agence'
                 record.badge_color = 'info'  # Bleu clair
 
             # Antenne : parent type 'headquarters', type 'agency'
-            elif record.parent_id and record.parent_id.hierarchy_relation == 'headquarters' and record.hierarchy_relation == 'agency':
+            elif record.parent_id and record.parent_id.hierarchy_relation == 'headquarters' and record.hierarchy_relation == 'headquarters':
                 record.company_badge_display = 'Antenne'
-                record.badge_color = 'warning'  # C'est un siège qui est pilote par un autre siège
+                record.badge_color = 'warning'  # C'est un siège qui est piloté par un autre siège
 
             else:
                 record.company_badge_display = False

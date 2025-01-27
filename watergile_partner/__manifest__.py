@@ -2,6 +2,7 @@
     'name': 'Watergile Partner',
     'version': '1.0',
     'category': 'Hidden',
+    'sequence': 1,
     'summary': 'Extension des partenaires pour la gestion de groupes',
     'description': """
         Extension du module res.partner pour gérer :
@@ -10,25 +11,31 @@
         - Antennes
         - Filiales
         - Blaz et organisation
+        - Badges et hiérarchie
+        - Localisation française
     """,
+    'author': 'Dorevia',
+    'website': 'https://www.doreviateam.com',
     'depends': [
         'base',
         'contacts',
         'hr',
-        'watergile_web',
-        'l10n_fr_department',
-        'l10n_fr_state',
+        'watergile_core',
+        'web',                 # Pour les widgets web
     ],
     'data': [
-        'security/ir.model.access.csv',
+        # Sécurité uniquement
         'security/watergile_security.xml',
-        'data/res_user_david_data.xml',
-        'views/res_partner.xml',
-        'views/res_partner_location.xml',
-        'views/partner_blaz_views.xml',
-        'views/res_partner_badge.xml',
-        'views/menus.xml',
+        'security/ir.model.access.csv',
+        
+        # Vue de test
+        'views/res_partner_test.xml',
+        'views/partner_blaz.xml',
+        'views/partner_badge.xml',
+        'views/partner_location.xml',
+        'views/menu.xml',
     ],
+    'demo': [],
     'installable': True,
     'application': True,
     'auto_install': False,

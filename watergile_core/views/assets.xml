@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Assets backend -->
+    <template id="watergile_backend_assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <style type="text/scss">
+                @import "watergile_core/static/src/scss/watergile_style";
+                @import "watergile_core/static/src/scss/chatter";
+            </style>
+        </xpath>
+    </template>
+</odoo>

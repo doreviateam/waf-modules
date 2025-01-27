@@ -1,0 +1,7 @@
+Metadata-Version: 2.2
+Name: watergile_localization_iso
+Version: 0.1
+Requires-Dist: pytest
+Requires-Dist: pytest-odoo
+Requires-Dist: pytest-cov
+Dynamic: requires-dist

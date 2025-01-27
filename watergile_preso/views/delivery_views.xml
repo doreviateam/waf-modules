@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire -->
+    <record id="view_pre_sale_order_line_delivery_form" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.form</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" 
+                            title="Confirmer" 
+                            string="Confirmer" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_done" 
+                            title="Marquer comme livré" 
+                            string="Marquer comme livré" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" 
+                            title="Annuler" 
+                            string="Annuler" 
+                            type="object"
+                            invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_reset_to_draft" 
+                            title="Remettre en brouillon" 
+                            string="Remettre en brouillon" 
+                            type="object"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="preso_line_id" invisible="1"/>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="partner_id"/>
+                            <field name="delivery_address_id" 
+                                   domain="['|', ('parent_id', '=', partner_id), ('id', '=', partner_id)]"
+                                   context="{'show_address': 1}"/>
+                            <field name="delivery_date"/>
+                            <field name="delivery_time" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="uom_id"/>
+                            <field name="unit_price"/>
+                            <field name="picking_id" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="message_ids" widget="mail_thread"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue tree -->
+    <record id="view_pre_sale_order_line_delivery_tree" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.tree</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'confirmed'"
+                  decoration-success="state == 'done'"
+                  decoration-danger="state == 'cancel'">
+                <field name="delivery_date"/>
+                <field name="delivery_time" widget="float_time"/>
+                <field name="partner_id"/>
+                <field name="delivery_address_id"/>
+                <field name="product_id"/>
+                <field name="quantity" sum="Total"/>
+                <field name="uom_id"/>
+                <field name="state" widget="badge"/>
+                <button name="action_confirm" 
+                        type="object" 
+                        icon="fa-check"
+                        title="Confirmer la livraison"/>
+                <button name="action_done" 
+                        type="object" 
+                        icon="fa-truck"
+                        title="Marquer comme livré"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue calendar -->
+    <record id="view_pre_sale_order_line_delivery_calendar" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.calendar</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <calendar string="Livraisons" 
+                     date_start="delivery_date" 
+                     date_delay="delivery_time"
+                     mode="month" 
+                     color="state">
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Vue kanban -->
+    <record id="view_pre_sale_order_line_delivery_kanban" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.kanban</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="delivery_date" 
+                    class="o_kanban_small_column" 
+                    quick_create="false">
+                <field name="delivery_date"/>
+                <field name="delivery_time"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click
+                                         #{record.state.raw_value == 'done' ? 'bg-success-light' : ''}
+                                         #{record.state.raw_value == 'confirmed' ? 'bg-warning-light' : ''}
+                                         #{record.state.raw_value == 'cancel' ? 'bg-danger-light' : ''}">
+                            <div class="oe_kanban_content">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong><field name="partner_id"/></strong>
+                                    <span class="badge" t-attf-class="badge-#{record.state.raw_value}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <div><field name="product_id"/></div>
+                                <div class="text-muted">
+                                    Qté: <field name="quantity"/>
+                                </div>
+                                <div class="text-muted">
+                                    <field name="delivery_time" widget="float_time"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vue form pour le dispatch -->
+    <record id="view_pre_sale_order_line_form" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.form</field>
+        <field name="model">pre.sale.order.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="sale_order_id" invisible="1"/>
+                        <field name="product_id" 
+                               domain="[('id', 'in', parent.order_line.product_id.ids)]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="available_quantity" readonly="1"/>
+                        <field name="quantity"/>
+                        <field name="partner_id" 
+                               domain="[('parent_id', '=', parent.partner_id)]"
+                               options="{'no_create': True}"/>
+                        <field name="delivery_address_id" 
+                               domain="[('parent_id', '=', partner_id)]"
+                               options="{'no_create': True}"/>
+                        <field name="uom_id" groups="uom.group_uom"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pre_sale_order_line_form_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.form.view</field>
+        <field name="model">pre.sale.order.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <!-- <field name="name"/> -->
+                        <field name="partner_id"/>
+                        <field name="product_id"/>
+                        <field name="is_preso"/>
+                        <field name="confirm_dispatch" invisible="not is_preso"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pre_sale_order_line_tree_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.tree.view</field>
+        <field name="model">pre.sale.order.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <!-- <field name="name"/> -->
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="is_preso"/>
+                <field name="confirm_dispatch" optional="show" invisible="not is_preso"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="pre_sale_order_line_delivery_form_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.form.view</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="product_id"/>
+                        <field name="delivery_date"/>
+                        <field name="is_preso"/>
+                        <field name="confirm_dispatch" invisible="not is_preso"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="pre_sale_order_line_delivery_tree_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.tree.view</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="delivery_date"/>
+                <field name="is_preso"/>
+                <field name="confirm_dispatch" optional="show" invisible="not is_preso"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="pre_sale_order_line_delivery_kanban_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.kanban.view</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="delivery_date"/>
+                <field name="is_preso"/>
+                <field name="confirm_dispatch"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="partner_id"/>
+                                </strong>
+                                <div class="o_kanban_record_subtitle">
+                                    <field name="product_id"/>
+                                </div>
+                                <div>
+                                    <field name="delivery_date"/>
+                                </div>
+                                <div t-if="record.is_preso.raw_value">
+                                    <field name="confirm_dispatch" widget="boolean"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Calendar View -->
+    <record id="pre_sale_order_line_delivery_calendar_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.calendar</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <calendar string="Livraisons" date_start="delivery_date" color="partner_id">
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="pre_sale_order_line_delivery_search_view" model="ir.ui.view">
+        <field name="name">pre.sale.order.line.delivery.search</field>
+        <field name="model">pre.sale.order.line.delivery</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="delivery_date"/>
+                <separator/>
+                <filter string="À venir" name="upcoming"
+                        domain="[('delivery_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Aujourd'hui" name="today"
+                        domain="[('delivery_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmé" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Livré" name="done" domain="[('state', '=', 'done')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'delivery_date'}"/>
+                    <filter string="État" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Client" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

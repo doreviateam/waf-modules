@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    
+    <data noupdate="0">
+        
+
+        <record id="action_view_department" model="ir.actions.act_window">
+            <field name="name">Départements</field>
+            <field name="res_model">res.country.department</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+    </data>
 </odoo>

@@ -6,3 +6,7 @@ access_partner_blaz_admin,partner.blaz.admin,model_partner_blaz,base.group_syste
 access_res_partner_badge_user,res.partner.badge.user,model_res_partner_badge,base.group_user,1,0,0,0
 access_res_partner_badge_manager,res.partner.badge.manager,model_res_partner_badge,base.group_partner_manager,1,1,1,0
 access_res_partner_badge_admin,res.partner.badge.admin,model_res_partner_badge,base.group_system,1,1,1,1
+
+
+access_res_country_department_user,res.country.department.user,l10n_fr_department.model_res_country_department,base.group_user,1,0,0,0
+access_res_country_department_manager,res.country.department.manager,l10n_fr_department.model_res_country_department,base.group_partner_manager,1,1,1,1

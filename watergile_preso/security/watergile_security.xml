@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pre_sale_order_comp_rule" model="ir.rule">
+        <field name="name">Pre-Sale Order multi-company</field>
+        <field name="model_id" ref="model_pre_sale_order_line"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="pre_sale_order_line_delivery_comp_rule" model="ir.rule">
+        <field name="name">Pre-Sale Order Delivery multi-company</field>
+        <field name="model_id" ref="model_pre_sale_order_line_delivery"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('preso_line_id.company_id','=',False),('preso_line_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="pre_sale_order_movements_comp_rule" model="ir.rule">
+        <field name="name">Pre-Sale Order Movements multi-company</field>
+        <field name="model_id" ref="model_pre_sale_order_movements"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

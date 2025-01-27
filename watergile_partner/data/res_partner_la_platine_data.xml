@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo noupdate="1">
 
-    <!-- Création du Blaz La Platine -->
-    <record id="partner_blaz_la_platine" model="partner.blaz">
-        <field name="name">La Platine</field>
-        <field name="image_1920" type="base64" file="watergile_partner/static/src/img/default_avatar.png"/>
-        <field name="owner_partner_id" ref="base.main_partner"/>
-    </record>
-
     <!-- Création de La Platine -->
     <record id="partner_la_platine" model="res.partner">
         <field name="name">La Platine</field>
-        <field name="type">parent_company</field>
+        <field name="is_company" eval="True"/>
+        <field name="street">Lieu-dit Bois-Jolan</field>
+        <field name="street2">Rond-Point Douville</field>
+        <field name="zip">97180</field>
+        <field name="city">Saint-Anne</field>
+    </record>
+
+    <!-- Création du blaz de La Platine -->
+    <record id="partner_blaz_la_platine" model="partner.blaz">
+        <field name="name">LaPlatine</field>
+        <field name="owner_partner_id" ref="partner_la_platine"/>
+    </record>
+
+    <!-- Mise à jour de La Platine avec son blaz -->
+    <record id="partner_la_platine" model="res.partner">
         <field name="partner_blaz_id" ref="partner_blaz_la_platine"/>
     </record>
 </odoo>

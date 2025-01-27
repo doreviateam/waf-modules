@@ -1,4 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Vue formulaire -->
+    <record id="view_partner_badge_form" model="ir.ui.view">
+        <field name="name">res.partner.badge.form</field>
+        <field name="model">res.partner.badge</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom du badge..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active"/>
+                            <field name="color" widget="color"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Partenaires" name="partners">
+                            <field name="partner_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
+    <!-- Vue liste -->
+    <record id="view_partner_badge_tree" model="ir.ui.view">
+        <field name="name">res.partner.badge.tree</field>
+        <field name="model">res.partner.badge</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="color" widget="color"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue recherche -->
+    <record id="view_partner_badge_search" model="ir.ui.view">
+        <field name="name">res.partner.badge.search</field>
+        <field name="model">res.partner.badge</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter string="Actifs" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archivés" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_view_partner_badge" model="ir.actions.act_window">
+        <field name="name">Badges</field>
+        <field name="res_model">res.partner.badge</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+        <field name="context">{'default_active': True}</field>
+    </record>
 </odoo>
