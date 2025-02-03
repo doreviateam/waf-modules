@@ -6,3 +6,4 @@ __pycache__/
 sessions/
 .DS_Store
 scratch/
+*.conf
