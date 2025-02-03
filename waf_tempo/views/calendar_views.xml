@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Calendar Region Views -->
+    <record id="view_calendar_region_tree" model="ir.ui.view">
+        <field name="name">calendar.region.tree</field>
+        <field name="model">calendar.region</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="country_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_calendar_region_form" model="ir.ui.view">
+        <field name="name">calendar.region.form</field>
+        <field name="model">calendar.region</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom de la région"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="country_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="description" string="Description">
+                            <field name="description" placeholder="Description détaillée de la région..."/>
+                        </page>
+                        <page name="holidays" string="Jours fériés spécifiques">
+                            <field name="specific_holiday_ids" context="{'default_region_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="type"/>
+                                    <field name="month" invisible="type != 'fixed'"/>
+                                    <field name="day" invisible="type != 'fixed'"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_calendar_region_search" model="ir.ui.view">
+        <field name="name">calendar.region.search</field>
+        <field name="model">calendar.region</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="country_id"/>
+                <filter name="inactive" string="Archivé" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter name="country" string="Pays" context="{'group_by': 'country_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Calendar Holiday Views -->
+    <record id="view_calendar_holiday_tree" model="ir.ui.view">
+        <field name="name">calendar.holiday.tree</field>
+        <field name="model">calendar.holiday</field>
+        <field name="arch" type="xml">
+            <tree string="Jours fériés">
+                <field name="name"/>
+                <field name="region_id"/>
+                <field name="type"/>
+                <field name="variable_type" 
+                       invisible="type != 'variable'"/>
+                <field name="date"/>
+                <field name="weekday"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_calendar_holiday_form" model="ir.ui.view">
+        <field name="name">calendar.holiday.form</field>
+        <field name="model">calendar.holiday</field>
+        <field name="arch" type="xml">
+            <form string="Jour férié">
+                <header>
+                    <button name="action_compute_dates" 
+                            string="Calculer dates variables" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="type != 'variable'"
+                            groups="base.group_user"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="region_id"/>
+                            <field name="type"/>
+                            <field name="variable_type" 
+                                   invisible="type != 'variable'"
+                                   required="type == 'variable'"/>
+                        </group>
+                        <group>
+                            <field name="month" readonly="type == 'variable'"/>
+                            <field name="day" readonly="type == 'variable'"/>
+                            <field name="date"/>
+                            <field name="weekday"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_calendar_holiday_search" model="ir.ui.view">
+        <field name="name">calendar.holiday.search</field>
+        <field name="model">calendar.holiday</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher un jour férié">
+                <field name="name"/>
+                <field name="region_id"/>
+                <field name="type"/>
+                <field name="variable_type"/>
+                <field name="date"/>
+                <field name="weekday"/>
+                <group expand="0" string="Group By">
+                    <filter string="Région" name="group_by_region" domain="[]" context="{'group_by': 'region_id'}"/>
+                    <filter string="Type" name="group_by_type" domain="[]" context="{'group_by': 'type'}"/>
+                    <filter string="Type variable" name="group_by_variable_type" domain="[]" context="{'group_by': 'variable_type'}"/>
+                    <filter string="Mois" name="group_by_month" domain="[]" context="{'group_by': 'month'}"/>
+                    <filter string="Jour de la semaine" name="group_by_weekday" domain="[]" context="{'group_by': 'weekday'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_calendar_region" model="ir.actions.act_window">
+        <field name="name">Régions</field>
+        <field name="res_model">calendar.region</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer une nouvelle région
+            </p>
+            <p>
+                Définissez les régions et leurs jours fériés spécifiques.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_calendar_holiday" model="ir.actions.act_window">
+        <field name="name">Jours fériés</field>
+        <field name="res_model">calendar.holiday</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_calendar_holiday_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer votre premier jour férié
+            </p>
+        </field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_waf_tempo_root"
+              name="Tempoo"
+              web_icon="waf_tempo,static/description/icon.png"
+              sequence="10"/>
+
+    <menuitem id="menu_waf_tempo_config"
+              name="Configuration"
+              parent="menu_waf_tempo_root"
+              sequence="100"/>
+
+    <menuitem id="menu_calendar_region"
+              name="Régions"
+              parent="menu_waf_tempo_config"
+              action="action_calendar_region"
+              sequence="10"/>
+
+    <menuitem id="menu_calendar_holiday"
+              name="Jours fériés"
+              parent="menu_waf_tempo_config"
+              action="action_calendar_holiday"
+              sequence="20"/>
+</odoo>

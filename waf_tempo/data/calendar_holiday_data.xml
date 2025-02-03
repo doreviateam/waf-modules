@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Jours fériés Guadeloupe -->
+        <record id="holiday_gp_abolition" model="calendar.holiday">
+            <field name="name">Abolition de l'esclavage (Guadeloupe)</field>
+            <field name="region_id" ref="region_gp"/>
+            <field name="type">fixed</field>
+            <field name="month">5</field>
+            <field name="day">27</field>
+            <field name="date" eval="time.strftime('%Y-05-27')"/>
+            <field name="weekday">1</field>
+            <field name="description">Commémoration de l'abolition de l'esclavage en Guadeloupe</field>
+        </record>
+
+        <record id="holiday_gp_schoelcher" model="calendar.holiday">
+            <field name="name">Fête Victor Schœlcher</field>
+            <field name="region_id" ref="region_gp"/>
+            <field name="type">fixed</field>
+            <field name="month">7</field>
+            <field name="day">21</field>
+            <field name="date" eval="time.strftime('%Y-07-21')"/>
+            <field name="description">Célébration de Victor Schœlcher, artisan de l'abolition de l'esclavage</field>
+        </record>
+
+        <!-- Jours fériés Martinique -->
+        <record id="holiday_mq_abolition" model="calendar.holiday">
+            <field name="name">Abolition de l'esclavage (Martinique)</field>
+            <field name="region_id" ref="region_mq"/>
+            <field name="type">fixed</field>
+            <field name="month">5</field>
+            <field name="day">22</field>
+            <field name="date">2024-05-22</field>
+            <field name="description">Commémoration de l'abolition de l'esclavage en Martinique</field>
+        </record>
+
+        <!-- Jours fériés Guyane -->
+        <record id="holiday_gf_abolition" model="calendar.holiday">
+            <field name="name">Abolition de l'esclavage (Guyane)</field>
+            <field name="region_id" ref="region_gf"/>
+            <field name="type">fixed</field>
+            <field name="month">6</field>
+            <field name="day">10</field>
+            <field name="date">2024-06-10</field>
+            <field name="description">Commémoration de l'abolition de l'esclavage en Guyane</field>
+        </record>
+
+        <!-- Jours fériés Réunion -->
+        <record id="holiday_re_abolition" model="calendar.holiday">
+            <field name="name">Abolition de l'esclavage (Réunion)</field>
+            <field name="region_id" ref="region_re"/>
+            <field name="type">fixed</field>
+            <field name="month">12</field>
+            <field name="day">20</field>
+            <field name="date" eval="time.strftime('%Y-12-20')"/>
+            <field name="description">Commémoration de l'abolition de l'esclavage à La Réunion</field>
+        </record>
+    </data>
+</odoo>

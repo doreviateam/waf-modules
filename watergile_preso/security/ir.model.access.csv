@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_pre_sale_order_line_user,pre.sale.order.line.user,model_pre_sale_order_line,sales_team.group_sale_salesman,1,1,1,1
-access_pre_sale_order_line_delivery_user,pre.sale.order.line.delivery.user,model_pre_sale_order_line_delivery,sales_team.group_sale_salesman,1,1,1,1
-access_pre_sale_order_line_manager,pre.sale.order.line.manager,model_pre_sale_order_line,sales_team.group_sale_manager,1,1,1,1
-access_pre_sale_order_line_delivery_manager,pre.sale.order.line.delivery.manager,model_pre_sale_order_line_delivery,sales_team.group_sale_manager,1,1,1,1
-access_pre_sale_order_movements_user,pre.sale.order.movements.user,model_pre_sale_order_movements,sales_team.group_sale_salesman,1,1,1,0
-access_pre_sale_order_movements_manager,pre.sale.order.movements.manager,model_pre_sale_order_movements,sales_team.group_sale_manager,1,1,1,1

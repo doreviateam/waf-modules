@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Régions métropolitaines -->
+        <record id="state_fr_reg_ara" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Auvergne-Rhône-Alpes</field>
+            <field name="code">ARA</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_reg_bfc" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Bourgogne-Franche-Comté</field>
+            <field name="code">BFC</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_reg_bre" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Bretagne</field>
+            <field name="code">BRE</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_cvl" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Centre-Val de Loire</field>
+            <field name="code">CVL</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_cor" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Corse</field>
+            <field name="code">COR</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_ges" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Grand Est</field>
+            <field name="code">GES</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_hdf" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Hauts-de-France</field>
+            <field name="code">HDF</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_idf" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Île-de-France</field>
+            <field name="code">IDF</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_nor" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Normandie</field>
+            <field name="code">NOR</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_naq" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Nouvelle-Aquitaine</field>
+            <field name="code">NAQ</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_occ" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Occitanie</field>
+            <field name="code">OCC</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_pdl" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Pays de la Loire</field>
+            <field name="code">PDL</field>
+            <field name="is_region" eval="True"/>
+        </record>
+        <record id="state_fr_pac" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Provence-Alpes-Côte d'Azur</field>
+            <field name="code">PAC</field>
+            <field name="is_region" eval="True"/>
+        </record>
+
+        <record id="state_fr_reg_rom" model="res.country.state">
+            <field name="country_id" ref="base.fr"/>
+            <field name="name">Régions d'Outre-Mer</field>
+            <field name="code">ROM</field>
+            <field name="is_region" eval="True"/>
+        </record>
+    </data>
+</odoo> 

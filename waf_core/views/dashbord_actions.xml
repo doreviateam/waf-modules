@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Actions -->
+    <record id="action_superadmin_dashboard" model="ir.actions.act_url">
+        <field name="name">Administration Super Admin</field>
+        <field name="url">/web/superadmin/dashboard</field>
+        <field name="target">self</field>
+    </record>
+
+    <record id="action_admin_dashboard" model="ir.actions.act_url">
+        <field name="name">Administration Admin</field>
+        <field name="url">/web/admin/dashboard</field>
+        <field name="target">self</field>
+    </record>
+
+    <record id="action_manager_dashboard" model="ir.actions.act_url">
+        <field name="name">Administration Manager</field>
+        <field name="url">/web/manager/dashboard</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- Menu unique avec règles de groupes -->
+    <menuitem id="menu_dashboard"
+        name="Administration"
+        action="action_superadmin_dashboard"
+        sequence="1"
+        groups="base.group_system"
+        web_icon="waf_core,static/description/dashboard_icon.png"/>
+</odoo>

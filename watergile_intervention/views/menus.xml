@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <menuitem id="menu_intervention_intervention"
-              name="interventions"
-              action="watergile_intervention.action_intervention_intervention"
-              parent="watergile_base.menu_watergile_root"
-              sequence="20"/>
-</odoo>
