@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_watergile_user_all,access_watergile_user_all,base.model_res_users,watergile_web.group_watergile_user,1,0,0,0
-access_watergile_manager_all,access_watergile_manager_all,base.model_res_users,watergile_web.group_watergile_manager,1,1,0,0
-access_watergile_admin_all,access_watergile_admin_all,base.model_res_users,watergile_web.group_watergile_admin,1,1,1,1

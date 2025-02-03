@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_calendar_region_user,calendar.region.user,model_calendar_region,group_waf_tempo_user,1,0,0,0
+access_calendar_region_manager,calendar.region.manager,model_calendar_region,group_waf_tempo_manager,1,1,1,1
+access_calendar_holiday_user,calendar.holiday.user,model_calendar_holiday,group_waf_tempo_user,1,0,0,0
+access_calendar_holiday_manager,calendar.holiday.manager,model_calendar_holiday,group_waf_tempo_manager,1,1,1,1

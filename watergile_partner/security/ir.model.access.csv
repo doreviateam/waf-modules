@@ -1,8 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_partner_blaz_user,partner.blaz.user,model_partner_blaz,base.group_user,1,1,1,1
-access_partner_blaz_manager,partner.blaz.manager,model_partner_blaz,base.group_partner_manager,1,1,1,0
-access_partner_blaz_admin,partner.blaz.admin,model_partner_blaz,base.group_system,1,1,1,1
-
-access_res_partner_badge_user,res.partner.badge.user,model_res_partner_badge,base.group_user,1,0,0,0
-access_res_partner_badge_manager,res.partner.badge.manager,model_res_partner_badge,base.group_partner_manager,1,1,1,0
-access_res_partner_badge_admin,res.partner.badge.admin,model_res_partner_badge,base.group_system,1,1,1,1

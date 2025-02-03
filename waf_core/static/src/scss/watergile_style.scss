@@ -1,0 +1,159 @@
+// Variables waf
+$waf-primary: #7BA7D0; // Bleu pastel principal
+$waf-secondary: #A5C5E5; // Bleu pastel secondaire
+$waf-dark: #456789; // Bleu foncé
+$waf-light: #F5F7FA; // Gris clair
+$waf-white: #FFFFFF; // Blanc
+$waf-text: #4A5568; // Gris texte
+
+// Barre de navigation
+.o_main_navbar {
+    background-color: $waf-primary !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none !important;
+
+    * {
+        color: $waf-white !important;
+    }
+
+    .dropdown-toggle,
+    .o_menu_brand,
+    .o_menu_sections {
+        color: $waf-white !important;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: darken($waf-primary, 5%);
+        }
+    }
+
+    .o_menu_apps {
+        background-color: $waf-primary !important;
+    }
+
+    .o_menu_brand {
+        background-color: $waf-primary !important;
+        font-size: 18px;
+        font-weight: 500;
+
+        &::before {
+            content: "Doreviateam" !important;
+        }
+
+        // Cache le texte Odoo original
+        font-size: 0;
+    }
+
+    // Sous-menus
+    .dropdown-menu {
+        background-color: $waf-white !important;
+
+        // Pour les sous-menus sur fond blanc
+        &.show {
+            background-color: $waf-white !important;
+
+            .dropdown-item {
+                color: $waf-dark !important;
+
+                &:hover {
+                    background-color: rgba($waf-primary, 0.1) !important;
+                    color: $waf-primary !important;
+                }
+            }
+        }
+
+        .dropdown-item {
+            color: $waf-dark !important;
+
+            &:hover {
+                background-color: rgba($waf-primary, 0.1) !important;
+                color: $waf-primary !important;
+            }
+        }
+    }
+
+    // Menu principal et ses éléments
+    .o_menu_sections {
+        background-color: $waf-primary !important;
+
+        * {
+            background-color: $waf-primary !important;
+            color: $waf-white !important;
+        }
+
+        // Pour les textes dans les menus déroulants
+        .dropdown-item {
+            color: $waf-white !important;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: darken($waf-primary, 5%) !important;
+                color: $waf-light !important; // Plus clair au survol
+                transform: translateX(5px); // Petit décalage vers la droite
+            }
+        }
+    }
+
+    // Menu système (coin droit)
+    .o_menu_systray {
+        background-color: $waf-primary !important;
+
+        .dropdown-menu {
+            background-color: $waf-white !important;
+
+            .dropdown-item {
+                color: $waf-dark !important;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: rgba($waf-primary, 0.1) !important;
+                    color: $waf-primary !important;
+                    transform: translateX(5px);
+                }
+            }
+
+            // Ciblage très spécifique pour CTRL+K
+            .o_mobile_menu_shortcut {
+                color: $waf-dark !important;
+            }
+
+            span,
+            small {
+                color: $waf-dark !important;
+            }
+        }
+
+        // Force la couleur sur tous les éléments du menu
+        .dropdown-menu * {
+            color: $waf-dark !important;
+        }
+    }
+}
+
+// Page d'accueil
+.app-menu-container {
+    background: $waf-white !important;
+
+    // Forcer la couleur sur tous les textes
+    span,
+    div {
+        color: $waf-dark !important;
+    }
+}
+
+// Texte des icônes avec effet hover
+.o_app {
+    transition: all 0.3s ease;
+
+    span {
+        color: $waf-dark !important;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+
+        span {
+            color: $waf-primary !important;
+        }
+    }
+}

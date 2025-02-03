@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_country_state_user,res.country.state.user,base.model_res_country_state,group_waf_user,1,0,0,0
+access_res_country_state_manager,res.country.state.manager,base.model_res_country_state,group_waf_manager,1,1,1,1

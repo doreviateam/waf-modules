@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Liste -->
+    <record id="view_sale_order_tree_groupment" model="ir.ui.view">
+        <field name="name">sale.order.tree.groupment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="agent_id" widget="badge" optional="show"/>
+                <field name="interest_groupment_ids" widget="many2many_tags" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='amount_total']" position="before">
+                <field name="interest_groupment_count" widget="statinfo" string="Groupements"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire -->
+    <record id="view_sale_order_form_groupment" model="ir.ui.view">
+        <field name="name">sale.order.form.groupment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Ajout du mandataire avant le pricelist -->
+            <xpath expr="//field[@name='pricelist_id']" position="before">
+                <field name="agent_id" 
+                       groups="sales_team.group_sale_salesman"
+                       context="{'show_company': True}"
+                       options="{'no_create': True}"
+                       class="oe_inline"/>
+            </xpath>
+
+            <!-- Bouton statistique pour les groupements -->
+            <div name="button_box" position="inside">
+                <button name="action_view_groupments" 
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-users"
+                        invisible="interest_groupment_count == 0">
+                    <field name="interest_groupment_count" widget="statinfo" string="Groupements"/>
+                </button>
+            </div>
+
+            <!-- Ajout des groupements dans un onglet -->
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page string="Groupements" name="interest_groupments">
+                    <field name="interest_groupment_ids" widget="many2many_tags" 
+                           options="{'color_field': 'color', 'no_create_edit': True}"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vue Recherche -->
+    <record id="view_sale_order_search_groupment" model="ir.ui.view">
+        <field name="name">sale.order.search.groupment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <filter name="sales" position="after">
+                <filter string="Mes groupements" name="my_groupments" domain="[('interest_groupment_ids.agent_id', '=', uid)]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- Action pour les commandes groupées -->
+    <record id="action_sale_order_groupment" model="ir.actions.act_window">
+        <field name="name">Commandes Groupées</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('interest_groupment_ids', '!=', False)]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune commande groupée trouvée
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu item -->
+    <menuitem id="menu_sale_groupment"
+              name="Commandes Groupées"
+              parent="sale.sale_order_menu"
+              action="action_sale_order_groupment"
+              sequence="20"
+              groups="sales_team.group_sale_salesman"/>
+</odoo>

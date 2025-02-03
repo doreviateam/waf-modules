@@ -5,3 +5,5 @@ __pycache__/
 *.log
 sessions/
 .DS_Store
+scratch/
+*.conf

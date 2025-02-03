@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_validation" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.validation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_address_format')]" position="inside">
+                    <field name="address_validation_score" 
+                           widget="percentage" 
+                           invisible="address_validation_score == 0.0"
+                           string="Score"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
