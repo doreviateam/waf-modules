@@ -8,3 +8,12 @@ sessions/
 scratch/
 *.conf
 local2Do.md
+resources/
+resources/static/description/
+resources/static/img/
+resources/static/img/icon.png
+resources/static/img/dashboard_icon.png
+resources/static/img/icon.png
+resources/static/img/dashboard_icon.png
+resources/static/img/icon.png
+resources/static/img/dashboard_icon.pngwatergile_core/
