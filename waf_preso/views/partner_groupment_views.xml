@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action Window -->
+    <record id="action_partner_groupment" model="ir.actions.act_window">
+        <field name="name">Groupements</field>
+        <field name="res_model">partner.groupment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un nouveau groupement
+            </p>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_partner_groupment_form" model="ir.ui.view">
+        <field name="name">partner.groupment.form</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" 
+                            string="Activer" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_deactivate" 
+                            string="Désactiver" 
+                            type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_draft" 
+                            string="Remettre en brouillon" 
+                            type="object"
+                            invisible="state != 'inactive'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom du groupement"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="interest_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Membres" name="members">
+                            <group>
+                                <field name="agent_id" 
+                                       options="{'no_create': True}"
+                                       domain="[('is_company', '=', True)]"/>
+                                <field name="member_count"/>
+                            </group>
+                            <field name="member_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                    <field name="city"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes internes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_partner_groupment_tree" model="ir.ui.view">
+        <field name="name">partner.groupment.tree</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="agent_id"/>
+                <field name="interest_id"/>
+                <field name="member_count"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state" decoration-success="state == 'active'" 
+                                  decoration-info="state == 'draft'"
+                                  decoration-danger="state == 'inactive'"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_partner_groupment_search" model="ir.ui.view">
+        <field name="name">partner.groupment.search</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="agent_id"/>
+                <field name="interest_id"/>
+                <field name="member_ids"/>
+                <separator/>
+                <filter string="Mes groupements" 
+                        name="my_groupments" 
+                        domain="[('agent_id.user_id', '=', uid)]"/>
+                <filter string="Actifs" 
+                        name="active" 
+                        domain="[('state', '=', 'active')]"/>
+                <filter string="Brouillons" 
+                        name="draft" 
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Inactifs" 
+                        name="inactive" 
+                        domain="[('state', '=', 'inactive')]"/>
+                <filter string="Archivés" 
+                        name="archived" 
+                        domain="[('active', '=', False)]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Agent" 
+                            name="agent" 
+                            domain="[]" 
+                            context="{'group_by': 'agent_id'}"/>
+                    <filter string="État" 
+                            name="state" 
+                            domain="[]" 
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Centre d'intérêt" 
+                            name="interest" 
+                            domain="[]" 
+                            context="{'group_by': 'interest_id'}"/>
+                    <filter string="Société" 
+                            name="company" 
+                            domain="[]" 
+                            context="{'group_by': 'company_id'}" 
+                            groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_partner_groupment"
+              name="Groupements"
+              parent="menu_waf_operations"
+              action="action_partner_groupment"
+              sequence="10"/>
+</odoo>

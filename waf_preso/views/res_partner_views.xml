@@ -1,4 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
+    <!-- Actions -->
+    <record id="action_partner_companies" model="ir.actions.act_window">
+        <field name="name">Sociétés</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('is_company', '=', True)]</field>
+        <field name="context">{
+            'default_is_company': True,
+            'search_default_type_company': 1
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre première société !
+            </p>
+        </field>
+    </record>
+
+    <record id="action_partner_agents" model="ir.actions.act_window">
+        <field name="name">Mandants</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('is_agent', '=', True)]</field>
+        <field name="context">{
+            'default_is_company': True,
+            'default_is_agent': True,
+            'search_default_agents': 1
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier mandant !
+            </p>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_partner_form_inherit_waf" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.waf</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Smart Buttons -->
+            <div name="button_box" position="inside">
+                <button name="action_view_groupments" 
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-users"
+                        groups="waf_preso.group_waf_preso_user">
+                    <field name="groupment_count" widget="statinfo" string="Groupements"/>
+                </button>
+                <button name="action_view_managed_partners" 
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-user-circle"
+                        groups="waf_preso.group_waf_preso_manager">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="managed_partner_count"/>
+                        </span>
+                        <span class="o_stat_text">Partenaires gérés</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Champs principaux -->
+            <field name="vat" position="after">
+                <field name="is_agent" 
+                       groups="waf_preso.group_waf_preso_user"
+                       options="{'no_create': True}"/>
+            </field>
+
+            <!-- Onglet Groupements -->
+            <notebook position="inside">
+                <page name="groupments" 
+                      string="Groupements"
+                      groups="waf_preso.group_waf_preso_user">
+                    <group>
+                        <group name="groupment_info" string="Informations Groupements">
+                            <field name="groupment_count"/>
+                            <field name="managed_partner_count" 
+                                   groups="waf_preso.group_waf_preso_manager"/>
+                        </group>
+                    </group>
+                    <group name="managed_groupments" 
+                           string="Groupements gérés"
+                           groups="waf_preso.group_waf_preso_manager">
+                        <field name="managed_groupment_ids" nolabel="1">
+                            <tree>
+                                <field name="sequence" widget="handle"/>
+                                <field name="code"/>
+                                <field name="name"/>
+                                <field name="member_count"/>
+                                <field name="state" widget="badge"/>
+                                <field name="date_start"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group name="member_groupments" string="Membre des groupements">
+                        <field name="groupment_ids" nolabel="1">
+                            <tree>
+                                <field name="code"/>
+                                <field name="name"/>
+                                <field name="agent_id" widget="many2one_avatar"/>
+                                <field name="state" widget="badge"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_partner_tree_inherit_waf" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.waf</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="email" position="after">
+                <field name="is_agent" optional="show"/>
+                <field name="groupment_count" optional="show" sum="Total"/>
+                <field name="managed_partner_count" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_res_partner_filter_inherit_waf" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit.waf</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <filter name="type_company" position="after">
+                <separator/>
+                <filter string="Mandants" 
+                        name="agents" 
+                        domain="[('is_agent', '=', True)]"/>
+                <filter string="Membres de groupements"
+                        name="groupment_members"
+                        domain="[('groupment_ids', '!=', False)]"/>
+            </filter>
+            <group position="inside">
+                <filter string="Type de partenaire" 
+                        name="group_by_type" 
+                        context="{'group_by': 'type'}"/>
+                <filter string="Mandant" 
+                        name="group_by_agent" 
+                        context="{'group_by': 'is_agent'}"/>
+            </group>
+        </field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_partner_companies"
+              name="Sociétés"
+              parent="menu_waf_partners"
+              action="action_partner_companies"
+              sequence="10"/>
+
+    <menuitem id="menu_partner_agents"
+              name="Mandants"
+              parent="menu_waf_partners"
+              action="action_partner_agents"
+              sequence="20"/>
+
 </odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Séquence pour les groupements -->
+        <record id="seq_partner_groupment" model="ir.sequence">
+            <field name="name">Séquence Groupement</field>
+            <field name="code">partner.groupment</field>
+            <field name="prefix">GRP/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Séquence pour les centres d'intérêt -->
+        <record id="seq_partner_interest" model="ir.sequence">
+            <field name="name">Séquence Centre d'intérêt</field>
+            <field name="code">partner.interest</field>
+            <field name="prefix">INT/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,88 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Vue Liste -->
-    <record id="view_sale_order_tree_groupment" model="ir.ui.view">
-        <field name="name">sale.order.tree.groupment</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="agent_id" widget="badge" optional="show"/>
-                <field name="interest_groupment_ids" widget="many2many_tags" optional="hide"/>
-            </xpath>
-            <xpath expr="//field[@name='amount_total']" position="before">
-                <field name="interest_groupment_count" widget="statinfo" string="Groupements"/>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- Vue Formulaire -->
-    <record id="view_sale_order_form_groupment" model="ir.ui.view">
-        <field name="name">sale.order.form.groupment</field>
+    <!-- Form View -->
+    <record id="view_order_form_inherit_waf_preso" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.waf.preso</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <!-- Ajout du mandataire avant le pricelist -->
-            <xpath expr="//field[@name='pricelist_id']" position="before">
+            <field name="partner_id" position="after">
+                <field name="available_delivery_partners" invisible="1"/>
                 <field name="agent_id" 
-                       groups="sales_team.group_sale_salesman"
-                       context="{'show_company': True}"
-                       options="{'no_create': True}"
-                       class="oe_inline"/>
-            </xpath>
+                       options="{'no_create': True, 'no_open': True}"
+                       context="{'trying_to_select_agent': True}"
+                       groups="waf_preso.group_waf_preso_user"/>
+            </field>
 
-            <!-- Bouton statistique pour les groupements -->
-            <div name="button_box" position="inside">
-                <button name="action_view_groupments" 
-                        type="object"
-                        class="oe_stat_button"
-                        icon="fa-users"
-                        invisible="interest_groupment_count == 0">
-                    <field name="interest_groupment_count" widget="statinfo" string="Groupements"/>
-                </button>
-            </div>
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Points de livraison" name="groupments_delivery" groups="waf_preso.group_waf_preso_user">
+                    <group>
+                        <group name="groupment_info" string="Groupes">
+                            <field name="groupment_ids" 
+                                   widget="many2many_tags"
+                                   options="{'no_create': True}"/>                           
+                        </group>
+                        <group name="delivery_points" string="Destinataires">
+                             <field name="delivery_partner_ids"
+                                   string="Partenaires" 
+                                   widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Dispatching" name="order_lines_dispatching" groups="waf_preso.group_waf_preso_user">
+                    <group>
 
-            <!-- Ajout des groupements dans un onglet -->
-            <xpath expr="//page[@name='other_information']" position="after">
-                <page string="Groupements" name="interest_groupments">
-                    <field name="interest_groupment_ids" widget="many2many_tags" 
-                           options="{'color_field': 'color', 'no_create_edit': True}"/>
+                    </group>
                 </page>
             </xpath>
         </field>
     </record>
 
-    <!-- Vue Recherche -->
-    <record id="view_sale_order_search_groupment" model="ir.ui.view">
-        <field name="name">sale.order.search.groupment</field>
+    <!-- Tree View -->
+    <record id="view_order_tree_inherit_waf_preso" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.waf.preso</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
         <field name="arch" type="xml">
-            <filter name="sales" position="after">
-                <filter string="Mes groupements" name="my_groupments" domain="[('interest_groupment_ids.agent_id', '=', uid)]"/>
-            </filter>
+            <field name="partner_id" position="after">
+                <field name="agent_id" optional="show"/>
+                <field name="groupment_ids" optional="show" widget="many2many_tags"/>
+                <field name="delivery_partner_ids" optional="hide" widget="many2many_tags"/>
+            </field>
         </field>
     </record>
 
-    <!-- Action pour les commandes groupées -->
-    <record id="action_sale_order_groupment" model="ir.actions.act_window">
+    <!-- Search View -->
+    <record id="view_sales_order_filter_inherit_waf_preso" model="ir.ui.view">
+        <field name="name">sale.order.list.select.inherit.waf.preso</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="agent_id"/>
+                <field name="groupment_ids"/>
+                <field name="delivery_partner_ids"/>
+                <separator/>
+                <filter string="Mes mandants" 
+                        name="my_agents" 
+                        domain="[('agent_id.user_id', '=', uid)]"/>
+                <filter string="Avec groupements" 
+                        name="with_groupments" 
+                        domain="[('groupment_ids', '!=', False)]"/>
+            </field>
+            <group position="inside">
+                <filter string="Mandant" 
+                        name="group_by_agent" 
+                        context="{'group_by': 'agent_id'}"/>
+                <filter string="Groupements" 
+                        name="group_by_groupments" 
+                        context="{'group_by': 'groupment_ids'}"/>
+            </group>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_orders_waf_preso" model="ir.actions.act_window">
         <field name="name">Commandes Groupées</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('interest_groupment_ids', '!=', False)]</field>
-        <field name="context">{}</field>
+        <field name="view_mode">tree,form,kanban,calendar</field>
+        <field name="context">{
+            'search_default_my_agents': 1,
+            'search_default_with_groupments': 1
+        }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Aucune commande groupée trouvée
+                Créez votre première commande groupée !
+            </p>
+            <p>
+                Gérez vos commandes avec livraisons multiples et groupements.
             </p>
         </field>
     </record>
 
-    <!-- Menu item -->
-    <menuitem id="menu_sale_groupment"
+    <!-- Menu Item -->
+    <menuitem id="menu_sale_order_groupment"
               name="Commandes Groupées"
-              parent="sale.sale_order_menu"
-              action="action_sale_order_groupment"
-              sequence="20"
-              groups="sales_team.group_sale_salesman"/>
+              parent="menu_waf_operations"
+              action="action_orders_waf_preso"
+              sequence="20"/>
 </odoo>

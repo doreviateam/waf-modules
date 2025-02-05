@@ -1,10 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_group_interest_type_manager,res.partner.interest.type.manager,model_res_partner_interest_type,group_waf_preso_manager,1,1,1,1
-access_group_interest_type_user,res.partner.interest.type.user,model_res_partner_interest_type,group_waf_preso_user,1,0,0,0
-
-access_res_partner_interest_groupment_manager,res.partner.interest.groupment.manager,model_res_partner_interest_groupment,waf_preso.group_waf_preso_manager,1,1,1,1
-access_res_partner_interest_groupment_user,res.partner.interest.groupment.user,model_res_partner_interest_groupment,waf_preso.group_waf_preso_user,1,1,1,0
-access_res_partner_interest_groupment_admin,res.partner.interest.groupment.admin,model_res_partner_interest_groupment,base.group_system,1,1,1,1
-
-access_sale_order_groupment,sale.order.groupment,model_sale_order,group_waf_preso_manager,1,1,0,0
-access_res_partner_groupment,res.partner.groupment,model_res_partner,group_waf_preso_manager,1,1,0,0
+access_partner_groupment_user,partner.groupment.user,model_partner_groupment,group_waf_preso_user,1,1,1,0
+access_partner_groupment_manager,partner.groupment.manager,model_partner_groupment,group_waf_preso_manager,1,1,1,1
+access_partner_interest_user,partner.interest.user,model_partner_interest,group_waf_preso_user,1,0,0,0
+access_partner_interest_manager,partner.interest.manager,model_partner_interest,group_waf_preso_manager,1,1,1,1
