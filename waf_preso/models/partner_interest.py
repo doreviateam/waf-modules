@@ -77,12 +77,12 @@ class PartnerInterest(models.Model):
     # Statistiques
     groupment_count = fields.Integer(
         string='Nombre de groupements',
-        compute='_compute_groupment_counts',
+        compute='_compute_groupment_count',
         compute_sudo=True
     )
     active_groupment_count = fields.Integer(
         string='Groupements actifs',
-        compute='_compute_groupment_counts',
+        compute='_compute_active_groupment_count',
         compute_sudo=True
     )
 
@@ -102,12 +102,15 @@ class PartnerInterest(models.Model):
         for record in self:
             record.display_name = f'[{record.code}] {record.name}' if record.code else record.name
 
+    @api.depends('groupment_ids')
+    def _compute_groupment_count(self):
+        for interest in self:
+            interest.groupment_count = len(interest.groupment_ids)
+
     @api.depends('groupment_ids', 'groupment_ids.active')
-    def _compute_groupment_counts(self):
-        for record in self:
-            groupements = record.with_context(active_test=False).groupment_ids
-            record.groupment_count = len(groupements)
-            record.active_groupment_count = len(groupements.filtered('active'))
+    def _compute_active_groupment_count(self):
+        for interest in self:
+            interest.active_groupment_count = len(interest.groupment_ids.filtered('active'))
 
     # Surcharges ORM
     @api.model_create_multi

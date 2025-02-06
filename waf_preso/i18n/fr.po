@@ -1,0 +1,1234 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* waf_preso
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-06 13:59+0000\n"
+"PO-Revision-Date: 2025-02-06 13:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+msgid "<span class=\"o_stat_text\">Groupements</span>"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf
+msgid "<span class=\"o_stat_text\">Partenaires gérés</span>"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__active
+#: model:ir.model.fields.selection,name:waf_preso.selection__partner_groupment__state__active
+msgid "Actif"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+msgid "Actifs"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_needaction
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_needaction
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_needaction
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__active
+msgid "Active"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Activer"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_ids
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_exception_decoration
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_exception_decoration
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_exception_decoration
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_state
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_state
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_state
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_type_icon
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_type_icon
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_type_icon
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__delivery_partner_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form_wizard
+msgid "Adhérent"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Adhérents"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+msgid "Adresse"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__shipping_address_id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__shipping_address_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form_wizard
+msgid "Adresse de livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__agent_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+msgid "Agent"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/partner_groupment.py:0
+#, python-format
+msgid "Ajoutez au moins un membre avant d'activer le groupement."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch__state__cancel
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch_delivery__state__cancel
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "Annulé"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+msgid "Annulés"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_search
+msgid "Archivés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_attachment_count
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_attachment_count
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_attachment_count
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order_line_dispatch_delivery.py:0
+#, python-format
+msgid "Aucun type d'opération de sortie trouvé !"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_sale_order_line_dispatch_delivery
+msgid "Aucune livraison planifiée"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_res_partner__is_agent
+#: model:ir.model.fields,help:waf_preso.field_res_users__is_agent
+msgid ""
+"Automatiquement défini si le partenaire est utilisé comme mandant dans des "
+"groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sales_order_filter_inherit_waf_preso
+msgid "Avec groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch_delivery__state__picking_created
+msgid "BL Créé"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__picking_id
+msgid "Bon de livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__partner_groupment__state__draft
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch__state__draft
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch_delivery__state__draft
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "Brouillon"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+msgid "Brouillons"
+msgstr ""
+
+#. module: waf_preso
+#: model:partner.groupment,name:waf_preso.groupment_cmh34_monetique
+msgid "CM34 Monétique"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+msgid "Centre d'intérêt"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_partner_interest
+msgid "Centre d'intérêt partenaire"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__interest_id
+msgid "Centre d'intérêt principal"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_partner_interest
+#: model:ir.ui.menu,name:waf_preso.menu_partner_interest
+msgid "Centres d'intérêt"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__code
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__code
+msgid "Code"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+msgid "Code unique"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__order_id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__order_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "Commande"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_orders_waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_sale_order_groupment
+msgid "Commandes Groupées"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_config
+msgid "Configuration"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__create_uid
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__create_uid
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__create_uid
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__create_date
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__create_date
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__create_date
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
+msgid "Créer BL"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_partner_groupment
+msgid "Créer un nouveau groupement"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_partner_interest
+msgid "Créez votre premier centre d'intérêt !"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_partner_agents
+msgid "Créez votre premier mandant !"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_orders_waf_preso
+msgid "Créez votre première commande groupée !"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_partner_companies
+msgid "Créez votre première société !"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__date_dispatch
+msgid "Date de dispatch"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__date_start
+msgid "Date de début"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__date_end
+msgid "Date de fin"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__scheduled_date
+msgid "Date planifiée"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+msgid "Date prévue"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__description
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+msgid "Description"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+msgid "Description détaillée..."
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Destinataires"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__dispatch_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Dispatch"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Dispatching"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__display_name
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__display_name
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Disponible"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/partner_groupment.py:0
+#, python-format
+msgid "Définissez un agent avant d'activer le groupement."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__sequence
+msgid "Définit l'ordre d'affichage"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Désactiver"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line__dispatch_state__partial
+msgid "En cours"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__is_agent
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__is_agent
+msgid "Est un mandant"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_follower_ids
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_follower_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_follower_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_partner_ids
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_partner_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_partner_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__activity_type_icon
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__activity_type_icon
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__activity_type_icon
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_partner_groupment
+msgid "Groupement de partenaires"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/partner_interest.py:0
+#: model:ir.actions.act_window,name:waf_preso.action_partner_groupment
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__groupment_ids
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__groupment_ids
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__groupment_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order__groupment_ids
+#: model:ir.ui.menu,name:waf_preso.menu_partner_groupment
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sales_order_filter_inherit_waf_preso
+#, python-format
+msgid "Groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__active_groupment_count
+msgid "Groupements actifs"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_res_partner__managed_groupment_ids
+#: model:ir.model.fields,help:waf_preso.field_res_users__managed_groupment_ids
+msgid "Groupements dont ce partenaire est l'agent"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_res_partner__groupment_ids
+#: model:ir.model.fields,help:waf_preso.field_res_users__groupment_ids
+msgid "Groupements dont ce partenaire est membre"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__groupment_agent_ids
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__groupment_agent_ids
+msgid "Groupements en tant que mandant"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__managed_groupment_ids
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__managed_groupment_ids
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf
+msgid "Groupements gérés"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Groupes"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_orders_waf_preso
+msgid "Gérez vos commandes avec livraisons multiples et groupements."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__has_message
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__has_message
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__has_message
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__id
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__id
+msgid "ID"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_exception_icon
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_exception_icon
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_exception_icon
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__activity_exception_icon
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__activity_exception_icon
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__activity_exception_icon
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__message_needaction
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__message_needaction
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__message_needaction
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__message_has_error
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__message_has_sms_error
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__message_has_error
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__message_has_sms_error
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__message_has_error
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__message_has_sms_error
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__message_has_error
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/partner_interest.py:0
+#, python-format
+msgid "Impossible de supprimer un type d'intérêt lié à des groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__partner_groupment__state__inactive
+msgid "Inactif"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+msgid "Inactifs"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf
+msgid "Informations Groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form_wizard
+msgid "Informations commande"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
+msgid "Informations dispatch"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Informations livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_is_follower
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_is_follower
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_is_follower
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/partner_groupment.py:0
+#: model:ir.model.constraint,message:waf_preso.constraint_partner_groupment_check_dates
+#, python-format
+msgid "La date de début doit être antérieure à la date de fin"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order_line_dispatch.py:0
+#, python-format
+msgid ""
+"La quantité à livrer ne peut pas dépasser la quantité restante à livrer.\n"
+"Quantité disponible : %(qty)s"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__write_uid
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__write_uid
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__write_uid
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__write_date
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__write_date
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__write_date
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.constraint,message:waf_preso.constraint_partner_groupment_unique_code_company
+#: model:ir.model.constraint,message:waf_preso.constraint_partner_interest_code_company_uniq
+msgid "Le code doit être unique par société"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.constraint,message:waf_preso.constraint_partner_interest_name_company_uniq
+msgid "Le nom doit être unique par société"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_partner_interest
+msgid ""
+"Les centres d'intérêt permettent de catégoriser vos groupements de "
+"partenaires."
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_sale_order_line_dispatch_delivery
+msgid "Les livraisons sont créées à partir des lignes de dispatch."
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order.py:0
+#, python-format
+msgid ""
+"Les partenaires suivants ne sont pas membres des groupements sélectionnés : "
+"%s"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__sale_order_line_id
+msgid "Ligne de commande"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_sale_order_line_dispatch
+msgid "Ligne de dispatch des commandes"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order__dispatch_line_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line__dispatch_line_ids
+#: model:ir.model.fields,help:waf_preso.field_sale_order__dispatch_line_ids
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line__dispatch_line_ids
+msgid "Lignes de dispatching"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
+msgid "Livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_sale_order_line_dispatch_delivery
+msgid "Livraison planifiée"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_sale_order_line_dispatch_delivery
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order__delivery_planning_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__delivery_ids
+#: model:ir.ui.menu,name:waf_preso.menu_sale_order_line_dispatch_delivery
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_calendar
+msgid "Livraisons planifiées"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch_delivery__state__delivered
+msgid "Livré"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+msgid "Livrés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order__agent_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_res_partner_filter_inherit_waf
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sales_order_filter_inherit_waf_preso
+msgid "Mandant"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_partner_agents
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__agent_ids
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__agent_ids
+#: model:ir.ui.menu,name:waf_preso.menu_partner_agents
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_res_partner_filter_inherit_waf
+msgid "Mandants"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf
+msgid "Membre des groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__member_ids
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Membres"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_res_partner_filter_inherit_waf
+msgid "Membres de groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_search
+msgid "Mes centres d'intérêt"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+msgid "Mes groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sales_order_filter_inherit_waf_preso
+msgid "Mes mandants"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_has_error
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_has_error
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_has_error
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_ids
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__my_activity_date_deadline
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__my_activity_date_deadline
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__my_activity_date_deadline
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_date_deadline
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_date_deadline
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_date_deadline
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_summary
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_summary
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_summary
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_type_id
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_type_id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_type_id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__name
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__name
+msgid "Nom"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__display_name
+msgid "Nom affiché"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+msgid "Nom du centre d'intérêt"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Nom du groupement"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__groupment_count
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__groupment_count
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__groupment_count
+msgid "Nombre de groupements"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__member_count
+msgid "Nombre de membres"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__managed_partner_count
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__managed_partner_count
+msgid "Nombre de partenaires gérés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_res_partner__groupment_count
+#: model:ir.model.fields,help:waf_preso.field_res_users__groupment_count
+msgid "Nombre total de groupements (membre + gérés)"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line__dispatch_state__draft
+msgid "Non dispatché"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__notes
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Notes"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Notes internes..."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_create_dispatch_line
+msgid "Nouvelle ligne de dispatch"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order_line_dispatch_delivery.py:0
+#, python-format
+msgid "Nouvelle livraison planifiée créée pour %s unités"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_needaction_counter
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_needaction_counter
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_needaction_counter
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_has_error_counter
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_has_error_counter
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_has_error_counter
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__message_needaction_counter
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__message_needaction_counter
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__message_needaction_counter
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__message_has_error_counter
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__message_has_error_counter
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__message_has_error_counter
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_operations
+msgid "Opérations"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_partners
+msgid "Partenaires"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/res_partner.py:0
+#: model:ir.model.fields,field_description:waf_preso.field_res_partner__managed_partner_ids
+#: model:ir.model.fields,field_description:waf_preso.field_res_users__managed_partner_ids
+#, python-format
+msgid "Partenaires gérés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__delivery_partner_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "Point de livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order__delivery_partner_ids
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Points de livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line__delivery_partner_ids
+msgid "Points de livraison autorisés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order__available_delivery_partners
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__delivery_partner_ids
+msgid "Points de livraison disponibles"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_preso_root
+msgid "Pre-SO"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__product_id
+msgid "Product"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__product_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
+msgid "Produit"
+msgstr ""
+
+#. module: waf_preso
+#: model:product.template,name:waf_preso.product_preparation_product_template
+msgid "Préparation TPE"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__quantity
+msgid "Quantité"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line__dispatched_qty
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__dispatched_qty
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line__dispatched_qty
+msgid "Quantité dispatchée"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line__remaining_qty
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__remaining_qty
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line__remaining_qty
+msgid "Quantité restante"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form_wizard
+msgid "Quantités et dates"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_reporting
+msgid "Rapports"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__rating_ids
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__rating_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__rating_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "Regrouper par"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_form
+msgid "Remettre en brouillon"
+msgstr ""
+
+#. module: waf_preso
+#: model:res.groups,name:waf_preso.group_waf_preso_manager
+msgid "Responsable"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_user_id
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__activity_user_id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__activity_user_id
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: waf_preso
+#: model:product.template,name:waf_preso.product_repair_product_template
+msgid "Réparation TPE"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__message_has_sms_error
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__message_has_sms_error
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__message_has_sms_error
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
+
+#. module: waf_preso
+#: model:ir.model,name:waf_preso.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de commande"
+
+#. module: waf_preso
+#: model_terms:product.template,description:waf_preso.product_preparation_product_template
+msgid "Service de préparation et paramétrage de terminal"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:product.template,description:waf_preso.product_repair_product_template
+msgid "Service de réparation de terminal de paiement"
+msgstr ""
+
+#. module: waf_preso
+#: model:partner.interest,name:waf_preso.interest_monetique
+msgid "Services Monétiques et Logistique"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/res_partner.py:0
+#, python-format
+msgid "Seules les sociétés peuvent être membres de groupements."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__company_id
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__company_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_search
+msgid "Société"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_partner_companies
+#: model:ir.ui.menu,name:waf_preso.menu_partner_companies
+msgid "Sociétés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__activity_state
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__activity_state
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__activity_state
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__sequence
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__sequence
+msgid "Séquence"
+msgstr ""
+
+#. module: waf_preso
+#: model:product.template,name:waf_preso.product_terminal_product_template
+msgid "Terminal de paiement"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:product.template,description:waf_preso.product_terminal_product_template
+msgid "Terminal de paiement électronique"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line__dispatch_state__done
+msgid "Terminé"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_tree
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_interest_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_tree_inherit_waf
+msgid "Total"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:partner.interest,description:waf_preso.interest_monetique
+msgid "Tous les services liées à la monétique"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_res_partner_filter_inherit_waf
+msgid "Type de partenaire"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__activity_exception_decoration
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__activity_exception_decoration
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__activity_exception_decoration
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: waf_preso
+#: model:res.groups,name:waf_preso.group_waf_preso_user
+msgid "Utilisateur"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__user_ids
+msgid "Utilisateurs autorisés"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line_dispatch__state__done
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "Validé"
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order.py:0
+#, python-format
+msgid ""
+"Vous devez sélectionner au moins un destinataire avant de confirmer la "
+"commande."
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order.py:0
+#, python-format
+msgid ""
+"Vous devez sélectionner au moins un destinataire pour les groupements "
+"choisis."
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order.py:0
+#, python-format
+msgid "Vous devez sélectionner au moins un destinataire."
+msgstr ""
+
+#. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/sale_order_line_dispatch_delivery.py:0
+#, python-format
+msgid "Vous ne pouvez créer un BL que pour une livraison en brouillon."
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.module.category,name:waf_preso.module_waf_preso_category
+msgid "WAF Pre-SO"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__website_message_ids
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest__website_message_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__website_message_ids
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,help:waf_preso.field_partner_groupment__website_message_ids
+#: model:ir.model.fields,help:waf_preso.field_partner_interest__website_message_ids
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch__website_message_ids
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line_dispatch_delivery__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+msgid "À livrer"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__state
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__state
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__state
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_groupment_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_search
+#: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
+msgid "État"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_sale_order_line__dispatch_state
+#: model:ir.model.fields,help:waf_preso.field_sale_order_line__dispatch_state
+msgid "État du dispatch"
+msgstr ""

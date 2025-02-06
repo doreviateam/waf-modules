@@ -3,8 +3,8 @@
     <data noupdate="1">
         <!-- Groupement CMH34 Monétique -->
         <record id="groupment_cmh34_monetique" model="partner.groupment">
-            <field name="name">CMH34 Monétique</field>
-            <field name="code">CMH34-MLS</field>
+            <field name="name">CM34 Monétique</field>
+            <field name="code">CM34-MLS</field>
             <field name="agent_id" ref="partner_cm_herault"/>
             <field name="interest_id" ref="interest_monetique"/>
             <field name="member_ids" eval="[

@@ -107,6 +107,9 @@
                         </field>
                     </group>
                 </page>
+                <page name="agents" string="Mandants" groups="waf_preso.group_waf_preso_user">
+                    <field name="agent_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                </page>
             </notebook>
         </field>
     </record>
@@ -163,5 +166,4 @@
               parent="menu_waf_partners"
               action="action_partner_agents"
               sequence="20"/>
-
 </odoo>

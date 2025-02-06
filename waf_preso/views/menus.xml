@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Menu racine -->
-    <menuitem id="menu_waf_preso_root"
-              name="WAF Preso"
-              web_icon="waf_preso,static/description/icon.png"
-              sequence="20"/>
-</odoo>

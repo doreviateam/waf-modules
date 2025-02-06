@@ -55,6 +55,7 @@ Configuration
         
         # Données de configuration
         'data/ir_sequence_data.xml',
+        'wizards/views/create_dispatch_wizard_views.xml',
         
         # Vues (ordre logique de chargement)
         'views/menu.xml',
@@ -62,12 +63,14 @@ Configuration
         'views/partner_groupment_views.xml',
         'views/res_partner_views.xml',
         'views/sale_order_views.xml',
+        'views/sale_order_line_dispatch_views.xml',
+        'views/sale_order_line_dispatch_delivery_views.xml',
 
-        # Données de démonstration        
-        'data/partner_interest_data.xml',
-        'data/partner_groupment_data.xml',  
+        # Données de démonstration  
         'data/res_partner_data.xml',
-        'data/product_data.xml',
+        'data/product_data.xml',       
+        'data/partner_interest_data.xml',
+        'data/partner_groupment_data.xml', 
     ],
     
     # Assets frontend et backend

@@ -6,7 +6,7 @@
         <field name="res_model">partner.interest</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="context">{
-            'search_default_active': 1,
+            'search_default_active': 1
         }</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -48,7 +48,7 @@
                         <group name="main_info">
                             <field name="code" placeholder="Code unique"/>
                             <field name="sequence"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="company_id" groups="base.group_multi_company" optional="hide"/>
                         </group>
                         <group name="additional_info">
                             <field name="user_ids" widget="many2many_tags"/>
@@ -65,12 +65,9 @@
                                 <tree>
                                     <field name="code"/>
                                     <field name="name"/>
-                                    <field name="agent_id"/>
-                                    <field name="member_count"/>
-                                    <field name="state" decoration-success="state == 'active'"
-                                           decoration-info="state == 'draft'"
-                                           decoration-danger="state == 'inactive'"
-                                           widget="badge"/>
+                                    <field name="agent_id" widget="many2one_avatar"/>
+                                    <field name="member_count" sum="Total"/>
+                                    <field name="state" widget="badge"/>
                                 </tree>
                             </field>
                         </page>
@@ -120,14 +117,14 @@
                                     <strong class="o_kanban_record_title">
                                         <span><field name="name"/></span>
                                     </strong>
-                                    <small class="o_kanban_record_subtitle">
+                                    <small class="o_kanban_record_subtitle text-muted">
                                         <field name="code"/>
                                     </small>
                                 </div>
                             </div>
                             <div class="o_kanban_record_bottom">
                                 <div class="oe_kanban_bottom_right">
-                                    <span class="badge badge-pill bg-info">
+                                    <span class="badge rounded-pill text-bg-info">
                                         <field name="active_groupment_count"/> / <field name="groupment_count"/>
                                     </span>
                                 </div>

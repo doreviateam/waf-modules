@@ -31,47 +31,59 @@ class ResPartner(models.Model):
         help="Nombre total de groupements (membre + gérés)"
     )
 
+    @api.depends('groupment_agent_ids')
+    def _compute_is_agent(self):
+        for partner in self:
+            partner.is_agent = bool(partner.groupment_agent_ids)
+
     is_agent = fields.Boolean(
-        string="Est un agent",
+        string='Est un mandant',
         compute='_compute_is_agent',
         store=True,
-        index=True,
-        help="Indique si le partenaire est agent de groupements"
+        help="Automatiquement défini si le partenaire est utilisé comme mandant dans des groupements"
     )
 
     managed_partner_ids = fields.Many2many(
         'res.partner',
-        string='Partenaires gérés',
         compute='_compute_managed_partner_ids',
-        compute_sudo=True,
-        help="Partenaires membres des groupements gérés"
+        string='Partenaires gérés',
+    )
+    managed_partner_count = fields.Integer(
+        compute='_compute_managed_partner_count',
+        string='Nombre de partenaires gérés',
     )
 
-    managed_partner_count = fields.Integer(
-        string='Nombre de partenaires gérés',
-        compute='_compute_managed_partner_ids',
-        store=True,
-        help="Nombre de partenaires membres des groupements gérés"
+    agent_ids = fields.Many2many(
+        'res.partner',
+        'partner_agent_rel',
+        'partner_id',
+        'agent_id',
+        string='Mandants',
+        domain=[('is_agent', '=', True)]
+    )
+
+    # Relation inverse pour le calcul
+    groupment_agent_ids = fields.One2many(
+        'partner.groupment',
+        'agent_id',
+        string='Groupements en tant que mandant'
     )
 
     # Méthodes calculées
-    @api.depends('managed_groupment_ids')
-    def _compute_is_agent(self):
-        """Détermine si le partenaire est un agent"""
-        for partner in self:
-            partner.is_agent = bool(partner.managed_groupment_ids)
-
     @api.depends('groupment_ids', 'managed_groupment_ids')
     def _compute_groupment_count(self):
         """Calcule le nombre total de groupements"""
         for partner in self:
             partner.groupment_count = len(partner.groupment_ids) + len(partner.managed_groupment_ids)
 
-    @api.depends('managed_groupment_ids.member_ids')
+    @api.depends('managed_groupment_ids', 'managed_groupment_ids.member_ids')
     def _compute_managed_partner_ids(self):
-        """Calcule la liste des partenaires gérés et leur nombre"""
         for partner in self:
             partner.managed_partner_ids = partner.managed_groupment_ids.mapped('member_ids')
+
+    @api.depends('managed_partner_ids')
+    def _compute_managed_partner_count(self):
+        for partner in self:
             partner.managed_partner_count = len(partner.managed_partner_ids)
 
     # Contraintes

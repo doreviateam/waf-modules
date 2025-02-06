@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_sale_order_line_dispatch_delivery_form" model="ir.ui.view">
+        <field name="name">sale.order.line.dispatch.delivery.form</field>
+        <field name="model">sale.order.line.dispatch.delivery</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_picking" 
+                            string="Créer BL" 
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="dispatch_id"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Informations dispatch">
+                            <field name="dispatch_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="delivery_partner_id" 
+                                   string="Adhérent"
+                                   readonly="1"/>
+                        </group>
+                        <group string="Adresse">
+                            <field name="shipping_address_id" 
+                                   string="Adresse de livraison"
+                                   domain="[('parent_id', '=', delivery_partner_id)]"
+                                   context="{'default_parent_id': delivery_partner_id}"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group string="Livraison">
+                            <field name="quantity"/>
+                            <field name="scheduled_date"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_sale_order_line_dispatch_delivery_tree" model="ir.ui.view">
+        <field name="name">sale.order.line.dispatch.delivery.tree</field>
+        <field name="model">sale.order.line.dispatch.delivery</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="dispatch_id"/>
+                <field name="shipping_address_id"/>
+                <field name="scheduled_date"/>
+                <field name="quantity"/>
+                <field name="picking_id"/>
+                <field name="state" 
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'delivered'"
+                       decoration-warning="state == 'picking_created'"
+                       decoration-danger="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_sale_order_line_dispatch_delivery_search" model="ir.ui.view">
+        <field name="name">sale.order.line.dispatch.delivery.search</field>
+        <field name="model">sale.order.line.dispatch.delivery</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="dispatch_id"/>
+                <field name="shipping_address_id"/>
+                <field name="picking_id"/>
+                <separator/>
+                <filter string="À livrer" name="to_deliver" 
+                        domain="[('state', 'in', ('draft', 'picking_created'))]"/>
+                <filter string="Livrés" name="delivered" 
+                        domain="[('state', '=', 'delivered')]"/>
+                <filter string="Annulés" name="cancelled" 
+                        domain="[('state', '=', 'cancel')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="État" name="state" 
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Date prévue" name="scheduled_date" 
+                            context="{'group_by': 'scheduled_date:day'}"/>
+                    <filter string="Adresse" name="shipping_address" 
+                            context="{'group_by': 'shipping_address_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Calendar View -->
+    <record id="view_sale_order_line_dispatch_delivery_calendar" model="ir.ui.view">
+        <field name="name">sale.order.line.dispatch.delivery.calendar</field>
+        <field name="model">sale.order.line.dispatch.delivery</field>
+        <field name="arch" type="xml">
+            <calendar string="Livraisons planifiées" 
+                     date_start="scheduled_date" 
+                     color="state"
+                     mode="month">
+                <field name="shipping_address_id"/>
+                <field name="quantity"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_sale_order_line_dispatch_delivery" model="ir.actions.act_window">
+        <field name="name">Livraisons planifiées</field>
+        <field name="res_model">sale.order.line.dispatch.delivery</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="context">{
+            'search_default_to_deliver': 1
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune livraison planifiée
+            </p>
+            <p>
+                Les livraisons sont créées à partir des lignes de dispatch.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_sale_order_line_dispatch_delivery"
+              name="Livraisons planifiées"
+              parent="menu_waf_operations"
+              action="action_sale_order_line_dispatch_delivery"
+              sequence="30"/>
+</odoo>

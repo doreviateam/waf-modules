@@ -1,5 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Form View pour la création de ligne de dispatch -->
+    <!-- <record id="view_sale_order_line_dispatch_form_wizard" model="ir.ui.view">
+        <field name="name">sale.order.line.dispatch.form.wizard</field>
+        <field name="model">sale.order.line.dispatch</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="order_id" invisible="1"/>
+                        <field name="delivery_partner_ids" invisible="1"/>
+                        <field name="sale_order_line_id" 
+                               domain="[('order_id', '=', order_id)]"
+                               options="{'no_create': True}"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="remaining_qty" readonly="1"/>
+                        <field name="dispatched_qty"/>
+                        <field name="delivery_partner_id" 
+                               domain="[('id', 'in', delivery_partner_ids)]"
+                               options="{'no_create': True, 'no_open': True}"
+                               context="{'show_address': 1}"/>
+                        <field name="date_dispatch" optional="hide" readonly="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Créer" type="object" class="btn-primary" special="save"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record> -->
+
+    <!-- Action pour créer une nouvelle ligne de dispatch -->
+    <record id="action_create_dispatch_line" model="ir.actions.act_window">
+        <field name="name">Nouvelle ligne de dispatch</field>
+        <field name="res_model">sale.order.line.dispatch</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sale_order_line_dispatch_form_wizard"/>
+        <field name="target">new</field>
+        <field name="context">{'default_order_id': id}</field>
+    </record>
+
     <!-- Form View -->
     <record id="view_order_form_inherit_waf_preso" model="ir.ui.view">
         <field name="name">sale.order.form.inherit.waf.preso</field>
@@ -7,15 +48,12 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
-                <field name="available_delivery_partners" invisible="1"/>
-                <field name="agent_id" 
-                       options="{'no_create': True, 'no_open': True}"
-                       context="{'trying_to_select_agent': True}"
-                       groups="waf_preso.group_waf_preso_user"/>
+                <field name="agent_id"/>
+                <field name="allowed_delivery_partner_ids" invisible="1"/>
             </field>
 
             <xpath expr="//page[@name='order_lines']" position="after">
-                <page string="Points de livraison" name="groupments_delivery" groups="waf_preso.group_waf_preso_user">
+                <page string="Stakholders" name="groupments_delivery">
                     <group>
                         <group name="groupment_info" string="Groupes">
                             <field name="groupment_ids" 
@@ -23,17 +61,72 @@
                                    options="{'no_create': True}"/>                           
                         </group>
                         <group name="delivery_points" string="Destinataires">
-                             <field name="delivery_partner_ids"
-                                   string="Partenaires" 
-                                   widget="many2many_tags"
-                                   options="{'no_create': True}"/>
+                             <field name="delivery_partner_ids" 
+                                    string="Adhérents"
+                                    widget="many2many_tags" 
+                                    options="{'no_create': True}"
+                                    domain="[('id', 'in', allowed_delivery_partner_ids)]"/>
                         </group>
                     </group>
                 </page>
-                <page string="Dispatching" name="order_lines_dispatching" groups="waf_preso.group_waf_preso_user">
-                    <group>
-
-                    </group>
+                <page string="Répartition" name="order_lines_dispatching">
+                    <field name="dispatch_line_ids">
+                        <tree create="false">
+                            <field name="order_line_id" optional="hide"/>
+                            <field name="product_id" string="Produit"/>
+                            <field name="remaining_qty" string="Disponible"/>
+                            <field name="dispatched_qty" string="Répartition"/>
+                            <field name="delivery_partner_id" string="Adhérent"/>
+                            <field name="date_dispatch" optional="hide"/>
+                            <field name="state"/>
+                            <button name="%(waf_preso.action_sale_order_line_dispatch_form)d" 
+                                    type="action" 
+                                    icon="fa-pencil" 
+                                    class="btn-link"/>
+                        </tree>
+                    </field>
+                     <button name="%(action_create_dispatch_wizard)d" 
+                             type="action"
+                             string="Ajouter une ligne"
+                             class="btn-primary"
+                             context="{'default_order_id': id}"/>
+                </page>
+            
+                <page string="Distribution" name="planned_deliveries">
+                    <field name="delivery_planning_ids">
+                        <tree>
+                            <field name="dispatch_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="delivery_partner_id" string="Adhérent"/>
+                            <field name="shipping_address_id"/>
+                            <field name="scheduled_date"/>
+                            <field name="picking_id"/>
+                            <field name="state"/>
+                        </tree>
+                        <form>
+                            <sheet>
+                                <group>
+                                    <group string="Informations dispatch">
+                                        <field name="dispatch_id" readonly="1"/>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="delivery_partner_id" 
+                                               string="Adhérent"
+                                               readonly="1"/>
+                                        <field name="quantity"/>
+                                    </group>
+                                    <group string="Informations livraison">
+                                        <field name="shipping_address_id" 
+                                               string="Adresse de livraison"
+                                               domain="[('parent_id', '=', delivery_partner_id)]"
+                                               context="{'default_parent_id': delivery_partner_id}"/>
+                                        <field name="scheduled_date"/>
+                                        <field name="state"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
                 </page>
             </xpath>
         </field>
@@ -64,19 +157,15 @@
                 <field name="groupment_ids"/>
                 <field name="delivery_partner_ids"/>
                 <separator/>
-                <filter string="Mes mandants" 
-                        name="my_agents" 
+                <filter string="Mes mandants" name="my_agents" 
                         domain="[('agent_id.user_id', '=', uid)]"/>
-                <filter string="Avec groupements" 
-                        name="with_groupments" 
+                <filter string="Avec groupements" name="with_groupments" 
                         domain="[('groupment_ids', '!=', False)]"/>
             </field>
             <group position="inside">
-                <filter string="Mandant" 
-                        name="group_by_agent" 
+                <filter string="Mandant" name="group_by_agent" 
                         context="{'group_by': 'agent_id'}"/>
-                <filter string="Groupements" 
-                        name="group_by_groupments" 
+                <filter string="Groupements" name="group_by_groupments" 
                         context="{'group_by': 'groupment_ids'}"/>
             </group>
         </field>
@@ -107,4 +196,13 @@
               parent="menu_waf_operations"
               action="action_orders_waf_preso"
               sequence="20"/>
+
+    <!-- Action pour la vue form standard -->
+    <record id="action_sale_order_line_dispatch_form" model="ir.actions.act_window">
+        <field name="name">Modifier Répartition</field>
+        <field name="res_model">sale.order.line.dispatch</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="waf_preso.view_create_dispatch_wizard_form"/>
+        <field name="target">new</field>
+    </record>
 </odoo>

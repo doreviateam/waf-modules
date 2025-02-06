@@ -38,12 +38,15 @@ class PartnerGroupment(models.Model):
     ], string='État', default='draft', tracking=True, index=True)
     
     # Relations
+    parent_id = fields.Many2one(
+        'partner.groupment',
+        string='Groupement parent',
+        tracking=True
+    )
     member_ids = fields.Many2many(
         'res.partner',
-        string='Membres',
-        domain="[('is_company', '=', True)]",
-        tracking=True,
-        context={'active_test': False}
+        string='Liste des adhérents',
+        domain="[('id', 'in', allowed_member_ids)]"
     )
     agent_id = fields.Many2one(
         'res.partner',
@@ -64,6 +67,14 @@ class PartnerGroupment(models.Model):
     member_count = fields.Integer(
         string='Nombre de membres',
         compute='_compute_member_count',
+        store=True
+    )
+    allowed_member_ids = fields.Many2many(
+        'res.partner',
+        'partner_groupment_allowed_members_rel',
+        'groupment_id',
+        'partner_id',
+        compute='_compute_allowed_member_ids',
         store=True
     )
     
@@ -101,6 +112,14 @@ class PartnerGroupment(models.Model):
     def _compute_member_count(self):
         for record in self:
             record.member_count = len(record.member_ids)
+
+    @api.depends('parent_id', 'parent_id.member_ids')
+    def _compute_allowed_member_ids(self):
+        for groupment in self:
+            if groupment.parent_id:
+                groupment.allowed_member_ids = groupment.parent_id.member_ids
+            else:
+                groupment.allowed_member_ids = self.env['res.partner']
 
     # Contraintes Python
     @api.constrains('date_start', 'date_end')
