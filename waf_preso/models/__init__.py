@@ -1,7 +1,14 @@
-from . import res_partner
-from . import partner_interest
-from . import partner_groupment
-from . import sale_order
-from . import sale_order_line
-from . import sale_order_line_dispatch
-from . import sale_order_line_dispatch_delivery
+"""
+Modèles WAF Preso
+===============
+
+Ce package contient les modèles principaux et les extensions
+pour le module WAF Preso.
+"""
+
+from . import delivery
+from . import partner
+from . import ventes
+from . import product
+from . import stock
+

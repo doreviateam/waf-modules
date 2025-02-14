@@ -3,13 +3,19 @@ from odoo import models, fields, api
 class ResCountryState(models.Model):
     _inherit = 'res.country.state'
 
-    parent_id = fields.Many2one('res.country.state', string='Région', domain="[('country_id', '=', country_id), ('is_region', '=', True)]")
+    region_id = fields.Many2one(
+        'res.country.state',
+        string='Région administrative',
+        domain=[('type', '=', 'region')]
+    )
+
+    parent_id = fields.Many2one(
+        'res.country.state',
+        string='Région parente',
+        domain="[('country_id', '=', country_id), ('is_region', '=', True)]")
     child_ids = fields.One2many('res.country.state', 'parent_id', string='Départements')
     is_region = fields.Boolean(string="Est une région", compute='_compute_is_region', store=True)
     is_department = fields.Boolean('Est un département', compute='_compute_is_department', store=True)
-    
-    region_id = fields.Many2one('res.country.state', string='Région', 
-                                compute='_compute_region_id', store=True) 
     
     @api.depends('parent_id', 'is_region', 'is_department')
     def _compute_region_id(self):

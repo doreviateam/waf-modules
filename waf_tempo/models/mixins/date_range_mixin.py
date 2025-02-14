@@ -37,14 +37,27 @@ class DateRangeMixin(models.AbstractModel):
                                    string="Type de période",
                                    help="Type de période (jour, semaine, mois, trimestre, année)")
     
-    is_active_period = fields.Boolean(compute='_compute_is_active_period',
-                                      search='_search_is_active_period',
-                                      store=True,
-                                      string="Période active",
-                                      help="Indique si la période est active")
+    is_active_period = fields.Boolean(
+        compute='_compute_is_active_period',
+        search='_search_is_active_period',
+        store=True,
+        string="Période active",
+        help="Indique si la période est active"
+    )
 
-    duration_days = fields.Integer(compute='_compute_duration_days', store=True, string="Durée en jours", help="Durée de la période en jours")
-    is_open_ended = fields.Boolean(compute='_compute_is_open_ended', store=True, string="Période ouverte", help="Indique si la période est ouverte")
+    duration_days = fields.Integer(
+        compute='_compute_duration_days',
+        store=True,
+        string="Durée en jours",
+        help="Durée de la période en jours"
+    )
+
+    is_open_ended = fields.Boolean(
+        compute='_compute_is_open_ended',
+        store=True,
+        string="Période ouverte",
+        help="Indique si la période est ouverte"
+    )
 
     @api.model
     def _get_period_info(self, start_date, end_date=None, period_type='month'):
@@ -66,14 +79,21 @@ class DateRangeMixin(models.AbstractModel):
     @api.depends('date_start', 'date_end')
     def _compute_duration_days(self):
         for record in self:
-            info = self._get_period_info(record.date_start, record.date_end)
-            record.duration_days = info['duration']
+            if not record.date_start:
+                record.duration_days = 0
+            elif not record.date_end:
+                record.duration_days = (fields.Date.context_today(self) - record.date_start).days + 1
+            else:
+                record.duration_days = (record.date_end - record.date_start).days + 1
 
     @api.depends('date_start', 'date_end')
     def _compute_is_active_period(self):
+        today = fields.Date.context_today(self)
         for record in self:
-            info = self._get_period_info(record.date_start, record.date_end)
-            record.is_active_period = info['is_active']
+            record.is_active_period = (
+                record.date_start <= today and 
+                (not record.date_end or record.date_end >= today)
+            )
 
     @api.model
     def _search_is_active_period(self, operator, value):

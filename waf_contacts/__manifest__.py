@@ -1,6 +1,6 @@
 {
     'name': 'W.A.F Contacts',
-    'version': '1.0.0',
+    'version': '17.0.1.0.0',
     'depends': [ 
         'waf_core', 
         'contacts',

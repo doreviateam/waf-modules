@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Actions Ventes -->
+    <record id="action_orders_waf" model="ir.actions.act_window">
+        <field name="name">Commandes</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{
+            'display_name': 'name',
+            'search_default_my_sale_orders_filter': 1
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre première commande
+            </p>
+        </field>
+    </record>
+
+    <!-- Action pour les lignes de dispatch -->
+    <record id="action_sale_order_line_dispatch" model="ir.actions.act_window">
+        <field name="name">Lignes de dispatch</field>
+        <field name="res_model">sale.order.line.dispatch</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer votre première ligne de dispatch
+            </p>
+        </field>
+    </record>
+
+    <!-- Actions pour les livraisons -->
+    <record id="action_dispatch_delivery" model="ir.actions.act_window">
+        <field name="name">Livraisons</field>
+        <field name="res_model">sale.order.line.dispatch.delivery</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune livraison trouvée
+            </p>
+            <p>
+                Créez votre première livraison pour commencer à gérer vos dispatches.
+            </p>
+        </field>
+    </record>
+
+    <!-- Actions Contacts -->
+    <record id="action_partner_company" model="ir.actions.act_window">
+        <field name="name">Sociétés</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_company', '=', True)]</field>
+        <field name="context">{'default_is_company': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre première société
+            </p>
+        </field>
+    </record>
+
+    <!-- Action pour les groupements -->
+    <record id="action_partner_groupment" model="ir.actions.act_window">
+        <field name="name">Groupements</field>
+        <field name="res_model">partner.groupment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier groupement !
+            </p>
+        </field>
+    </record>
+
+    <!-- Action pour les centres d'intérêt -->
+    <record id="action_partner_interest" model="ir.actions.act_window">
+        <field name="name">Centres d'intérêt</field>
+        <field name="res_model">partner.interest</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier centre d'intérêt !
+            </p>
+        </field>
+    </record>
+
+    <record id="action_delivery_zone" model="ir.actions.act_window">
+        <field name="name">Zones de livraison</field>
+        <field name="res_model">delivery.zone</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre première zone de livraison
+            </p>
+        </field>
+    </record>
+
+    <!-- Actions Statistiques -->
+    <record id="action_sale_dispatch_stats" model="ir.actions.act_window">
+        <field name="name">Statistiques Dispatch</field>
+        <field name="res_model">sale.order.line.dispatch</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="context">{
+            'search_default_last_month': 1,
+            'group_by': ['create_date:month', 'state']
+        }</field>
+    </record>
+
+    <record id="action_stock_dispatch_moves" model="ir.actions.act_window">
+        <field name="name">Mouvements Dispatch</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_dispatch_move', '=', True)]</field>
+        <field name="context">{
+            'search_default_group_by_dispatch': 1
+        }</field>
+    </record>
+
+    <!-- Actions Configuration Livraison -->
+    <record id="action_delivery_weekday" model="ir.actions.act_window">
+        <field name="name">Jours de livraison</field>
+        <field name="res_model">delivery.weekday</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier jour de livraison
+            </p>
+        </field>
+    </record>
+
+    <record id="action_delivery_time_slot" model="ir.actions.act_window">
+        <field name="name">Créneaux horaires</field>
+        <field name="res_model">delivery.time.slot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier créneau horaire
+            </p>
+        </field>
+    </record>
+</odoo>

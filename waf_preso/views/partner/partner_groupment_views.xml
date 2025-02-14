@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="partner_groupment_view_tree" model="ir.ui.view">
+        <field name="name">partner.groupment.tree</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <tree string="Groupements">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="mandant_id"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="partner_groupment_view_form" model="ir.ui.view">
+        <field name="name">partner.groupment.form</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" 
+                            string="Activer" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_archive" 
+                            string="Archiver" 
+                            type="object"
+                            invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom du groupement"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sequence" groups="base.group_no_one"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Membres" name="members">
+                            <field name="partner_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </page>
+                        <page string="Zones de livraison" name="delivery_zones">
+                            <field name="delivery_zone_ids" 
+                                   widget="many2many_tags" 
+                                   options="{'no_create': True}"
+                                   groups="base.group_multi_company"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Notes internes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="partner_groupment_view_search" model="ir.ui.view">
+        <field name="name">partner.groupment.search</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="mandant_id"/>
+                <field name="partner_ids"/>
+                <separator/>
+                <filter string="Actifs" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Brouillons" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Archivés" name="archived" domain="[('state', '=', 'archived')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Mandant" name="mandant" context="{'group_by': 'mandant_id'}"/>
+                    <filter string="État" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Société" name="company" context="{'group_by': 'company_id'}" 
+                            groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="partner_groupment_view_kanban" model="ir.ui.view">
+        <field name="name">partner.groupment.kanban</field>
+        <field name="model">partner.groupment</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="state"/>
+                <field name="image"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('partner.groupment', 'image', record.id.raw_value)" 
+                                     alt="Logo"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <span class="badge badge-pill" 
+                                          t-attf-class="bg-#{record.state.raw_value == 'active' ? 'success' : record.state.raw_value == 'draft' ? 'warning' : 'secondary'}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <ul>
+                                    <li>Code: <field name="code"/></li>
+                                    <li>Mandant: <field name="mandant_id"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

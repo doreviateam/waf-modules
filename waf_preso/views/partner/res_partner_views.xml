@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- TODO: vues pour les partenaires -->
+
+    <!-- Form View Inheritance -->
+    <record id="view_partner_form_inherit_waf_preso" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.waf.preso</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Ajout des champs de livraison dans l'onglet Ventes & Achats -->
+            <xpath expr="//page[@name='sales_purchases']//group[@name='sale']" position="inside">
+                <field name="groupment_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                <field name="interest_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                <field name="interest_category_ids" widget="many2many_tags" options="{'no_create': True}"/>
+            </xpath>
+            
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Livraison WAF" name="waf_delivery">
+                    <group>
+                        <group>
+                            <field name="delivery_zone_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Nouvel onglet Groupements -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Groupements" name="groupments" invisible="not is_company">
+                    <group>
+                        <group string="Groupements gérés">
+                            <field name="managed_groupment_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Membre des groupements">
+                            <field name="groupment_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="mandant_id"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+
+                <!-- Nouvel onglet Centres d'intérêt -->
+                <page string="Centres d'intérêt" name="interests" invisible="not is_company">
+                    <group>
+                        <field name="interest_ids" widget="many2many_tags"/>
+                        <field name="interest_category_ids" widget="many2many_tags"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search View Inheritance -->
+    <record id="view_res_partner_filter_inherit_waf_preso" model="ir.ui.view">
+        <field name="name">res.partner.select.inherit.waf.preso</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Groupements" name="groupment" context="{'group_by': 'groupment_ids'}"/>
+                <filter string="Zones de livraison" name="delivery_zone" context="{'group_by': 'delivery_zone_ids'}"/>
+                <filter string="Centres d'intérêt" name="interest" context="{'group_by': 'interest_ids'}"/>
+                <filter string="Catégories d'intérêt" name="interest_category" context="{'group_by': 'interest_category_ids'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Kanban View Inheritance -->
+    <record id="view_partner_kanban_inherit_waf_preso" model="ir.ui.view">
+        <field name="name">res.partner.kanban.inherit.waf.preso</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_kanban_details')]//ul/li[last()]" position="after">
+                <li t-if="record.delivery_zone_ids.raw_value">
+                    <field name="delivery_zone_ids" widget="many2many_tags"/>
+                </li>
+                <li t-if="record.groupment_ids.raw_value">
+                    <field name="groupment_ids" widget="many2many_tags"/>
+                </li>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="delivery_zone_view_tree" model="ir.ui.view">
+        <field name="name">delivery.zone.tree</field>
+        <field name="model">delivery.zone</field>
+        <field name="arch" type="xml">
+            <tree string="Zones de livraison">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="state"/>
+                <field name="partner_count"/>
+                <field name="delivery_order_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="delivery_zone_view_form" model="ir.ui.view">
+        <field name="name">delivery.zone.form</field>
+        <field name="model">delivery.zone</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" string="Activer" type="object" 
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_archive" string="Archiver" type="object"
+                            invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_partners" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="partner_count" string="Clients" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_deliveries" type="object" class="oe_stat_button" icon="fa-truck">
+                            <field name="delivery_order_count" string="Livraisons" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="is_multi_carrier"/>
+                            <field name="delivery_lead_time"/>
+                            <field name="min_amount" widget="monetary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Configuration" name="configuration">
+                            <group>
+                                <group string="Transporteurs">
+                                    <field name="delivery_carrier_ids" widget="many2many_tags"/>
+                                    <field name="default_carrier_id" 
+                                           domain="[('id', 'in', delivery_carrier_ids)]"
+                                           options="{'no_create': True}"/>
+                                </group>
+                                <group string="Planification">
+                                    <field name="delivery_days" widget="many2many_tags"/>
+                                    <field name="delivery_time_slots" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Clients" name="partners">
+                            <field name="partner_ids"/>
+                        </page>
+                        <page string="Zones adjacentes" name="adjacent_zones">
+                            <field name="adjacent_zone_ids"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes et commentaires sur la zone de livraison..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="delivery_zone_view_search" model="ir.ui.view">
+        <field name="name">delivery.zone.search</field>
+        <field name="model">delivery.zone</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="partner_ids"/>
+                <filter string="Actives" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Brouillons" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Archivées" name="archived" domain="[('state', '=', 'archived')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="État" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Société" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="delivery_zone_view_kanban" model="ir.ui.view">
+        <field name="name">delivery.zone.kanban</field>
+        <field name="model">delivery.zone</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="partner_count"/>
+                <field name="delivery_order_count"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <span class="badge badge-pill" 
+                                          t-attf-class="bg-#{record.state.raw_value == 'active' ? 'success' : record.state.raw_value == 'draft' ? 'warning' : 'secondary'}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <ul>
+                                    <li>Code: <field name="code"/></li>
+                                    <li><field name="partner_count"/> clients</li>
+                                    <li><field name="delivery_order_count"/> livraisons</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

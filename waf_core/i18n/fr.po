@@ -1,0 +1,274 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* waf_core
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-14 02:29+0000\n"
+"PO-Revision-Date: 2025-02-14 02:29+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "<i class=\"fa fa-arrow-right me-1\"/>Accéder"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "<i class=\"fa fa-cogs me-2\"/>Paramètres"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "<i class=\"fa fa-users me-2\"/>Utilisateurs"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "Accéder"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__active
+msgid "Actif"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__active
+msgid "Active/désactive le suivi des états"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.ui.menu,name:waf_core.menu_dashboard
+msgid "Administration"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.actions.act_url,name:waf_core.action_admin_dashboard
+msgid "Administration Admin"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.actions.act_url,name:waf_core.action_manager_dashboard
+msgid "Administration Manager"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.actions.act_url,name:waf_core.action_superadmin_dashboard
+msgid "Administration Super Admin"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields.selection,name:waf_core.selection__waf_state_tracking__state__cancelled
+msgid "Annulé"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields.selection,name:waf_core.selection__waf_state_tracking__state__draft
+msgid "Brouillon"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "Configuration Générale"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields.selection,name:waf_core.selection__waf_state_tracking__state__confirmed
+msgid "Confirmé"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.ui.menu,name:waf_core.menu_waf_root
+msgid "Coore"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "Gérer les utilisateurs et leurs droits d'accès"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.login
+msgid "Identifiant"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__message_has_error
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: waf_core
+#. odoo-python
+#: code:addons/waf_core/models/mixins/state_tracking_mixin.py:0
+#, python-format
+msgid "Impossible d'annuler depuis l'état %s"
+msgstr ""
+
+#. module: waf_core
+#. odoo-python
+#: code:addons/waf_core/models/mixins/state_tracking_mixin.py:0
+#, python-format
+msgid "Impossible de confirmer depuis l'état %s"
+msgstr ""
+
+#. module: waf_core
+#. odoo-python
+#: code:addons/waf_core/models/mixins/state_tracking_mixin.py:0
+#, python-format
+msgid "Impossible de remettre en brouillon depuis l'état %s"
+msgstr ""
+
+#. module: waf_core
+#. odoo-python
+#: code:addons/waf_core/models/mixins/state_tracking_mixin.py:0
+#, python-format
+msgid "Impossible de terminer : %s"
+msgstr ""
+
+#. module: waf_core
+#. odoo-python
+#: code:addons/waf_core/models/mixins/state_tracking_mixin.py:0
+#, python-format
+msgid "Impossible de terminer depuis l'état %s"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "Installer et mettre à jour les applications"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model,name:waf_core.model_waf_state_tracking
+msgid "Mixin pour la gestion des états"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "Modules"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.login
+msgid "Mot de passe"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.admin_dashboard
+msgid "Paramètres système et configuration technique"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: waf_core
+#: model_terms:ir.ui.view,arch_db:waf_core.login
+msgid "Se connecter"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields.selection,name:waf_core.selection__waf_state_tracking__state__done
+msgid "Terminé"
+msgstr ""
+
+#. module: waf_core
+#. odoo-python
+#: code:addons/waf_core/models/mixins/state_tracking_mixin.py:0
+#, python-format
+msgid "Validation impossible : %s"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,field_description:waf_core.field_waf_state_tracking__state
+msgid "État"
+msgstr ""
+
+#. module: waf_core
+#: model:ir.model.fields,help:waf_core.field_waf_state_tracking__state
+msgid "État du document"
+msgstr ""

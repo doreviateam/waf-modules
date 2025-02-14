@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. Catégories -->
+    <data noupdate="1">
+        <record id="category_services" model="partner.interest.category">
+            <field name="name">Services</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="category_logistique" model="partner.interest.category">
+            <field name="name">Logistique</field>
+            <field name="sequence">20</field>
+        </record>
+    </data>
+
+    <!-- 1. Centres d'intérêt -->
+    <data noupdate="1">
+        <record id="interest_monetique" model="partner.interest">
+            <field name="name">Services Monétiques</field>
+            <field name="code">MON</field>
+            <field name="description">Services liés aux solutions monétiques</field>
+            <field name="category_id" ref="category_services"/>
+            <field name="state">active</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="interest_logistique" model="partner.interest">
+            <field name="name">Logistique Bancaire</field>
+            <field name="code">LOG</field>
+            <field name="description">Services de logistique bancaire</field>
+            <field name="category_id" ref="category_logistique"/>
+            <field name="state">active</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="interest_securite" model="partner.interest">
+            <field name="name">Sécurité</field>
+            <field name="code">SEC</field>
+            <field name="description">Services de sécurité et surveillance</field>
+            <field name="category_id" ref="category_services"/>
+            <field name="state">active</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+
+    <!-- 2. Zones de livraison -->
+    <data noupdate="1">
+        <record id="delivery_zone_montpellier" model="delivery.zone">
+            <field name="name">Zone Montpellier Centre</field>
+            <field name="code">ZLMPLC</field>
+            <field name="sequence">10</field>
+            <field name="active" eval="True"/>
+            <field name="note">Zone centre-ville de Montpellier</field>
+        </record>
+
+        <record id="delivery_zone_beziers" model="delivery.zone">
+            <field name="name">Zone Béziers</field>
+            <field name="code">ZLBZR</field>
+            <field name="sequence">20</field>
+            <field name="active" eval="True"/>
+            <field name="note">Zone Béziers et alentours</field>
+        </record>
+
+        <record id="delivery_zone_sete" model="delivery.zone">
+            <field name="name">Zone Sète</field>
+            <field name="code">ZLSET</field>
+            <field name="sequence">30</field>
+            <field name="active" eval="True"/>
+            <field name="note">Zone Sète et bassin de Thau</field>
+        </record>
+    </data>
+
+    <!-- 3. Partenaires -->
+    <data noupdate="1">
+        <!-- Sièges régionaux -->
+        <record id="partner_cm_herault" model="res.partner">
+            <field name="name">Crédit Mutuel Hérault</field>
+            <field name="street">230 Avenue du Marché Gare</field>
+            <field name="zip">34070</field>
+            <field name="city">Montpellier</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="email">direction@cm-herault.fr</field>
+            <field name="phone">04.67.XX.XX.XX</field>
+            <field name="partner_type">agent</field>
+            <field name="company_type">company</field>
+            <field name="is_company" eval="True"/>
+        </record>
+
+        <!-- Agences Montpellier -->
+        <record id="partner_cm_antigone" model="res.partner">
+            <field name="name">Crédit Mutuel Antigone</field>
+            <field name="street">Place Paul Bec</field>
+            <field name="zip">34000</field>
+            <field name="city">Montpellier</field>
+            <field name="parent_id" ref="partner_cm_herault"/>
+            <field name="partner_type">member</field>
+            <field name="is_company" eval="True"/>
+        </record>
+
+        <record id="partner_cm_gambetta" model="res.partner">
+            <field name="name">Crédit Mutuel Gambetta</field>
+            <field name="street">Cours Gambetta</field>
+            <field name="zip">34000</field>
+            <field name="city">Montpellier</field>
+            <field name="parent_id" ref="partner_cm_herault"/>
+            <field name="partner_type">member</field>
+            <field name="is_company" eval="True"/>
+        </record>
+
+        <!-- Agences Béziers -->
+        <record id="partner_cm_beziers" model="res.partner">
+            <field name="name">CM Béziers Centre</field>
+            <field name="street">Avenue Wilson</field>
+            <field name="zip">34500</field>
+            <field name="city">Béziers</field>
+            <field name="parent_id" ref="partner_cm_herault"/>
+            <field name="partner_type">member</field>
+        </record>
+    </data>
+
+    <!-- 4. Groupements -->
+    <data noupdate="1">
+        <record id="groupment_mpl_monetique" model="partner.groupment">
+            <field name="name">Groupement Monétique Montpellier</field>
+            <field name="code">GRPMONMPL</field>
+            <field name="agent_id" ref="partner_cm_herault"/>
+            <field name="interest_ids" eval="[(4, ref('interest_monetique'))]"/>
+            <field name="member_ids" eval="[(6, 0, [ref('partner_cm_antigone'), ref('partner_cm_gambetta')])]"/>
+            <field name="date_start" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="state">active</field>
+            <field name="note">Groupement monétique zone Montpellier</field>
+        </record>
+
+        <record id="groupment_bzr_logistique" model="partner.groupment">
+            <field name="name">Groupement Logistique Béziers</field>
+            <field name="code">GRPLOGBZR</field>
+            <field name="agent_id" ref="partner_cm_herault"/>
+            <field name="interest_ids" eval="[(4, ref('interest_logistique'))]"/>
+            <field name="member_ids" eval="[
+                (6, 0, [
+                    ref('partner_cm_beziers')
+                ])
+            ]"/>
+            <field name="date_start" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="state">active</field>
+            <field name="notes">Groupement logistique zone Béziers</field>
+        </record>
+    </data>
+
+    <!-- 5. Dispatches -->
+    <data noupdate="1">
+        <record id="dispatch_monetique_mpl_01" model="sale.order.line.dispatch">
+            <field name="name">DISP/2025/000001</field>
+            <field name="date_planned" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="groupment_id" ref="groupment_mpl_monetique"/>
+            <field name="delivery_zone_id" ref="delivery_zone_montpellier"/>
+            <field name="state">draft</field>
+            <field name="notes">Premier dispatch monétique 2025</field>
+        </record>
+
+        <record id="dispatch_logistique_bzr_01" model="sale.order.line.dispatch">
+            <field name="name">DISP/2025/000002</field>
+            <field name="date_planned" eval="time.strftime('%Y-%m-%d')"/>
+            <field name="groupment_id" ref="groupment_bzr_logistique"/>
+            <field name="delivery_zone_id" ref="delivery_zone_beziers"/>
+            <field name="state">draft</field>
+            <field name="notes">Premier dispatch logistique 2025</field>
+        </record>
+    </data>
+</odoo>
+

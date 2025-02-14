@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Template pour la création -->
+        <record id="mail_template_interest_created" model="mail.template">
+            <field name="name">Centre d'intérêt - Création</field>
+            <field name="model_id" ref="model_partner_interest"/>
+            <field name="subject">Nouveau centre d'intérêt : ${object.name}</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.company_id.partner_id.lang}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Bonjour,</p>
+                    <p>Un nouveau centre d'intérêt vient d'être créé :</p>
+                    <ul>
+                        <li>Nom : ${object.name}</li>
+                        <li>Code : ${object.code}</li>
+                        <li>Catégorie : ${object.category_id.name}</li>
+                        <li>Groupements : ${', '.join(object.groupment_ids.mapped('name')) or 'Aucun'}</li>
+                        % if object.description:
+                            <li>Description : ${object.description | safe}</li>
+                        % endif
+                    </ul>
+                    <p>Cordialement,<br/>${user.signature | safe}</p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Template pour modification des groupements -->
+        <record id="mail_template_groupment_changed" model="mail.template">
+            <field name="name">Centre d'intérêt - Modification groupements</field>
+            <field name="model_id" ref="model_partner_interest"/>
+            <field name="subject">Modification des groupements : ${object.name}</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.company_id.partner_id.lang}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Bonjour,</p>
+                    <p>Les groupements associés au centre d'intérêt "${object.name}" ont été modifiés.</p>
+                    <p>Nouveaux groupements associés :</p>
+                    % if object.groupment_ids:
+                        <ul>
+                            % for groupment in object.groupment_ids:
+                                <li>${groupment.name}</li>
+                            % endfor
+                        </ul>
+                    % else:
+                        <p>Aucun groupement associé</p>
+                    % endif
+                    <p>Cordialement,<br/>${user.signature | safe}</p>
+                </div>
+            </field>
+        </record>
+
+        <!-- Template pour changement d'état -->
+        <record id="mail_template_state_changed" model="mail.template">
+            <field name="name">Centre d'intérêt - Changement d'état</field>
+            <field name="model_id" ref="model_partner_interest"/>
+            <field name="subject">Changement d'état : ${object.name}</field>
+            <field name="email_from">${user.email_formatted | safe}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.company_id.partner_id.lang}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Bonjour,</p>
+                    <p>L'état du centre d'intérêt "${object.name}" a changé.</p>
+                    <p>Nouvel état : ${dict(object._fields['state'].selection).get(object.state)}</p>
+                    <p>Cordialement,<br/>${user.signature | safe}</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo> 

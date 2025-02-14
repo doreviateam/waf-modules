@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Séquence pour les lignes de dispatch -->
+        <record id="seq_sale_order_line_dispatch" model="ir.sequence">
+            <field name="name">Séquence des lignes de dispatch</field>
+            <field name="code">sale.order.line.dispatch</field>
+            <field name="prefix">DISP/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo> 

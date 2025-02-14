@@ -1,108 +1,132 @@
 {
-    'name': 'WAF Pre-SO',  # Suppression du point dans le nom
+    'name': 'WAF Pre-SO',
     'version': '17.0.1.0.0',
     'category': 'Sales/Sales',
-    'summary': 'Gestion des groupements d\'intérêt et livraisons multiples',
+    'summary': 'Gestion avancée des groupements et livraisons',
     
-    # Description détaillée avec formatage RST
     'description': """
-WAF Pre-SO
-==========
+Module de gestion avancée des groupements d'intérêt et des livraisons
+===================================================================
 
-Module de gestion des groupements d'intérêt et livraisons multiples pour Odoo 17.
+Fonctionnalités principales
+--------------------------
+* Gestion des zones de livraison avec capacités et créneaux
+* Gestion hiérarchique des groupements de partenaires
+* Centres d'intérêt catégorisés avec statistiques
+* Planification optimisée des livraisons
+* Dispatch intelligent des commandes
+* Tableaux de bord et rapports analytiques
 
-Fonctionnalités
---------------
-* Gestion complète des groupements d'intérêt
-* Administration des mandataires et adhérents
-* Configuration des livraisons multiples
-* Système de dispatch des livraisons
-* Fractionnement automatique des bons de commande
-* Traçabilité avancée des colis
-* Interface de reporting dédiée
+Intégration
+-----------
+* Synchronisation avec la gestion commerciale
+* Interface avec la logistique
+* Connexion avec la comptabilité
+* API REST pour intégrations externes
 
-Configuration
-------------
-* Paramétrage des groupements
-* Définition des règles de livraison
-* Configuration des workflows de validation
-    """,
+Sécurité
+--------
+* Gestion fine des droits d'accès
+* Traçabilité complète des opérations
+* Protection des données sensibles
+""",
 
-    # Informations techniques
     'author': 'Dorevia',
     'maintainers': ['Dorevia Team'],
-    'website': 'https://www.doreviateam.com',
+    'website': 'https://www.dorevia.com',
     'license': 'LGPL-3',
     
-    # Dépendances essentielles
     'depends': [
+        # Modules de base Odoo
         'base',
         'mail',
+        'web',
+        'base_setup',
+        
+        # Modules métier Odoo
+        'contacts',
+        'sale',
         'sale_management',
         'stock',
+        'delivery',
+        'purchase',
+        'account',
+        'product',
+        
         # Modules WAF
         'waf_core',
         'waf_contacts',
         'waf_localisation',
-        'waf_tempo',
     ],
     
-    # Données
     'data': [
-        # Sécurité (toujours en premier)
-        'security/waf_preso_security.xml',
+        # Sécurité
+        'security/security.xml',
         'security/ir.model.access.csv',
         
-        # Données de configuration
-        'data/ir_sequence_data.xml',
-        'wizards/views/create_dispatch_wizard_views.xml',
+        # Wizards (déplacé avant les vues)
+        'wizards/create_delivery_wizard_views.xml',
         
-        # Vues (ordre logique de chargement)
-        'views/menu.xml',
-        'views/partner_interest_views.xml',
-        'views/partner_groupment_views.xml',
-        'views/res_partner_views.xml',
-        'views/sale_order_views.xml',
-        'views/sale_order_line_dispatch_views.xml',
-        'views/sale_order_line_dispatch_delivery_views.xml',
-
-        # Données de démonstration  
-        'data/res_partner_data.xml',
-        'data/product_data.xml',       
-        'data/partner_interest_data.xml',
-        'data/partner_groupment_data.xml', 
+        # Vues communes
+        'views/common/action_views.xml',
+        'views/common/menu_views.xml',
+        
+        # Vues partenaires
+        'views/partner/partner_groupment_views.xml',
+        'views/partner/partner_interest_views.xml',
+        'views/partner/partner_interest_category_views.xml',
+        'views/partner/res_partner_views.xml',
+        
+        # Vues ventes
+        'views/sale/sale_order_views.xml',
+        'views/sale/line_dispatch_views.xml',
+        
+        # Vues livraison
+        'views/delivery/delivery_zone_views.xml',
+        'views/delivery/delivery_config_views.xml',
+        'views/delivery/dispatch_delivery_views.xml',
+        
+        # Vues produits
+        'views/product/product_template_views.xml',
+        'views/product/product_pricelist_views.xml',
+        
+        # Vues stock
+        'views/stock/stock_move_views.xml',
+        'views/stock/stock_picking_views.xml',
+        
+        # Data
+        'data/sale_order_line_dispatch_data.xml',
     ],
     
-    # Assets frontend et backend
     'assets': {
-        'web.assets_backend': [
-            # 'waf_preso/static/src/scss/groupment.scss',
-            # 'waf_preso/static/src/js/groupment.js',
-        ],
+        'web.assets_backend': [],
+        'web.assets_qweb': [],
     },
     
-    # Données de démonstration
-    # 'demo': [
-    #     'demo/partner_interest_demo.xml',
-    #     'demo/res_partner_demo.xml',
-    #     'demo/partner_groupment_demo.xml',
-    # ],
-    
-    # Configuration Odoo 17
+    'demo': [],
+    'images': [],
+
     'application': True,
     'installable': True,
     'auto_install': False,
-    'sequence': 1,  # Position dans le menu des applications
-    'development_status': 'Beta',
+    'sequence': 1,
+    
+    # Configuration
+        # 'post_init_hook': 'post_init_hook',
+        # 'uninstall_hook': 'uninstall_hook',
     
     # Métadonnées
     'version': '17.0.1.0.0',
     'currency': 'EUR',
     'price': 0.0,
-    'images': ['static/description/banner.png'],
+    'development_status': 'Beta',
     
-    # Hooks d'installation
-    'pre_init_hook': None,
-    'post_init_hook': None,
-    'uninstall_hook': None,
+    # Configuration technique
+    'external_dependencies': {
+        'python': [
+            'pandas',
+            'geopy',
+        ],
+    },
 }
+

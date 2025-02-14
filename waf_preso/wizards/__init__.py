@@ -1,1 +1,1 @@
-from . import create_dispatch_wizard
+from . import create_delivery_wizard

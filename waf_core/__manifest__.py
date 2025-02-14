@@ -25,14 +25,14 @@
         'om_account_accountant',
         
         # Modules projet et vente
-        'project',
-        'hr_timesheet',
-        'analytic',
-        'product',
-        'sale',
-        'sale_management',
-        'sale_timesheet',
-        'sale_project',
+        # 'project',
+        # 'hr_timesheet',
+        # 'analytic',
+        # 'product',
+        # 'sale',
+        # 'sale_management',
+        # 'sale_timesheet',
+        # 'sale_project',
         
         # Modules interface OCA
         'web_responsive',
@@ -56,7 +56,7 @@
         ],
     },
     'installable': True,
-    'application': True,
+    'application': False,
     'auto_install': False,
     'license': 'LGPL-3',
 }

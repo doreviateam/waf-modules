@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Product Pricelist Form -->
+    <record id="product_pricelist_view_form_inherit" model="ir.ui.view">
+        <field name="name">product.pricelist.form.inherit</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='country_group_ids']" position="after">
+                <field name="delivery_zone_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Product Pricelist Search -->
+    <record id="product_pricelist_view_search_inherit" model="ir.ui.view">
+        <field name="name">product.pricelist.search.inherit</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view_search"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <field name="delivery_zone_ids"/>
+                <filter string="Avec zones de livraison" name="with_delivery_zones" domain="[('delivery_zone_ids', '!=', False)]"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -13,7 +13,13 @@ class BusinessDayMixin(models.AbstractModel):
 
     calendar_country = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.ref('base.fr', False), required=True, 
                                        tracking=True, help="Pays pour lequel le calendrier est utilisé")
-    calendar_region_id = fields.Many2one(compute='_compute_calendar_region_id', store=True, string="Région du calendrier", help="Région du calendrier")
+    calendar_region_id = fields.Many2one(
+        comodel_name='calendar.region',
+        compute='_compute_calendar_region_id', 
+        store=True, 
+        string="Région du calendrier", 
+        help="Région du calendrier"
+    )
     business_days_count = fields.Integer(compute='_compute_business_days', store=True, string="Nombre de jours ouvrés", help="Nombre de jours ouvrés dans la période")
     
     _calendar_instances = {}  # Cache pour les instances de calendrier

@@ -41,7 +41,7 @@
                             <field name="description" placeholder="Description détaillée de la région..."/>
                         </page>
                         <page name="holidays" string="Jours fériés spécifiques">
-                            <field name="specific_holiday_ids" context="{'default_region_id': active_id}">
+                            <field name="specific_holiday_ids" context="{'default_region_id': id}">
                                 <tree editable="bottom">
                                     <field name="name"/>
                                     <field name="date"/>
