@@ -5,11 +5,15 @@
         <field name="name">partner.groupment.tree</field>
         <field name="model">partner.groupment</field>
         <field name="arch" type="xml">
-            <tree string="Groupements">
+            <tree string="Groupements" decoration-muted="state=='archived'" decoration-info="state=='draft'">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="mandant_id"/>
+                <field name="interest_id"/>
+                <field name="active_member_count"/>
+                <field name="activity_level"/>
+                <field name="total_revenue" sum="Total"/>
                 <field name="state"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </tree>
@@ -32,6 +36,11 @@
                             string="Archiver" 
                             type="object"
                             invisible="state != 'active'"/>
+                    <button name="action_send_summary" 
+                            string="Envoyer résumé" 
+                            type="object"
+                            class="btn-secondary" 
+                            invisible="state != 'active'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -39,27 +48,79 @@
                         <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
                             <field name="active" widget="boolean_button"/>
                         </button>
+                        <button name="action_view_partners" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="active_member_count" string="Membres" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_deliveries" type="object" class="oe_stat_button" icon="fa-truck">
+                            <field name="delivery_count" string="Livraisons" widget="statinfo"/>
+                        </button>
                     </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
-                        <h1>
-                            <field name="name" placeholder="Nom du groupement"/>
-                        </h1>
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Nom du groupement"/></h1>
+                        <h2><field name="code" placeholder="Code unique"/></h2>
                     </div>
                     <group>
                         <group>
-                            <field name="sequence" groups="base.group_no_one"/>
-                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="mandant_id"/>
+                            <field name="mandataire_id" 
+                                   context="{'show_address': 0, 'show_parent_name': 0}" 
+                                   options="{'always_reload': True}"/>
+                            <field name="interest_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="min_order_amount"/>
+                            <field name="activity_level"/>
+                            <field name="last_activity_date"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Membres" name="members">
-                            <field name="partner_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="partner_ids" nolabel="1">
+                                <tree string="Membres du groupement">
+                                    <field name="name"/>
+                                    <field name="street"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                    <field name="phone" widget="phone"/>
+                                    <field name="mobile" widget="phone" optional="hide"/>
+                                    <field name="email" widget="email"/>
+                                    <field name="website" widget="url" optional="hide"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                </tree>
+                            </field>
                         </page>
-                        <page string="Zones de livraison" name="delivery_zones">
-                            <field name="delivery_zone_ids" 
-                                   widget="many2many_tags" 
-                                   options="{'no_create': True}"
-                                   groups="base.group_multi_company"/>
+                        <page string="Livraison" name="delivery">
+                            <group>
+                                <group>
+                                    <field name="delivery_zone_ids" widget="many2many_tags"/>
+                                    <field name="default_delivery_zone_id"/>
+                                    <field name="delivery_carrier_ids" widget="many2many_tags"/>
+                                    <field name="property_delivery_carrier_id"/>
+                                </group>
+                                <group>
+                                    <field name="delivery_instructions"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Configuration" name="configuration">
+                            <group>
+                                <group>
+                                    <field name="property_payment_term_id"/>
+                                    <field name="category_ids" widget="many2many_tags"/>
+                                    <field name="manager_ids" widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                    <field name="total_revenue"/>
+                                    <field name="average_order_value"/>
+                                </group>
+                            </group>
                         </page>
                         <page string="Notes" name="notes">
                             <field name="note" placeholder="Notes internes..."/>
@@ -68,6 +129,7 @@
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
                     <field name="message_ids"/>
                 </div>
             </form>
@@ -83,16 +145,22 @@
                 <field name="name"/>
                 <field name="code"/>
                 <field name="mandant_id"/>
+                <field name="interest_id"/>
                 <field name="partner_ids"/>
+                <field name="delivery_zone_ids"/>
                 <separator/>
                 <filter string="Actifs" name="active" domain="[('state', '=', 'active')]"/>
                 <filter string="Brouillons" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Archivés" name="archived" domain="[('state', '=', 'archived')]"/>
+                <separator/>
+                <filter string="Haute activité" name="high_activity" domain="[('activity_level', '=', 'high')]"/>
+                <filter string="Inactifs" name="inactive" domain="[('activity_level', '=', 'inactive')]"/>
                 <group expand="0" string="Regrouper par">
                     <filter string="Mandant" name="mandant" context="{'group_by': 'mandant_id'}"/>
+                    <filter string="Centre d'intérêt" name="interest" context="{'group_by': 'interest_id'}"/>
                     <filter string="État" name="state" context="{'group_by': 'state'}"/>
-                    <filter string="Société" name="company" context="{'group_by': 'company_id'}" 
-                            groups="base.group_multi_company"/>
+                    <filter string="Niveau d'activité" name="activity_level" context="{'group_by': 'activity_level'}"/>
+                    <filter string="Société" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
                 </group>
             </search>
         </field>
@@ -103,18 +171,20 @@
         <field name="name">partner.groupment.kanban</field>
         <field name="model">partner.groupment</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban default_group_by="state">
                 <field name="id"/>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="state"/>
                 <field name="image"/>
+                <field name="active_member_count"/>
+                <field name="activity_level"/>
+                <field name="total_revenue"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
                             <div class="o_kanban_image">
-                                <img t-att-src="kanban_image('partner.groupment', 'image', record.id.raw_value)" 
-                                     alt="Logo"/>
+                                <img t-att-src="kanban_image('partner.groupment', 'image', record.id.raw_value)" alt="Logo"/>
                             </div>
                             <div class="oe_kanban_details">
                                 <strong class="o_kanban_record_title">
@@ -125,10 +195,15 @@
                                           t-attf-class="bg-#{record.state.raw_value == 'active' ? 'success' : record.state.raw_value == 'draft' ? 'warning' : 'secondary'}">
                                         <field name="state"/>
                                     </span>
+                                    <span class="badge badge-pill" 
+                                          t-attf-class="bg-#{record.activity_level.raw_value == 'high' ? 'success' : record.activity_level.raw_value == 'medium' ? 'info' : record.activity_level.raw_value == 'low' ? 'warning' : 'danger'}">
+                                        <field name="activity_level"/>
+                                    </span>
                                 </div>
                                 <ul>
                                     <li>Code: <field name="code"/></li>
-                                    <li>Mandant: <field name="mandant_id"/></li>
+                                    <li>Membres: <field name="active_member_count"/></li>
+                                    <li>CA: <field name="total_revenue" widget="monetary"/></li>
                                 </ul>
                             </div>
                         </div>

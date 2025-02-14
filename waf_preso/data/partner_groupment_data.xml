@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Création du groupement CM34 Monétique & Logistique -->
+        <record id="partner_groupment_cm34_monetique" model="partner.groupment">
+            <field name="name">CM34 Monétique &amp; Logistique</field>
+            <field name="code">CM34ML</field>
+            <field name="mandant_id" ref="waf_preso.partner_cm_herault"/>
+            <field name="mandataire_id" ref="waf_preso.partner_cm_herault_contact"/>
+            <field name="interest_id" ref="waf_preso.partner_interest_mls"/>
+            <field name="state">active</field>
+            <field name="partner_ids" eval="[
+                (6, 0, [
+                    ref('waf_preso.partner_cm_herault'),
+                    ref('waf_preso.partner_cm_antigone'),
+                    ref('waf_preso.partner_cm_gambetta'),
+                    ref('waf_preso.partner_cm_beziers')
+                ])
+            ]"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active" eval="True"/>
+            <field name="sequence">10</field>
+        </record>
+    </data>
+</odoo> 

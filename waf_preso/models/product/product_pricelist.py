@@ -1,16 +1,29 @@
-from odoo import fields, models
+from odoo import api, fields, models, _
 
 class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
+    _description = 'Liste de prix produits avec restrictions groupements'
 
-    partner_ids = fields.Many2many(
-        'res.partner',
-        'product_pricelist_allowed_partner_rel',
+    groupment_ids = fields.Many2many(
+        'partner.groupment',
+        'product_pricelist_groupment_rel',
         'pricelist_id',
-        'partner_id',
-        string='Partenaires autorisés',
-        help="Partenaires autorisés à utiliser cette liste de prix"
+        'groupment_id',
+        string='Groupements autorisés',
+        tracking=True,
+        help="Groupements de partenaires autorisés à utiliser cette liste de prix"
     )
+
+    groupment_count = fields.Integer(
+        string='Nombre de groupements',
+        compute='_compute_groupment_count',
+        store=True
+    )
+
+    @api.depends('groupment_ids')
+    def _compute_groupment_count(self):
+        for pricelist in self:
+            pricelist.groupment_count = len(pricelist.groupment_ids)
 
     delivery_zone_ids = fields.Many2many(
         'delivery.zone',

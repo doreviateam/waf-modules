@@ -10,63 +10,85 @@
     <menuitem id="menu_waf_sales"
               name="Ventes"
               parent="menu_waf_preso_root"
+              sequence="10"/>
+
+    <menuitem id="menu_waf_commande"
+              name="Commandes"
+              parent="menu_waf_sales"
               action="action_orders_waf"
               sequence="10"/>
 
-    <!-- Zones de livraison -->
-    <menuitem id="menu_delivery_zones"
-              name="Zones de livraison"
-              action="action_delivery_zone"
+    <menuitem id="menu_product_list"
+              name="Produits"
               parent="menu_waf_preso_root"
               sequence="20"/>
 
-    <!-- Partenaires -->
-    <menuitem id="menu_partner_root"
-              name="Partenaires"
+    <menuitem id="menu_marchandise_list"
+              name="Produits"
+              parent="menu_product_list"
+              action="action_product_list"
+              sequence="10"/>
+
+    <menuitem id="menu_service_list"
+              name="Services"
+              parent="menu_product_list"
+              action="action_service_list"
+              sequence="20"/>
+
+    <!-- Contacts -->
+    <menuitem id="menu_waf_contact"
+              name="Contacts"
               parent="menu_waf_preso_root"
-              sequence="30"/>
+              sequence="5"/>
 
     <menuitem id="menu_partner_companies"
               name="Sociétés"
               action="action_partner_company"
-              parent="menu_partner_root"
+              parent="menu_waf_contact"
               sequence="10"/>
 
     <menuitem id="menu_partner_groupment"
               name="Groupements"
               action="action_partner_groupment"
-              parent="menu_partner_root"
+              parent="menu_waf_contact"
               sequence="20"/>
 
-    <menuitem id="menu_partner_interest"
-              name="Centres d'intérêt"
-              action="action_partner_interest"
-              parent="menu_partner_root"
-              sequence="30"/>
-
-    <!-- Dispatches -->
-    <menuitem id="menu_dispatch_root"
-              name="Dispatches"
+    <!-- Logistique -->
+    <menuitem id="menu_waf_logistic"
+              name="Logistique"
               parent="menu_waf_preso_root"
               sequence="40"/>
 
     <menuitem id="menu_dispatch_list"
               name="Dispatches"
               action="action_sale_order_line_dispatch"
-              parent="menu_dispatch_root"
+              parent="menu_waf_logistic"
               sequence="10"/>
 
     <menuitem id="menu_dispatch_delivery"
               name="Livraisons"
               action="action_dispatch_delivery"
-              parent="menu_dispatch_root"
+              parent="menu_waf_logistic"
               sequence="20"/>
 
     <menuitem id="menu_dispatch_stats"
               name="Statistiques"
               action="action_sale_dispatch_stats"
-              parent="menu_dispatch_root"
+              parent="menu_waf_logistic"
               sequence="30"/>
+
+    <!-- Stock -->
+    <menuitem id="menu_waf_stock"
+              name="Stock"
+              parent="menu_waf_preso_root"
+              sequence="50"/>
+
+    <menuitem id="menu_waf_stock_move"
+              name="Mouvements"
+              action="action_stock_move"
+              parent="menu_waf_stock"
+              sequence="10"/>
+              
 
     <!-- Configuration -->
     <menuitem id="menu_waf_preso_config"
@@ -76,19 +98,49 @@
 
     <!-- Configuration Livraison -->
     <menuitem id="menu_delivery_config"
-              name="Configuration Livraison"
+              name="Livraison"
               parent="menu_waf_preso_config"
+              sequence="10"/>
+              
+    <menuitem id="menu_delivery_zones"
+              name="Zones de livraison"
+              action="action_delivery_zone"
+              parent="menu_delivery_config"
               sequence="10"/>
 
     <menuitem id="menu_delivery_weekday"
               name="Jours de livraison"
               action="action_delivery_weekday"
               parent="menu_delivery_config"
-              sequence="10"/>
+              sequence="20"/>
 
     <menuitem id="menu_delivery_time_slot"
               name="Créneaux horaires"
               action="action_delivery_time_slot"
               parent="menu_delivery_config"
+              sequence="30"/>
+
+    <!-- Configuration Groupement -->
+    <menuitem id="menu_groupment_config"
+              name="Groupement"
+              parent="menu_waf_preso_config"
+              sequence="100"/>
+    
+    <menuitem id="menu_partner_groupment"
+              name="Groupements"
+              action="action_partner_groupment"
+              parent="menu_groupment_config"
+              sequence="10"/>
+    
+    <menuitem id="menu_groupment_interest"
+              name="Centres d'intérêt"
+              action="action_partner_interest"
+              parent="menu_groupment_config"
               sequence="20"/>
+
+    <menuitem id="menu_groupment_interest_category"
+              name="Catégories"
+              action="action_partner_interest_category"
+              parent="menu_groupment_config"
+              sequence="30"/>
 </odoo>

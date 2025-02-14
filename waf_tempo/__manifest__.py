@@ -1,7 +1,7 @@
 {
     'name': 'W.A.F Tempo',
     'version': '1.0.0',
-    'category': 'Tools',
+    'category': 'Technical Settings',
     'summary': 'Gestion avancée de la temporalité',
     'author': 'Dorevia',
     'website': 'https://www.doreviateam.com',
@@ -32,5 +32,6 @@
     'installable': True,
     'application': False,
     'auto_install': False,
+    'visible': False,
     'license': 'LGPL-3',
 }

@@ -9,55 +9,12 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <!-- Ajout des champs de livraison dans l'onglet Ventes & Achats -->
-            <xpath expr="//page[@name='sales_purchases']//group[@name='sale']" position="inside">
-                <field name="groupment_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                <field name="interest_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                <field name="interest_category_ids" widget="many2many_tags" options="{'no_create': True}"/>
-            </xpath>
-            
-            <xpath expr="//page[@name='sales_purchases']" position="after">
-                <page string="Livraison WAF" name="waf_delivery">
-                    <group>
-                        <group>
-                            <field name="delivery_zone_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                        </group>
-                    </group>
-                </page>
-            </xpath>
-
-            <!-- Nouvel onglet Groupements -->
-            <xpath expr="//notebook" position="inside">
-                <page string="Groupements" name="groupments" invisible="not is_company">
-                    <group>
-                        <group string="Groupements gérés">
-                            <field name="managed_groupment_ids" nolabel="1">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="code"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
-                        </group>
-                        <group string="Membre des groupements">
-                            <field name="groupment_ids" nolabel="1">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="code"/>
-                                    <field name="mandant_id"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
-                        </group>
-                    </group>
-                </page>
-
-                <!-- Nouvel onglet Centres d'intérêt -->
-                <page string="Centres d'intérêt" name="interests" invisible="not is_company">
-                    <group>
-                        <field name="interest_ids" widget="many2many_tags"/>
-                        <field name="interest_category_ids" widget="many2many_tags"/>
-                    </group>
-                </page>
+            <xpath expr="//page[@name='sales_purchases']//group[@name='sale']" position="after">
+                <group name="groupment_interest" string="Groupements">
+                    <field name="groupment_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="interest_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="interest_category_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                </group>
             </xpath>
         </field>
     </record>

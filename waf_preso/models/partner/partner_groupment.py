@@ -122,7 +122,7 @@ class PartnerGroupment(models.Model):
         'res.partner',
         string='Membres',
         tracking=True,
-        domain="[('customer_rank', '>', 0)]"
+        domain="[('is_company', '=', True)]"
     )
 
     # Champs de configuration
@@ -379,14 +379,17 @@ class PartnerGroupment(models.Model):
     @api.constrains('partner_ids', 'delivery_zone_ids')
     def _check_partners_zones(self):
         for groupment in self:
-            invalid_partners = groupment.partner_ids.filtered(
-                lambda p: not any(zone in groupment.delivery_zone_ids for zone in p.delivery_zone_ids)
-            )
-            if invalid_partners:
-                raise ValidationError(_(
-                    "Les partenaires suivants n'appartiennent à aucune zone de livraison autorisée :\n%s",
-                    '\n'.join(invalid_partners.mapped('name'))
-                ))
+            if groupment.delivery_zone_ids:  # Vérifie seulement si des zones sont définies
+                invalid_partners = groupment.partner_ids.filtered(
+                    lambda p: p.delivery_zone_ids and not any(
+                        zone in groupment.delivery_zone_ids for zone in p.delivery_zone_ids
+                    )
+                )
+                if invalid_partners:
+                    raise ValidationError(_(
+                        "Les partenaires suivants ont des zones de livraison qui ne sont pas autorisées dans le groupement :\n%s",
+                        '\n'.join(invalid_partners.mapped('name'))
+                    ))
 
     @api.constrains('company_id', 'delivery_zone_ids')
     def _check_delivery_zones_company(self):

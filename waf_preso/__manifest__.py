@@ -95,7 +95,10 @@ Sécurité
         'views/stock/stock_picking_views.xml',
         
         # Data
-        'data/sale_order_line_dispatch_data.xml',
+        'data/product_data.xml',
+        'data/partner_data.xml',
+        'data/partner_interest_data.xml',
+        'data/partner_groupment_data.xml',
     ],
     
     'assets': {

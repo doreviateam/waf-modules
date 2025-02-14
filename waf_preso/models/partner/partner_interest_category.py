@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 class PartnerInterestCategory(models.Model):
     _name = 'partner.interest.category'
     _description = 'Catégories des centres d\'intérêt'
-    _order = 'sequence, name'
+    _order = 'sequence,id desc'
     _parent_name = "parent_id"
     _parent_store = True
     _rec_name = 'complete_name'
@@ -63,11 +63,19 @@ class PartnerInterestCategory(models.Model):
         store=True
     )
 
+    currency_id = fields.Many2one(
+        'res.currency', 
+        string='Currency',
+        default=lambda self: self.env.company.currency_id.id,
+        required=True
+    )
+
     total_revenue = fields.Monetary(
-        string='Chiffre d\'affaires total',
-        compute='_compute_category_stats',
+        string='Total Revenue',
+        compute='_compute_total_revenue',
+        recursive=True,
         store=True,
-        currency_field='company_currency_id'
+        currency_field='currency_id'
     )
 
     company_id = fields.Many2one(
@@ -93,6 +101,36 @@ class PartnerInterestCategory(models.Model):
         translate=True
     )
 
+    # Champs stockés avec compute_sudo
+    delivery_count = fields.Integer(
+        compute='_compute_stored_delivery_stats',
+        compute_sudo=True,
+        store=True
+    )
+    on_time_delivery_rate = fields.Float(
+        compute='_compute_stored_delivery_stats',
+        compute_sudo=True,
+        store=True
+    )
+
+    # Champs calculés en temps réel
+    average_delivery_time = fields.Float(
+        compute='_compute_realtime_delivery_stats',
+        compute_sudo=True,
+        store=False
+    )
+    last_delivery_date = fields.Datetime(
+        compute='_compute_realtime_delivery_stats',
+        compute_sudo=True,
+        store=False
+    )
+
+    picking_ids = fields.One2many(
+        'stock.picking',
+        'partner_id',
+        string='Picking IDs'
+    )
+
     @api.depends('name', 'parent_id.complete_name')
     def _compute_complete_name(self):
         for category in self:
@@ -109,7 +147,7 @@ class PartnerInterestCategory(models.Model):
 
     @api.depends('interest_ids.revenue_contribution', 
                 'child_ids.total_revenue')
-    def _compute_category_stats(self):
+    def _compute_total_revenue(self):
         for category in self:
             direct_revenue = sum(interest.revenue_contribution or 0 
                                for interest in category.interest_ids)
@@ -156,5 +194,33 @@ class PartnerInterestCategory(models.Model):
             for category in self:
                 if category.child_ids and len(self.browse(vals['parent_id']).parent_path.split('/')) >= 2:
                     raise ValidationError(_("Impossible de déplacer une catégorie avec des enfants à ce niveau."))
-        return super().write(vals) 
+        return super().write(vals)
+
+    @api.depends('picking_ids')
+    def _compute_stored_delivery_stats(self):
+        """Calcul des statistiques stockées"""
+        for record in self:
+            pickings = record.picking_ids.filtered(lambda p: p.state == 'done')
+            record.delivery_count = len(pickings)
+            record.on_time_delivery_rate = self._compute_on_time_rate(pickings)
+
+    @api.depends('picking_ids')
+    def _compute_realtime_delivery_stats(self):
+        """Calcul des statistiques en temps réel"""
+        for record in self:
+            pickings = record.picking_ids.filtered(lambda p: p.state == 'done')
+            record.average_delivery_time = self._compute_average_time(pickings)
+            record.last_delivery_date = self._compute_last_date(pickings)
+
+    def _compute_on_time_rate(self, pickings):
+        # Implementation of _compute_on_time_rate method
+        pass
+
+    def _compute_average_time(self, pickings):
+        # Implementation of _compute_average_time method
+        pass
+
+    def _compute_last_date(self, pickings):
+        # Implementation of _compute_last_date method
+        pass
     

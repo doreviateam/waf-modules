@@ -3,12 +3,15 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from dateutil.relativedelta import relativedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class PartnerInterest(models.Model):
     _name = 'partner.interest'
     _description = "Centre d'intérêt partenaire"
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'sequence, name'
+    _order = 'sequence, id desc'
     _translate = True  
 
     # Champs de base
@@ -248,29 +251,16 @@ class PartnerInterest(models.Model):
         return records
 
     def write(self, vals):
-        """Surcharge pour notifier lors des modifications"""
-        # Sauvegarde des anciennes valeurs
-        tracked_fields = ['groupment_ids', 'state']
-        old_values = {
-            field: getattr(self, field) 
-            for field in tracked_fields 
-            if field in vals
-        }
-
-        res = super().write(vals)
-
-        # Gestion des notifications
-        changes = {
-            field: (old_values[field], getattr(self, field))
-            for field in tracked_fields
-            if field in vals
-        }
-        if changes:
-            self._notify_changes(changes)
-
-        if 'activity_level' in vals:
-            self.notify_activity_change()
-
+        """Surcharge de la méthode write pour gérer le tracking"""
+        # Désactiver temporairement le tracking mail
+        self = self.with_context(tracking_disable=True)
+        
+        # Appel du write parent
+        res = super(PartnerInterest, self).write(vals)
+        
+        # Réactiver le tracking pour les prochaines opérations
+        self = self.with_context(tracking_disable=False)
+        
         return res
 
     @api.depends('groupment_ids', 'groupment_ids.partner_ids')
@@ -308,8 +298,7 @@ class PartnerInterest(models.Model):
     _sql_constraints = [
         ('unique_code_company',
          'UNIQUE(code, company_id)',
-         'Le code doit être unique par société!'),
-        ('code_uniq', 'unique (code)', 'Le code doit être unique !')
+         'Le code doit être unique par société!')
     ]
 
     @api.model

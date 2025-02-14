@@ -10,7 +10,7 @@
         - Shared utilities
     """,
     'author': 'Dorevia',
-    'category': 'Services/Project',
+    'category': 'Technical Settings',
     'depends': [
         # Modules de base
         'base',
@@ -58,5 +58,6 @@
     'installable': True,
     'application': False,
     'auto_install': False,
+    'visible': False,
     'license': 'LGPL-3',
 }

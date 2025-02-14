@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-14 02:29+0000\n"
-"PO-Revision-Date: 2025-02-14 02:29+0000\n"
+"POT-Creation-Date: 2025-02-14 22:41+0000\n"
+"PO-Revision-Date: 2025-02-14 22:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -260,6 +260,11 @@ msgid "Avec zones de livraison"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__average_delivery_time
+msgid "Average Delivery Time"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.fields.selection,name:waf_preso.selection__create_delivery_wizard__validation_status__warning
 msgid "Avertissements"
 msgstr ""
@@ -288,6 +293,16 @@ msgid "Brouillons"
 msgstr ""
 
 #. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_kanban
+msgid "CA:"
+msgstr ""
+
+#. module: waf_preso
+#: model:partner.groupment,name:waf_preso.partner_groupment_cm34_monetique
+msgid "CM34 Monétique & Logistique"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_delivery_zone__available_capacity
 msgid "Capacité disponible"
 msgstr ""
@@ -310,6 +325,7 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__category_ids
+#: model:ir.ui.menu,name:waf_preso.menu_groupment_interest_category
 msgid "Catégories"
 msgstr ""
 
@@ -321,12 +337,18 @@ msgid "Catégories d'intérêt"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_partner_interest_category
+msgid "Catégories de centres d'intérêt"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model,name:waf_preso.model_partner_interest_category
 msgid "Catégories des centres d'intérêt"
 msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__interest_id
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_search
 msgid "Centre d'intérêt"
 msgstr ""
 
@@ -343,9 +365,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_preso.field_res_partner__interest_ids
 #: model:ir.model.fields,field_description:waf_preso.field_res_users__interest_ids
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order__interest_ids
-#: model:ir.ui.menu,name:waf_preso.menu_partner_interest
+#: model:ir.ui.menu,name:waf_preso.menu_groupment_interest
 #: model_terms:ir.ui.view,arch_db:waf_preso.partner_interest_view_tree
-#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf_preso
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_res_partner_filter_inherit_waf_preso
 #, python-format
 msgid "Centres d'intérêt"
@@ -365,7 +386,6 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__total_revenue
-#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__total_revenue
 msgid "Chiffre d'affaires total"
 msgstr ""
 
@@ -401,6 +421,11 @@ msgid "Code HS du produit"
 msgstr ""
 
 #. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
+msgid "Code unique"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.fields,help:waf_preso.field_delivery_zone__code
 msgid "Code unique de la zone de livraison"
 msgstr ""
@@ -426,6 +451,7 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.actions.act_window,name:waf_preso.action_orders_waf
 #: model:ir.model.fields,field_description:waf_preso.field_delivery_weekday__sale_order_ids
+#: model:ir.ui.menu,name:waf_preso.menu_waf_commande
 msgid "Commandes"
 msgstr ""
 
@@ -442,12 +468,8 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.ui.menu,name:waf_preso.menu_waf_preso_config
 #: model_terms:ir.ui.view,arch_db:waf_preso.delivery_zone_view_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
 msgid "Configuration"
-msgstr ""
-
-#. module: waf_preso
-#: model:ir.ui.menu,name:waf_preso.menu_delivery_config
-msgid "Configuration Livraison"
 msgstr ""
 
 #. module: waf_preso
@@ -474,6 +496,11 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.model.fields,help:waf_preso.field_partner_groupment__mandataire_id
 msgid "Contact principal du groupement"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_contact
+msgid "Contacts"
 msgstr ""
 
 #. module: waf_preso
@@ -545,6 +572,21 @@ msgid "Créer une répartition"
 msgstr ""
 
 #. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_stock_move
+msgid "Créer votre premier mouvement de stock"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_product_list
+msgid "Créer votre premier produit"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_service_list
+msgid "Créer votre premier service"
+msgstr ""
+
+#. module: waf_preso
 #: model_terms:ir.actions.act_window,help:waf_preso.action_sale_order_line_dispatch
 msgid "Créer votre première ligne de dispatch"
 msgstr ""
@@ -567,6 +609,11 @@ msgstr ""
 #. module: waf_preso
 #: model_terms:ir.actions.act_window,help:waf_preso.action_delivery_weekday
 msgid "Créez votre premier jour de livraison"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.actions.act_window,help:waf_preso.action_partner_interest_category
+msgid "Créez votre première catégorie de centres d'intérêt"
 msgstr ""
 
 #. module: waf_preso
@@ -633,6 +680,7 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_delivery_zone__currency_id
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__currency_id
 msgid "Currency"
 msgstr ""
 
@@ -674,6 +722,11 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__date_planned
 msgid "Date prévue"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__delivery_count
+msgid "Delivery Count"
 msgstr ""
 
 #. module: waf_preso
@@ -743,7 +796,6 @@ msgstr ""
 #: code:addons/waf_preso/models/ventes/sale_order_line.py:0
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order__dispatch_ids
 #: model:ir.ui.menu,name:waf_preso.menu_dispatch_list
-#: model:ir.ui.menu,name:waf_preso.menu_dispatch_root
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_order_form_inherit_waf_preso
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_calendar
 #, python-format
@@ -793,6 +845,11 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.model.fields.selection,name:waf_preso.selection__sale_order_line__dispatch_state__done
 msgid "Entièrement dispatché"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
+msgid "Envoyer résumé"
 msgstr ""
 
 #. module: waf_preso
@@ -875,6 +932,7 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order__groupment_id
+#: model:ir.ui.menu,name:waf_preso.menu_groupment_config
 msgid "Groupement"
 msgstr ""
 
@@ -911,7 +969,6 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_res_partner__managed_groupment_ids
 #: model:ir.model.fields,field_description:waf_preso.field_res_users__managed_groupment_ids
-#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf_preso
 msgid "Groupements gérés"
 msgstr ""
 
@@ -928,6 +985,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__has_message
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__has_message
 msgid "Has Message"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_search
+msgid "Haute activité"
 msgstr ""
 
 #. module: waf_preso
@@ -1060,6 +1122,11 @@ msgstr ""
 #: model:ir.model.fields.selection,name:waf_preso.selection__partner_groupment__activity_level__inactive
 #: model:ir.model.fields.selection,name:waf_preso.selection__partner_interest__activity_level__inactive
 msgid "Inactif"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_search
+msgid "Inactifs"
 msgstr ""
 
 #. module: waf_preso
@@ -1288,6 +1355,11 @@ msgid "La zone de livraison par défaut doit faire partie des zones autorisées"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__last_delivery_date
+msgid "Last Delivery Date"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_create_delivery_wizard__write_uid
 #: model:ir.model.fields,field_description:waf_preso.field_create_delivery_wizard_line__write_uid
 #: model:ir.model.fields,field_description:waf_preso.field_delivery_time_slot__write_uid
@@ -1320,11 +1392,6 @@ msgstr ""
 #: code:addons/waf_preso/models/delivery/delivery_config.py:0
 #, python-format
 msgid "Le code doit être un chiffre entre 1 et 7"
-msgstr ""
-
-#. module: waf_preso
-#: model:ir.model.constraint,message:waf_preso.constraint_partner_interest_code_uniq
-msgid "Le code doit être unique !"
 msgstr ""
 
 #. module: waf_preso
@@ -1399,6 +1466,13 @@ msgid ""
 msgstr ""
 
 #. module: waf_preso
+#. odoo-python
+#: code:addons/waf_preso/models/product/product_template.py:0
+#, python-format
+msgid "Le type de ce produit ne correspond pas au type détaillé"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.constraint,message:waf_preso.constraint_delivery_time_slot_check_hours
 msgid ""
 "Les heures doivent être valides et l'heure de début doit être avant l'heure "
@@ -1419,7 +1493,7 @@ msgstr ""
 #: code:addons/waf_preso/models/partner/partner_groupment.py:0
 #, python-format
 msgid ""
-"Les partenaires suivants n'appartiennent à aucune zone de livraison autorisée :\n"
+"Les partenaires suivants ont des zones de livraison qui ne sont pas autorisées dans le groupement :\n"
 "%s"
 msgstr ""
 
@@ -1492,13 +1566,10 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__delivery_id
+#: model:ir.ui.menu,name:waf_preso.menu_delivery_config
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
 #: model_terms:ir.ui.view,arch_db:waf_preso.product_template_form_view_inherit
 msgid "Livraison"
-msgstr ""
-
-#. module: waf_preso
-#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf_preso
-msgid "Livraison WAF"
 msgstr ""
 
 #. module: waf_preso
@@ -1538,6 +1609,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch__delivery_ids
 #: model:ir.ui.menu,name:waf_preso.menu_dispatch_delivery
 #: model_terms:ir.ui.view,arch_db:waf_preso.delivery_zone_view_form
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_tree
 #, python-format
 msgid "Livraisons"
@@ -1570,6 +1642,11 @@ msgid "Livrer tout ensemble"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_logistic
+msgid "Logistique"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__image
 #: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_kanban
 msgid "Logo"
@@ -1579,11 +1656,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__mandant_id
 #: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_search
 msgid "Mandant"
-msgstr ""
-
-#. module: waf_preso
-#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_kanban
-msgid "Mandant:"
 msgstr ""
 
 #. module: waf_preso
@@ -1612,11 +1684,6 @@ msgid "Membre de groupement"
 msgstr ""
 
 #. module: waf_preso
-#: model_terms:ir.ui.view,arch_db:waf_preso.view_partner_form_inherit_waf_preso
-msgid "Membre des groupements"
-msgstr ""
-
-#. module: waf_preso
 #. odoo-python
 #: code:addons/waf_preso/models/partner/partner_groupment.py:0
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__partner_ids
@@ -1628,6 +1695,16 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__active_member_count
 msgid "Membres actifs"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
+msgid "Membres du groupement"
+msgstr ""
+
+#. module: waf_preso
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_kanban
+msgid "Membres:"
 msgstr ""
 
 #. module: waf_preso
@@ -1700,13 +1777,34 @@ msgid "Montant total des dispatches"
 msgstr ""
 
 #. module: waf_preso
+#: model:partner.interest.category,name:waf_preso.partner_interest_category_monetique
+msgid "Monétique"
+msgstr ""
+
+#. module: waf_preso
+#: model:partner.interest,name:waf_preso.partner_interest_mls
+msgid "Monétique Logistique & Services"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_stock_move
+msgid "Mouvements"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.actions.act_window,name:waf_preso.action_stock_dispatch_moves
 msgid "Mouvements Dispatch"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_stock_move
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__move_ids
 msgid "Mouvements de stock"
+msgstr ""
+
+#. module: waf_preso
+#: model:product.template,name:waf_preso.product_move_5000
+msgid "Move 5000 Bluetooth CLESS"
 msgstr ""
 
 #. module: waf_preso
@@ -1784,6 +1882,7 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_partner_groupment__activity_level
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_search
 msgid "Niveau d'activité"
 msgstr ""
 
@@ -1971,6 +2070,11 @@ msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__on_time_delivery_rate
+msgid "On Time Delivery Rate"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_create_delivery_wizard__order_id
 msgid "Order"
 msgstr ""
@@ -1994,7 +2098,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/waf_preso/models/partner/partner_interest.py:0
 #: model:ir.model.fields,field_description:waf_preso.field_delivery_zone__partner_ids
-#: model:ir.ui.menu,name:waf_preso.menu_partner_root
 #: model_terms:ir.ui.view,arch_db:waf_preso.partner_interest_view_form
 #, python-format
 msgid "Partenaires"
@@ -2058,6 +2161,11 @@ msgstr ""
 #. module: waf_preso
 #: model:ir.model.fields,help:waf_preso.field_delivery_zone__is_multi_carrier
 msgid "Permet d'utiliser plusieurs transporteurs dans cette zone"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__picking_ids
+msgid "Picking IDs"
 msgstr ""
 
 #. module: waf_preso
@@ -2133,6 +2241,13 @@ msgstr "Produit"
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__product_id
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_search
 msgid "Produit"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_product_list
+#: model:ir.ui.menu,name:waf_preso.menu_marchandise_list
+#: model:ir.ui.menu,name:waf_preso.menu_product_list
+msgid "Produits"
 msgstr ""
 
 #. module: waf_preso
@@ -2283,6 +2398,12 @@ msgid "Sequence"
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.actions.act_window,name:waf_preso.action_service_list
+#: model:ir.ui.menu,name:waf_preso.menu_service_list
+msgid "Services"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model.constraint,message:waf_preso.constraint_res_partner_default_contact_unique
 msgid "Seul un contact peut être marqué comme contact par défaut."
 msgstr ""
@@ -2388,6 +2509,11 @@ msgid ""
 msgstr ""
 
 #. module: waf_preso
+#: model:ir.ui.menu,name:waf_preso.menu_waf_stock
+msgid "Stock"
+msgstr ""
+
+#. module: waf_preso
 #: model:ir.model,name:waf_preso.model_stock_move
 msgid "Stock Move"
 msgstr "Mouvement de stock"
@@ -2458,6 +2584,18 @@ msgid "Temps moyen de livraison"
 msgstr ""
 
 #. module: waf_preso
+#: model_terms:product.template,description:waf_preso.product_move_5000
+msgid ""
+"Terminal de paiement Move 5000 Bluetooth CLESS\n"
+"- Terminal de paiement portable\n"
+"- Connexion Bluetooth pour communication avec smartphone/tablette\n"
+"- Paiement sans contact\n"
+"- Imprimante thermique intégrée\n"
+"- Batterie longue durée\n"
+"- Certifié PCI-PTS 5.x"
+msgstr ""
+
+#. module: waf_preso
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_delivery_form
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_sale_order_line_dispatch_form
 msgid "Terminer"
@@ -2474,7 +2612,13 @@ msgstr ""
 
 #. module: waf_preso
 #: model:ir.model.fields,field_description:waf_preso.field_sale_order_line_dispatch_delivery__amount_total
+#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_tree
 msgid "Total"
+msgstr ""
+
+#. module: waf_preso
+#: model:ir.model.fields,field_description:waf_preso.field_partner_interest_category__total_revenue
+msgid "Total Revenue"
 msgstr ""
 
 #. module: waf_preso
@@ -2659,7 +2803,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:waf_preso.delivery_time_slot_view_form
 #: model_terms:ir.ui.view,arch_db:waf_preso.delivery_weekday_view_form
 #: model_terms:ir.ui.view,arch_db:waf_preso.delivery_zone_view_tree
-#: model_terms:ir.ui.view,arch_db:waf_preso.partner_groupment_view_form
 #: model_terms:ir.ui.view,arch_db:waf_preso.view_res_partner_filter_inherit_waf_preso
 msgid "Zones de livraison"
 msgstr ""

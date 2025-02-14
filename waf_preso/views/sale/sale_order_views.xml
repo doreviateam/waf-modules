@@ -9,7 +9,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <!-- Ajout des champs de livraison dans l'en-tête -->
-            <xpath expr="//group[@name='order_details']" position="inside">
+            <!-- <xpath expr="//group[@name='order_details']" position="inside">
                 <field name="delivery_zone_id" 
                        domain="[('id', 'in', available_delivery_zone_ids)]"/>
                 <field name="delivery_weekday_id" 
@@ -19,16 +19,16 @@
                 <field name="available_delivery_zone_ids" invisible="1"/>
                 <field name="available_delivery_weekday_ids" invisible="1"/>
                 <field name="available_delivery_time_slot_ids" invisible="1"/>
-            </xpath>
+            </xpath> -->
 
             <!-- Ajout des champs de dispatch dans les lignes de commande -->
-            <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
+            <!-- <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
                 <field name="dispatch_ids" widget="many2many_tags" optional="show"/>
                 <field name="dispatch_state" optional="show"/>
-            </xpath>
+            </xpath> -->
 
             <!-- Nouvel onglet Dispatches -->
-            <xpath expr="//notebook" position="inside">
+            <xpath expr="//notebook/page[1]" position="after">
                 <page string="Dispatches" name="dispatches">
                     <field name="dispatch_line_ids">
                         <tree>
