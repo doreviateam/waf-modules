@@ -37,13 +37,11 @@ class CalendarRegion(models.Model):
             record.display_name = name
 
     @api.model
-    def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None):
+    def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None, **kwargs):
         args = args or []
         domain = []
+        
         if name:
-            domain = ['|', '|',
-                ('name', operator, name),
-                ('code', operator, name),
-                ('country_id.name', operator, name)
-            ]
+            domain = [('name', operator, name)]
+        
         return self._search(domain + args, limit=limit, access_rights_uid=name_get_uid)

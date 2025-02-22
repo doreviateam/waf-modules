@@ -17,3 +17,6 @@ resources/static/img/icon.png
 resources/static/img/dashboard_icon.png
 resources/static/img/icon.png
 resources/static/img/dashboard_icon.pngwatergile_core/
+waf_preso/*
+*.Identifier*
+

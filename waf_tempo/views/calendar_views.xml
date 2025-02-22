@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Calendar Region Views -->
-    <record id="view_calendar_region_tree" model="ir.ui.view">
+    <!-- <record id="view_calendar_region_tree" model="ir.ui.view">
         <field name="name">calendar.region.tree</field>
         <field name="model">calendar.region</field>
         <field name="arch" type="xml">
@@ -76,10 +76,10 @@
                 </group>
             </search>
         </field>
-    </record>
+    </record> -->
 
     <!-- Calendar Holiday Views -->
-    <record id="view_calendar_holiday_tree" model="ir.ui.view">
+    <!-- <record id="view_calendar_holiday_tree" model="ir.ui.view">
         <field name="name">calendar.holiday.tree</field>
         <field name="model">calendar.holiday</field>
         <field name="arch" type="xml">
@@ -153,10 +153,10 @@
                 </group>
             </search>
         </field>
-    </record>
+    </record> -->
 
     <!-- Actions -->
-    <record id="action_calendar_region" model="ir.actions.act_window">
+    <!-- <record id="action_calendar_region" model="ir.actions.act_window">
         <field name="name">Régions</field>
         <field name="res_model">calendar.region</field>
         <field name="view_mode">tree,form</field>
@@ -180,10 +180,10 @@
                 Créer votre premier jour férié
             </p>
         </field>
-    </record>
+    </record> -->
 
     <!-- Menus -->
-    <menuitem id="menu_waf_tempo_root"
+    <!-- <menuitem id="menu_waf_tempo_root"
               name="Tempoo"
               web_icon="waf_tempo,static/description/icon.png"
               sequence="10"/>
@@ -203,5 +203,5 @@
               name="Jours fériés"
               parent="menu_waf_tempo_config"
               action="action_calendar_holiday"
-              sequence="20"/>
+              sequence="20"/> -->
 </odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Calendar Region Views -->
+        <record id="view_calendar_region_tree" model="ir.ui.view">
+            <field name="name">calendar.region.tree</field>
+            <field name="model">calendar.region</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="country_id"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_calendar_region_form" model="ir.ui.view">
+            <field name="name">calendar.region.form</field>
+            <field name="model">calendar.region</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Nom de la région"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="country_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="description" string="Description">
+                                <field name="description" placeholder="Description détaillée de la région..."/>
+                            </page>
+                            <page name="holidays" string="Jours fériés spécifiques">
+                                <field name="specific_holiday_ids" context="{'default_region_id': id}">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="type"/>
+                                        <field name="month" invisible="type != 'fixed'"/>
+                                        <field name="day" invisible="type != 'fixed'"/>
+                                        <field name="active" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_calendar_region_search" model="ir.ui.view">
+            <field name="name">calendar.region.search</field>
+            <field name="model">calendar.region</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="country_id"/>
+                    <filter name="inactive" string="Archivé" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Regrouper par">
+                        <filter name="country" string="Pays" context="{'group_by': 'country_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

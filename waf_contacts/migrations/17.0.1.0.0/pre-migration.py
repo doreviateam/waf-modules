@@ -1,98 +1,309 @@
 """
-Script de migration WAF Contacts v17.0.1.0
+Script de migration ResCountryState v17.0.1.0
+Gestion des régions et départements français
 """
 import logging
+from psycopg2 import sql
 from odoo.tools import column_exists, table_exists
+from contextlib import contextmanager
 
 _logger = logging.getLogger(__name__)
 
-def migrate(cr, version):
-    """Migration WAF Contacts"""
-    _logger.warning("=== DÉBUT PRE-MIGRATION WAF CONTACTS (version: %s) ===", version)
-    if not version:
-        _logger.warning("Première installation, pas de migration nécessaire")
-        return
+# Données de référence complètes pour les régions et départements français
+REGIONS_DATA = {
+    'ARA': {
+        'name': 'Auvergne-Rhône-Alpes',
+        'departments': {
+            '01': 'Ain', '03': 'Allier', '07': 'Ardèche', '15': 'Cantal',
+            '26': 'Drôme', '38': 'Isère', '42': 'Loire', '43': 'Haute-Loire',
+            '63': 'Puy-de-Dôme', '69': 'Rhône', '73': 'Savoie', '74': 'Haute-Savoie'
+        }
+    },
+    'BFC': {
+        'name': 'Bourgogne-Franche-Comté',
+        'departments': {
+            '21': 'Côte-d\'Or', '25': 'Doubs', '39': 'Jura', '58': 'Nièvre',
+            '70': 'Haute-Saône', '71': 'Saône-et-Loire', '89': 'Yonne', '90': 'Territoire de Belfort'
+        }
+    },
+    'BRE': {
+        'name': 'Bretagne',
+        'departments': {
+            '22': 'Côtes-d\'Armor', '29': 'Finistère', '35': 'Ille-et-Vilaine', '56': 'Morbihan'
+        }
+    },
+    'CVL': {
+        'name': 'Centre-Val de Loire',
+        'departments': {
+            '18': 'Cher', '28': 'Eure-et-Loir', '36': 'Indre', '37': 'Indre-et-Loire',
+            '41': 'Loir-et-Cher', '45': 'Loiret'
+        }
+    },
+    'GES': {
+        'name': 'Grand Est',
+        'departments': {
+            '08': 'Ardennes', '10': 'Aube', '51': 'Marne', '52': 'Haute-Marne',
+            '54': 'Meurthe-et-Moselle', '55': 'Meuse', '57': 'Moselle',
+            '67': 'Bas-Rhin', '68': 'Haut-Rhin', '88': 'Vosges'
+        }
+    },
+    'HDF': {
+        'name': 'Hauts-de-France',
+        'departments': {
+            '02': 'Aisne', '59': 'Nord', '60': 'Oise', '62': 'Pas-de-Calais', '80': 'Somme'
+        }
+    },
+    'IDF': {
+        'name': 'Île-de-France',
+        'departments': {
+            '75': 'Paris', '77': 'Seine-et-Marne', '78': 'Yvelines', '91': 'Essonne',
+            '92': 'Hauts-de-Seine', '93': 'Seine-Saint-Denis', '94': 'Val-de-Marne', '95': 'Val-d\'Oise'
+        }
+    },
+    'NOR': {
+        'name': 'Normandie',
+        'departments': {
+            '14': 'Calvados', '27': 'Eure', '50': 'Manche', '61': 'Orne', '76': 'Seine-Maritime'
+        }
+    },
+    'NAQ': {
+        'name': 'Nouvelle-Aquitaine',
+        'departments': {
+            '16': 'Charente', '17': 'Charente-Maritime', '19': 'Corrèze', '23': 'Creuse',
+            '24': 'Dordogne', '33': 'Gironde', '40': 'Landes', '47': 'Lot-et-Garonne',
+            '64': 'Pyrénées-Atlantiques', '79': 'Deux-Sèvres', '86': 'Vienne', '87': 'Haute-Vienne'
+        }
+    },
+    'OCC': {
+        'name': 'Occitanie',
+        'departments': {
+            '09': 'Ariège', '11': 'Aude', '12': 'Aveyron', '30': 'Gard', '31': 'Haute-Garonne',
+            '32': 'Gers', '34': 'Hérault', '46': 'Lot', '48': 'Lozère', '65': 'Hautes-Pyrénées',
+            '66': 'Pyrénées-Orientales', '81': 'Tarn', '82': 'Tarn-et-Garonne'
+        }
+    },
+    'PDL': {
+        'name': 'Pays de la Loire',
+        'departments': {
+            '44': 'Loire-Atlantique', '49': 'Maine-et-Loire', '53': 'Mayenne',
+            '72': 'Sarthe', '85': 'Vendée'
+        }
+    },
+    'PAC': {
+        'name': 'Provence-Alpes-Côte d\'Azur',
+        'departments': {
+            '04': 'Alpes-de-Haute-Provence', '05': 'Hautes-Alpes', '06': 'Alpes-Maritimes',
+            '13': 'Bouches-du-Rhône', '83': 'Var', '84': 'Vaucluse'
+        }
+    },
+    'COR': {
+        'name': 'Corse',
+        'departments': {
+            '2A': 'Corse-du-Sud', '2B': 'Haute-Corse'
+        }
+    },
+    'ROM': {
+        'name': 'Régions d\'Outre-Mer',
+        'departments': {
+            '971': 'Guadeloupe', '972': 'Martinique', '973': 'Guyane',
+            '974': 'La Réunion', '976': 'Mayotte'
+        }
+    }
+}
 
-    _logger.info("Début de la migration WAF Contacts v17.0.1.0")
-
+@contextmanager
+def savepoint(cr, name):
+    """Gestionnaire de contexte pour les savepoints"""
     try:
-        # 1. Structure des régions
-        _setup_region_structure(cr)
-        # 2. Mise à jour des partenaires
-        _update_partner_structure(cr)
-        # 3. Configuration des droits
-        _setup_access_rights(cr)
-
+        cr.execute(sql.SQL("SAVEPOINT {}").format(sql.Identifier(name)))
+        yield
     except Exception as e:
-        _logger.error("Erreur durant la migration WAF Contacts: %s", str(e))
-        raise
+        cr.execute(sql.SQL("ROLLBACK TO SAVEPOINT {}").format(sql.Identifier(name)))
+        raise e
+    finally:
+        cr.execute(sql.SQL("RELEASE SAVEPOINT {}").format(sql.Identifier(name)))
 
-def _setup_region_structure(cr):
-    """Création/Mise à jour de la structure des régions"""
-    if not table_exists(cr, 'res_country_state_region'):
-        cr.execute("""
-            CREATE TABLE res_country_state_region (
-                id serial PRIMARY KEY,
-                name varchar NOT NULL,
-                code varchar NOT NULL,
-                country_id integer REFERENCES res_country(id) ON DELETE CASCADE,
-                active boolean DEFAULT true,
-                create_uid integer REFERENCES res_users(id),
-                create_date timestamp without time zone DEFAULT now(),
-                write_uid integer REFERENCES res_users(id),
-                write_date timestamp without time zone DEFAULT now()
-            )
-        """)
+class StateMigration:
+    def __init__(self, cr):
+        self.cr = cr
+        self.france_id = self._get_france_id()
 
-        # Index pour les performances
-        cr.execute("""
-            CREATE INDEX IF NOT EXISTS region_country_id_idx 
-            ON res_country_state_region (country_id);
-            CREATE UNIQUE INDEX IF NOT EXISTS region_code_unique_idx 
-            ON res_country_state_region (code);
-        """)
+    def _get_france_id(self):
+        """Récupère l'ID de la France"""
+        self.cr.execute("SELECT id FROM res_country WHERE code = 'FR'")
+        result = self.cr.fetchone()
+        if not result:
+            raise ValueError("Pays 'France' non trouvé dans la base de données")
+        return result[0]
 
-def _update_partner_structure(cr):
-    """Mise à jour de la structure des partenaires"""
-    # Ajout des colonnes pour les régions si elles n'existent pas
-    if not column_exists(cr, 'res_partner', 'region_id'):
-        cr.execute("""
-            ALTER TABLE res_partner 
-            ADD COLUMN region_id integer REFERENCES res_country_state_region(id);
-            CREATE INDEX IF NOT EXISTS partner_region_id_idx 
-            ON res_partner (region_id);
-        """)
+    def validate_data(self):
+        """Validation des données de référence"""
+        for code, data in REGIONS_DATA.items():
+            if not isinstance(code, str) or len(code) != 3:
+                raise ValueError(f"Code région invalide: {code}")
+            for dept_code in data['departments']:
+                if not isinstance(dept_code, str) or not (2 <= len(dept_code) <= 3):
+                    raise ValueError(f"Code département invalide: {dept_code}")
 
-    # Ajout des colonnes pour les départements
-    if not column_exists(cr, 'res_country_state', 'region_id'):
-        cr.execute("""
-            ALTER TABLE res_country_state 
-            ADD COLUMN region_id integer REFERENCES res_country_state_region(id);
-            CREATE INDEX IF NOT EXISTS state_region_id_idx 
-            ON res_country_state (region_id);
-        """)
+    def setup_structure(self):
+        """Configuration de la structure de la table"""
+        columns = {
+            'is_region': 'boolean DEFAULT false',
+            'is_department': 'boolean DEFAULT false',
+            'parent_id': 'integer REFERENCES res_country_state(id)',
+            'insee_code': 'varchar(3)',
+            'active': 'boolean DEFAULT true'
+        }
+        
+        with savepoint(self.cr, "structure"):
+            for column, definition in columns.items():
+                if not column_exists(self.cr, 'res_country_state', column):
+                    self.cr.execute(sql.SQL("""
+                        ALTER TABLE res_country_state 
+                        ADD COLUMN {} {}
+                    """).format(
+                        sql.Identifier(column),
+                        sql.SQL(definition)
+                    ))
 
-def _setup_access_rights(cr):
-    """Configuration des droits d'accès"""
-    # Droits d'accès pour les régions
-    access_rights = [
-        ('access_region_user', 'res.country.state.region', 'group_user', 1, 0, 0, 0),
-        ('access_region_manager', 'res.country.state.region', 'group_partner_manager', 1, 1, 1, 1)
-    ]
+    def create_indexes(self):
+        """Création des index optimisés"""
+        indexes = [
+            ('state_parent_id_idx', 'parent_id'),
+            ('state_is_region_idx', 'is_region WHERE is_region'),
+            ('state_is_department_idx', 'is_department WHERE is_department'),
+            ('state_insee_code_idx', 'insee_code'),
+            ('state_code_country_idx', '(code, country_id)')
+        ]
 
-    for access in access_rights:
-        cr.execute("""
-            INSERT INTO ir_model_access (
-                name, model_id, group_id, perm_read, perm_write, perm_create, perm_unlink
-            )
+        with savepoint(self.cr, "indexes"):
+            for name, definition in indexes:
+                self.cr.execute(sql.SQL("""
+                    CREATE INDEX IF NOT EXISTS {} ON res_country_state ({})
+                """).format(
+                    sql.Identifier(name),
+                    sql.SQL(definition)
+                ))
+
+    def cleanup_data(self):
+        """Nettoyage des données incohérentes"""
+        with savepoint(self.cr, "cleanup"):
+            self.cr.execute("""
+                UPDATE res_country_state
+                SET parent_id = NULL
+                WHERE parent_id IS NOT NULL 
+                AND parent_id NOT IN (
+                    SELECT id FROM res_country_state 
+                    WHERE is_region IS TRUE
+                )
+            """)
+
+    def migrate_regions(self):
+        """Migration des régions"""
+        with savepoint(self.cr, "regions"):
+            for code, data in REGIONS_DATA.items():
+                self.cr.execute("""
+                    INSERT INTO res_country_state 
+                        (name, code, country_id, is_region, active)
+                    VALUES (%s, %s, %s, true, true)
+                    ON CONFLICT (code, country_id) 
+                    DO UPDATE SET 
+                        name = EXCLUDED.name,
+                        is_region = true
+                    RETURNING id
+                """, (data['name'], code, self.france_id))
+                
+                region_id = self.cr.fetchone()[0]
+                self._migrate_departments(region_id, code, data['departments'])
+
+    def _migrate_departments(self, region_id, region_code, departments):
+        """Migration des départements d'une région"""
+        for code, name in departments.items():
+            self.cr.execute("""
+                INSERT INTO res_country_state (
+                    name, code, country_id, parent_id, 
+                    is_department, insee_code, active
+                )
+                VALUES (%s, %s, %s, %s, true, %s, true)
+                ON CONFLICT (code, country_id) 
+                DO UPDATE SET 
+                    name = EXCLUDED.name,
+                    parent_id = EXCLUDED.parent_id,
+                    is_department = true,
+                    insee_code = EXCLUDED.insee_code
+            """, (name, code, self.france_id, region_id, code))
+
+    def setup_constraints(self):
+        """Configuration des contraintes"""
+        constraints = [
+            ('unique_insee_code', 
+             'UNIQUE(insee_code) WHERE insee_code IS NOT NULL',
+             'Le code INSEE doit être unique'),
+            ('check_parent_region', 
+             'CHECK(parent_id IS NULL OR is_department)',
+             'Seuls les départements peuvent avoir une région parente'),
+            ('check_region_department',
+             'CHECK(NOT (is_region AND is_department))',
+             'Un état ne peut pas être à la fois une région et un département')
+        ]
+
+        with savepoint(self.cr, "constraints"):
+            for name, definition, message in constraints:
+                # Suppression sécurisée de la contrainte existante
+                self.cr.execute("""
+                    DO $$
+                    BEGIN
+                        IF EXISTS (
+                            SELECT 1 FROM pg_constraint 
+                            WHERE conname = %s
+                        ) THEN
+                            EXECUTE 'ALTER TABLE res_country_state DROP CONSTRAINT ' || %s;
+                        END IF;
+                    END $$;
+                """, (name, name))
+
+                # Création de la nouvelle contrainte
+                self.cr.execute(sql.SQL("""
+                    ALTER TABLE res_country_state 
+                    ADD CONSTRAINT {} {}
+                """).format(
+                    sql.Identifier(name),
+                    sql.SQL(definition)
+                ))
+
+    def log_statistics(self):
+        """Journalisation des statistiques"""
+        self.cr.execute("""
             SELECT 
-                %s,
-                (SELECT id FROM ir_model WHERE model = %s),
-                (SELECT id FROM res_groups WHERE name = %s),
-                %s, %s, %s, %s
-            WHERE NOT EXISTS (
-                SELECT 1 FROM ir_model_access WHERE name = %s
-            )
-        """, (access[0], access[1], access[2], access[3], access[4], access[5], access[6], access[0]))
+                COUNT(*) FILTER (WHERE is_region) as regions,
+                COUNT(*) FILTER (WHERE is_department) as departments
+            FROM res_country_state
+            WHERE country_id = %s
+        """, (self.france_id,))
+        stats = self.cr.fetchone()
+        _logger.info(
+            "Migration terminée: %s régions, %s départements", 
+            stats[0], stats[1]
+        )
 
-    _logger.info("Migration WAF Contacts terminée avec succès") 
+def migrate(cr, version):
+    """Point d'entrée de la migration"""
+    _logger.warning("=== DÉBUT MIGRATION REGIONS/DÉPARTEMENTS (version: %s) ===", version)
+    
+    try:
+        migration = StateMigration(cr)
+        
+        with savepoint(cr, "main_migration"):
+            migration.validate_data()
+            migration.setup_structure()
+            migration.create_indexes()
+            migration.cleanup_data()
+            migration.migrate_regions()
+            migration.setup_constraints()
+            
+        migration.log_statistics()
+        _logger.info("Migration terminée avec succès")
+        
+    except Exception as e:
+        _logger.error("Erreur critique durant la migration: %s", str(e))
+        raise

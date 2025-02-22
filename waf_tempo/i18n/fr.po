@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-14 22:40+0000\n"
-"PO-Revision-Date: 2025-02-14 22:40+0000\n"
+"POT-Creation-Date: 2025-02-22 00:34+0000\n"
+"PO-Revision-Date: 2025-02-22 00:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -61,11 +61,6 @@ msgid "Année"
 msgstr ""
 
 #. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_search
-msgid "Archivé"
-msgstr ""
-
-#. module: waf_tempo
 #: model:ir.model.fields.selection,name:waf_tempo.selection__calendar_holiday__variable_type__armistice
 msgid "Armistice"
 msgstr ""
@@ -86,11 +81,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_region__message_attachment_count
 #: model:ir.model.fields,field_description:waf_tempo.field_date_range_mixin__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_form
-msgid "Calculer dates variables"
 msgstr ""
 
 #. module: waf_tempo
@@ -139,11 +129,6 @@ msgid "Commémoration de l'abolition de l'esclavage à La Réunion"
 msgstr ""
 
 #. module: waf_tempo
-#: model:ir.ui.menu,name:waf_tempo.menu_waf_tempo_config
-msgid "Configuration"
-msgstr ""
-
-#. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__create_uid
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_region__create_uid
 msgid "Created by"
@@ -153,16 +138,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__create_date
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_region__create_date
 msgid "Created on"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.actions.act_window,help:waf_tempo.action_calendar_region
-msgid "Créer une nouvelle région"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.actions.act_window,help:waf_tempo.action_calendar_holiday
-msgid "Créer votre premier jour férié"
 msgstr ""
 
 #. module: waf_tempo
@@ -224,18 +199,12 @@ msgstr ""
 #. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__description
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_region__description
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_form
 msgid "Description"
 msgstr ""
 
 #. module: waf_tempo
 #: model:ir.model.fields,help:waf_tempo.field_calendar_region__description
 msgid "Description détaillée de la région"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_form
-msgid "Description détaillée de la région..."
 msgstr ""
 
 #. module: waf_tempo
@@ -258,11 +227,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_tempo.field_business_day_mixin__duration_days
 #: model:ir.model.fields,field_description:waf_tempo.field_date_range_mixin__duration_days
 msgid "Durée en jours"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.actions.act_window,help:waf_tempo.action_calendar_region
-msgid "Définissez les régions et leurs jours fériés spécifiques."
 msgstr ""
 
 #. module: waf_tempo
@@ -324,11 +288,6 @@ msgstr ""
 #. module: waf_tempo
 #: model:ir.module.category,description:waf_tempo.module_category_waf_tempo
 msgid "Gestion des calendriers et jours ouvrés"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
-msgid "Group By"
 msgstr ""
 
 #. module: waf_tempo
@@ -424,7 +383,6 @@ msgstr ""
 
 #. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__weekday
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
 msgid "Jour de la semaine"
 msgstr ""
 
@@ -434,25 +392,12 @@ msgid "Jour du mois (pour les dates fixes)"
 msgstr ""
 
 #. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_form
-msgid "Jour férié"
-msgstr ""
-
-#. module: waf_tempo
 #: model:ir.model,name:waf_tempo.model_calendar_holiday
 msgid "Jour férié spécifique"
 msgstr ""
 
 #. module: waf_tempo
-#: model:ir.actions.act_window,name:waf_tempo.action_calendar_holiday
-#: model:ir.ui.menu,name:waf_tempo.menu_calendar_holiday
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_tree
-msgid "Jours fériés"
-msgstr ""
-
-#. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_region__specific_holiday_ids
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_form
 msgid "Jours fériés spécifiques"
 msgstr ""
 
@@ -557,7 +502,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__month
 #: model:ir.model.fields.selection,name:waf_tempo.selection__business_day_mixin__period_type__month
 #: model:ir.model.fields.selection,name:waf_tempo.selection__date_range_mixin__period_type__month
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
 msgid "Mois"
 msgstr ""
 
@@ -589,7 +533,6 @@ msgstr ""
 
 #. module: waf_tempo
 #: model:ir.model.fields,help:waf_tempo.field_calendar_region__name
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_form
 msgid "Nom de la région"
 msgstr ""
 
@@ -659,7 +602,6 @@ msgstr ""
 
 #. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_region__country_id
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_search
 msgid "Pays"
 msgstr ""
 
@@ -707,23 +649,12 @@ msgid "Période ouverte"
 msgstr ""
 
 #. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
-msgid "Rechercher un jour férié"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_region_search
-msgid "Regrouper par"
-msgstr ""
-
-#. module: waf_tempo
 #: model:res.groups,name:waf_tempo.group_waf_tempo_manager
 msgid "Responsable"
 msgstr ""
 
 #. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__region_id
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
 msgid "Région"
 msgstr ""
 
@@ -737,12 +668,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:waf_tempo.field_business_day_mixin__calendar_region_id
 #: model:ir.model.fields,help:waf_tempo.field_business_day_mixin__calendar_region_id
 msgid "Région du calendrier"
-msgstr ""
-
-#. module: waf_tempo
-#: model:ir.actions.act_window,name:waf_tempo.action_calendar_region
-#: model:ir.ui.menu,name:waf_tempo.menu_calendar_region
-msgid "Régions"
 msgstr ""
 
 #. module: waf_tempo
@@ -770,11 +695,6 @@ msgid "Semaine"
 msgstr ""
 
 #. module: waf_tempo
-#: model:ir.ui.menu,name:waf_tempo.menu_waf_tempo_root
-msgid "Tempoo"
-msgstr ""
-
-#. module: waf_tempo
 #: model:ir.model.fields.selection,name:waf_tempo.selection__calendar_holiday__variable_type__all_saints
 msgid "Toussaint"
 msgstr ""
@@ -787,7 +707,6 @@ msgstr ""
 
 #. module: waf_tempo
 #: model:ir.model.fields,field_description:waf_tempo.field_calendar_holiday__type
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
 msgid "Type"
 msgstr ""
 
@@ -818,11 +737,6 @@ msgstr ""
 #: code:addons/waf_tempo/models/mixins/date_range_mixin.py:0
 #, python-format
 msgid "Type de période non valide"
-msgstr ""
-
-#. module: waf_tempo
-#: model_terms:ir.ui.view,arch_db:waf_tempo.view_calendar_holiday_search
-msgid "Type variable"
 msgstr ""
 
 #. module: waf_tempo

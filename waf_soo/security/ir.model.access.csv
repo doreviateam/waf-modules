@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_calendar_region_user,calendar.region.user,model_calendar_region,waf_soo.group_waf_soo_user,1,0,0,0
+access_calendar_region_manager,calendar.region.manager,model_calendar_region,waf_soo.group_waf_soo_manager,1,1,1,1
+
+access_calendar_holiday_user,calendar.holiday.user,model_calendar_holiday,waf_soo.group_waf_soo_user,1,0,0,0
+access_calendar_holiday_manager,calendar.holiday.manager,model_calendar_holiday,waf_soo.group_waf_soo_manager,1,1,1,1
+
+access_delivery_zone_user,delivery.zone.user,model_delivery_zone,waf_soo.group_waf_soo_user,1,0,0,0
+access_delivery_zone_manager,delivery.zone.manager,model_delivery_zone,waf_soo.group_waf_soo_manager,1,1,1,1
+
+access_delivery_zone_zip_prefix_user,delivery.zone.zip.prefix.user,model_delivery_zone_zip_prefix,base.group_user,1,1,1,1
+
+access_sale_line_dispatch_user,Accès utilisateur aux dispatches,model_sale_line_dispatch,group_waf_soo_user,1,1,1,0
+access_sale_line_dispatch_manager,Accès responsable aux dispatches,model_sale_line_dispatch,group_waf_soo_manager,1,1,1,1
