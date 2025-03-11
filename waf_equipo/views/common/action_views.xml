@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action pour les équipements-->
+    <record id="action_equipment" model="ir.actions.act_window">
+        <field name="name">Équipements</field>
+        <field name="res_model">equipment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_equipment_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un équipement
+            </p>
+        </field>
+    </record>
+
+    <record id="action_product_spare_parts" model="ir.actions.act_window">
+        <field name="name">Pièces détachées</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="search_view_id" ref="waf_equipo.view_product_template_search_inherit_spare_part"/>
+        <field name="domain">[('is_spare_part', '=', True)]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer une pièce détachée
+            </p>
+        </field>
+    </record>
+
+    <!-- Action pour les partenaires Blaz -->
+    <record id="action_partner_blaz" model="ir.actions.act_window">
+        <field name="name">Blaz</field>
+        <field name="res_model">partner.blaz</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo> 

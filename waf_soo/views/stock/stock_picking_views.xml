@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-    </data>
-</odoo>
+    <record id="view_picking_form_inherit_waf_soo" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.waf.soo</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Modification du libellé du champ partner_id -->
+            <xpath expr="//div[hasclass('o_td_label')]/label[@for='partner_id']" position="replace">
+                <label for="partner_id" string="Stakeholder" class="fw-bold"/>
+            </xpath>
+
+            <!-- Ajout du champ delivery_address_id après le champ partner_id -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="delivery_address_id" 
+                       invisible="picking_type_code != 'outgoing'"
+                       readonly="state == 'cancel' or state == 'done'"
+                       no_create="1"
+                       no_open="1"/>
+            </xpath>
+
+            <!-- Ajout des champs d'adresse de livraison dans un groupe séparé -->
+            <xpath expr="//group[@name='other_infos']" position="after">
+                <group name="delivery_address" 
+                       string="Adresse de livraison"
+                       invisible="picking_type_code != 'outgoing'"
+                       class="mt-3">
+                        <field name="delivery_address_name" readonly="1"/>
+                        <field name="street" readonly="1"/>
+                        <field name="street2" readonly="1"/>
+                        <field name="zip" readonly="1"/>
+                        <field name="city" readonly="1"/>
+                        <field name="state_id" readonly="1"/>
+                        <field name="country_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo> 

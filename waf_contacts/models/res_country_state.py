@@ -140,11 +140,13 @@ class ResCountryState(models.Model):
             result.append((record.id, name))
         return result
 
-    @api.model
-    def create(self, vals):
-        if vals.get('code'):
-            vals['code'] = vals['code'].upper()
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Surcharge de la création pour formater le code en majuscules"""
+        for vals in vals_list:
+            if vals.get('code'):
+                vals['code'] = vals['code'].upper()
+        return super().create(vals_list)
 
     def write(self, vals):
         if vals.get('code'):

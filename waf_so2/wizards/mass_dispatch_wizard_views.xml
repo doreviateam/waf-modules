@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mass_dispatch_wizard_form" model="ir.ui.view">
+        <field name="name">mass.dispatch.wizard.form</field>
+        <field name="model">mass.dispatch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Création de dispatches">
+                <field name="warning_message" invisible="not warning_message" readonly="1" 
+                       nolabel="1" widget="html" class="alert alert-warning"/>
+                <group>
+                    <field name="sale_order_id" readonly="1"/>
+                    <field name="delivery_addresses" widget="many2many_tags" invisible="1"/>
+                </group>
+                <field name="line_ids">
+                    <tree editable="bottom">
+                        <field name="sale_order_line_id" 
+                               domain="[('order_id', '=', parent.sale_order_id)]"
+                               options="{'no_create': True}"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="available_qty" readonly="1"/>
+                        <field name="quantity_to_dispatch"/>
+                        <field name="delivery_address_id" 
+                               domain="[('id', 'in', parent.delivery_addresses)]"
+                               options="{'no_create': True}"/>
+                        <field name="scheduled_date" required="1"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_validate" string="Valider" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mass_dispatch_wizard" model="ir.actions.act_window">
+        <field name="name">Création de dispatches</field>
+        <field name="res_model">mass.dispatch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo> 

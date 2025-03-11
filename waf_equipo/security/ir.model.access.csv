@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_equipment_user,equipment.user,model_equipment,base.group_user,1,1,1,0
+access_equipment_manager,equipment.manager,model_equipment,base.group_system,1,1,1,1
+access_partner_blaz_user,partner.blaz.user,model_partner_blaz,base.group_user,1,1,1,0
+access_partner_blaz_manager,partner.blaz.manager,model_partner_blaz,base.group_system,1,1,1,1

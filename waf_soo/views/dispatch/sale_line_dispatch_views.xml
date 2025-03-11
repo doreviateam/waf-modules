@@ -1,88 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Form View -->
+    <!-- Vue arborescente -->
+    <record id="view_sale_line_dispatch_tree" model="ir.ui.view">
+        <field name="name">sale.line.dispatch.tree</field>
+        <field name="model">sale.line.dispatch</field>
+        <field name="arch" type="xml">
+            <tree string="Dispatches" 
+                  decoration-info="state == 'draft'" 
+                  decoration-success="state == 'done'" 
+                  decoration-warning="state == 'picking'" 
+                  decoration-danger="state == 'cancel'">
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="product_id"/>
+                <field name="stakeholder_id"/>
+                <field name="delivery_address_id"/>
+                <field name="quantity"/>
+                <field name="line_remaining_qty"/>
+                <field name="amount_total"/>
+                <field name="planned_date"/>
+                <field name="effective_date"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue formulaire -->
     <record id="view_sale_line_dispatch_form" model="ir.ui.view">
         <field name="name">sale.line.dispatch.form</field>
         <field name="model">sale.line.dispatch</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Dispatch">
                 <header>
-                    <button name="action_confirm" 
-                            string="Confirmer" 
-                            type="object" 
-                            class="btn-primary" 
+                    <button name="action_confirm" type="object" string="Confirmer"
                             invisible="state != 'draft'"
-                            data-hotkey="c"/>
-                    <button name="action_done" 
-                            string="Terminer" 
-                            type="object" 
-                            class="btn-primary" 
+                            class="oe_highlight"/>
+                    <button name="action_create_picking" type="object" string="Créer BL"
                             invisible="state != 'confirmed'"
-                            data-hotkey="t"/>
-                    <button name="action_draft" 
-                            string="Remettre en brouillon" 
-                            type="object" 
-                            invisible="state not in ('confirmed', 'cancel')"
-                            data-hotkey="r"/>
-                    <button name="action_cancel" 
-                            string="Annuler" 
-                            type="object" 
-                            invisible="state == 'done'"
-                            data-hotkey="x"/>
-                    <field name="state" widget="statusbar"/>
+                            class="oe_highlight"/>
+                    <button name="action_done" type="object" string="Terminer"
+                            invisible="state != 'picking'"
+                            class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Annuler"
+                            invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_archive" type="object" 
+                            string="Archiver" groups="base.group_user"
+                            invisible="state != 'cancel'" class="btn btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,picking,done"/>
                 </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="toggle_active" 
-                                type="object" 
-                                class="oe_stat_button" 
-                                icon="fa-archive">
-                            <field name="active" widget="boolean_button"/>
-                        </button>
-                    </div>
                     <div class="oe_title">
-                        <h1><field name="display_name" readonly="1"/></h1>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="currency_id" invisible="1"/>
                             <field name="sale_order_id" 
                                    readonly="state != 'draft'"
-                                   options="{'no_create': true}"/>
-                            <field name="sale_line_id" 
+                                   required="state == 'draft'"
+                                   domain="[('delivery_mode', '=', 'dispatch'), ('state', '=', 'sale')]"
+                                   options="{'no_create': True}"
+                                   help="Seules les commandes confirmées en mode 'Dispatch' peuvent être sélectionnées."/>
+                            <field name="sale_order_line_id"
                                    readonly="state != 'draft'"
-                                   options="{'no_create': true}"/>
-                            <field name="product_id"/>
-                            <field name="remaining_quantity" 
-                                   invisible="1"
-                                   decoration-danger="remaining_quantity &lt; 0"/>
-                            <field name="quantity" 
-                                   readonly="state != 'draft'"/>
+                                   required="state == 'draft'"
+                                   domain="[('order_id', '=', sale_order_id), ('dispatch_required', '=', True)]"
+                                   options="{'no_create': True}"
+                                   help="Seules les lignes de commande avec l'option 'Dispatch requis' activée peuvent être dispatchées."/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_uom" readonly="1"/>
+                            <field name="line_remaining_qty" readonly="1" 
+                                   decoration-info="line_remaining_qty > 0"
+                                   decoration-warning="line_remaining_qty == 0"/>
+                            <field name="quantity"
+                                   readonly="state != 'draft'"
+                                   required="state == 'draft'"
+                                   default="1"/>
                         </group>
                         <group>
-                            <field name="stakeholder_id" 
+                            <field name="stakeholder_id"
                                    readonly="state != 'draft'"
-                                   options="{'no_create': true}"/>
+                                   required="state == 'draft'"/>
                             <field name="delivery_address_id"
                                    readonly="state != 'draft'"
-                                   options="{'no_create': true}"
-                                   context="{
-                                                'show_address': 1,
-                                                'hide_parent_name': True
-                                            }"/>
-                            <field name="unit_price" widget="monetary"/>
-                            <field name="amount_total" widget="monetary"/>
+                                   required="state == 'draft'"/>
+                            <field name="planned_date"
+                                   readonly="state != 'draft'"
+                                   required="state == 'draft'"/>
+                            <field name="effective_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="unit_price" readonly="1"/>
+                            <field name="amount_total" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            <field name="active" invisible="1"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Notes" name="notes">
-                            <field name="notes" placeholder="Ajouter des notes..."/>
+                            <field name="notes"/>
                         </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="message_follower_ids"/>
                     <field name="activity_ids"/>
                     <field name="message_ids"/>
                 </div>
@@ -90,148 +118,37 @@
         </field>
     </record>
 
-    <!-- Tree/List View -->
-    <record id="view_sale_line_dispatch_tree" model="ir.ui.view">
-        <field name="name">sale.line.dispatch.tree</field>
-        <field name="model">sale.line.dispatch</field>
-        <field name="arch" type="xml">
-            <tree sample="1" multi_edit="1">
-                <field name="company_id" groups="base.group_multi_company"/>
-                <field name="currency_id" column_invisible="1"/>
-                <field name="sale_order_id"/>
-                <field name="product_id"/>
-                <field name="quantity" sum="Total"/>
-                <field name="unit_price" widget="monetary" optional="show"/>
-                <field name="amount_total" widget="monetary" sum="Total"/>
-                <field name="stakeholder_id"/>
-                <field name="delivery_address_id" optional="show"/>
-                <field name="remaining_quantity" optional="hide"
-                       decoration-danger="remaining_quantity &lt; 0"/>
-                <field name="state" 
-                       decoration-info="state == 'draft'"
-                       decoration-warning="state == 'confirmed'"
-                       decoration-success="state == 'done'"
-                       decoration-danger="state == 'cancel'"
-                       widget="badge"/>
-                <field name="create_date" optional="hide"/>
-                <field name="write_date" optional="hide"/>
-            </tree>
-        </field>
-    </record>
+    
 
-    <!-- Kanban View -->
-    <record id="view_sale_line_dispatch_kanban" model="ir.ui.view">
-        <field name="name">sale.line.dispatch.kanban</field>
-        <field name="model">sale.line.dispatch</field>
-        <field name="arch" type="xml">
-            <kanban default_group_by="state" 
-                    class="o_kanban_mobile" 
-                    sample="1"
-                    records_draggable="0">
-                <field name="currency_id" invisible="1"/>
-                <field name="sale_order_id"/>
-                <field name="product_id"/>
-                <field name="quantity"/>
-                <field name="amount_total"/>
-                <field name="stakeholder_id"/>
-                <field name="delivery_address_id"/>
-                <field name="state"/>
-                <field name="remaining_quantity"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_card oe_kanban_global_click">
-                            <div class="oe_kanban_content">
-                                <div class="o_kanban_record_top mb-0">
-                                    <div class="o_kanban_record_headings">
-                                        <strong class="o_kanban_record_title">
-                                            <span><field name="display_name"/></span>
-                                        </strong>
-                                    </div>
-                                </div>
-                                <div class="o_kanban_record_body">
-                                    <div class="row">
-                                        <div class="col-6" invisible="1">
-                                            <strong>Client: </strong>
-                                            <field name="stakeholder_id"/>
-                                        </div>
-                                         <div class="col-6" invisible="1">
-                                            <strong>Restant: </strong>
-                                            <field name="remaining_quantity"/>
-                                        </div>
-                                    </div>
-                                    <div class="row">                                        
-                                        <div class="col-6">
-                                            <strong>Quantité: </strong>
-                                            <field name="quantity"/>
-                                        </div>  
-                                        <div class="col-6">
-                                            <strong>Montant: </strong>
-                                            <field name="amount_total" widget="monetary"/>
-                                        </div>                                     
-                                    </div>
-                                </div>
-                                <div class="o_kanban_record_bottom">
-                                    <div class="oe_kanban_bottom_left"/>
-                                    <div class="oe_kanban_bottom_right">
-                                        <field name="state" widget="label_selection" 
-                                               options="{'classes': {
-                                                   'draft': 'info',
-                                                   'confirmed': 'warning',
-                                                   'done': 'success',
-                                                   'cancel': 'danger'}}"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
-
-    <!-- Search View -->
+    <!-- Vue recherche -->
     <record id="view_sale_line_dispatch_search" model="ir.ui.view">
         <field name="name">sale.line.dispatch.search</field>
         <field name="model">sale.line.dispatch</field>
         <field name="arch" type="xml">
-            <search>
-                <field name="display_name" filter_domain="[
-                    '|', '|', '|', '|',
-                    ('display_name', 'ilike', self),
-                    ('sale_order_id', 'ilike', self),
-                    ('product_id', 'ilike', self),
-                    ('stakeholder_id', 'ilike', self),
-                    ('delivery_address_id', 'ilike', self)]"/>
+            <search string="Rechercher des dispatches">
+                <field name="name"/>
                 <field name="sale_order_id"/>
                 <field name="product_id"/>
                 <field name="stakeholder_id"/>
                 <field name="delivery_address_id"/>
                 <separator/>
-                <filter string="Mes dispatches" name="my_dispatches" 
-                        domain="[('create_uid', '=', uid)]"/>
-                <separator/>
-                <filter string="Archivé" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Mes dispatches" name="my_dispatches" domain="[('create_uid', '=', uid)]"/>
+                <filter string="Actifs" name="active" domain="[('active', '=', True)]"/>
                 <separator/>
                 <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
                 <filter string="Confirmé" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Expédié" name="shipped" domain="[('state', '=', 'shipped')]"/>
                 <filter string="Terminé" name="done" domain="[('state', '=', 'done')]"/>
                 <filter string="Annulé" name="cancel" domain="[('state', '=', 'cancel')]"/>
                 <group expand="0" string="Regrouper par">
-                    <filter string="Société" name="company" 
-                            context="{'group_by': 'company_id'}"
-                            groups="base.group_multi_company"/>
-                    <filter string="Commande" name="group_by_order" 
-                            context="{'group_by': 'sale_order_id'}"/>
-                    <filter string="Produit" name="group_by_product" 
-                            context="{'group_by': 'product_id'}"/>
-                    <filter string="État" name="group_by_state" 
-                            context="{'group_by': 'state'}"/>
-                    <filter string="Partie prenante" name="group_by_stakeholder" 
-                            context="{'group_by': 'stakeholder_id'}"/>
-                    <filter string="Date de création" name="group_by_create_date" 
-                            context="{'group_by': 'create_date:month'}"/>
+                    <filter string="Commande" name="group_by_order" context="{'group_by': 'sale_order_id'}"/>
+                    <filter string="Produit" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Intervenant" name="group_by_stakeholder" context="{'group_by': 'stakeholder_id'}"/>
+                    <filter string="État" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Date planifiée" name="group_by_date" context="{'group_by': 'planned_date:month'}"/>
                 </group>
             </search>
         </field>
     </record>
+
 </odoo>

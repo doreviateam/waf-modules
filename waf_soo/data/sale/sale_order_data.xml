@@ -5,7 +5,9 @@
         <record id="sale_order_cm_move5000" model="sale.order">
             <!-- Informations générales -->
             <field name="partner_id" ref="partner_cm_siege"/>
-            <field name="date_order" eval="datetime.now()"/>
+            <field name="partner_shipping_id" ref="partner_cm_siege"/>
+            <field name="delivery_mode">dispatch</field>
+            <field name="date_order" eval="datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
             <field name="validity_date" eval="(datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')"/>
             <field name="user_id" ref="base.user_admin"/>
             <field name="company_id" ref="base.main_company"/>
@@ -20,6 +22,7 @@
             <field name="product_uom" ref="uom.product_uom_unit"/>
             <field name="price_unit">352.99</field>
             <field name="name">Move 5000 Bluetooth CLESS</field>
+            <field name="dispatch_required" eval="True"/>
         </record>
     </data>
 </odoo>

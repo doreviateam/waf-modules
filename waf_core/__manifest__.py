@@ -4,7 +4,7 @@
     'summary': 'Core module for W.A.F applications',
     'description': """
         Core module for WAF applications
-        ===============================
+        ==========================================
         - Base configuration
         - Common mixins
         - Shared utilities

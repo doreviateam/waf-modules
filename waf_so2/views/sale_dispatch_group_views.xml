@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue formulaire -->
+        <record id="view_sale_dispatch_group_form" model="ir.ui.view">
+            <field name="name">sale.dispatch.group.form</field>
+            <field name="model">sale.dispatch.group</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" 
+                                string="Confirmer" 
+                                type="object" 
+                                class="oe_highlight"
+                                invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="sale_order_id"/>
+                                <field name="delivery_address_id"/>
+                                <field name="scheduled_date"/>
+                            </group>
+                            <group>
+                                <field name="picking_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Dispatches">
+                                <field name="dispatch_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="product_id"/>
+                                        <field name="product_uom_qty"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste -->
+        <record id="view_sale_dispatch_group_tree" model="ir.ui.view">
+            <field name="name">sale.dispatch.group.tree</field>
+            <field name="model">sale.dispatch.group</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="sale_order_id"/>
+                    <field name="delivery_address_id"/>
+                    <field name="scheduled_date"/>
+                    <field name="state" decoration-info="state == 'draft'"
+                                decoration-success="state == 'confirmed'"
+                                decoration-muted="state == 'done'"
+                                decoration-danger="state == 'cancel'"/>
+                    <field name="picking_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue recherche -->
+        <record id="view_sale_dispatch_group_search" model="ir.ui.view">
+            <field name="name">sale.dispatch.group.search</field>
+            <field name="model">sale.dispatch.group</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="sale_order_id"/>
+                    <field name="delivery_address_id"/>
+                    <separator/>
+                    <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmé" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Terminé" name="done" domain="[('state', '=', 'done')]"/>
+                    <group expand="0" string="Regrouper par">
+                        <filter string="Commande" name="sale_order" context="{'group_by': 'sale_order_id'}"/>
+                        <filter string="Adresse" name="address" context="{'group_by': 'delivery_address_id'}"/>
+                        <filter string="État" name="state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_sale_dispatch_group" model="ir.actions.act_window">
+            <field name="name">Groupes de Dispatch</field>
+            <field name="res_model">sale.dispatch.group</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_sale_dispatch_group"
+                  name="Groupes de Dispatch"
+                  action="action_sale_dispatch_group"
+                  parent="sale.sale_order_menu"
+                  sequence="20"/>
+    </data>
+</odoo> 

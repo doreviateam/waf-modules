@@ -10,7 +10,6 @@ class DeliveryCarrier(models.Model):
         'zone_id',                    # Inverse de carrier_id
         string='Zones de livraison',
         domain="[]",
-        tracking=True,
         help="Zones de livraison couvertes par ce transporteur"
     )
     zone_count = fields.Integer(

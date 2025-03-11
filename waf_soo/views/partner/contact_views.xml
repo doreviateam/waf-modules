@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <!-- Vue Formulaire -->
@@ -7,22 +7,39 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <!-- Modification du champ parent_id -->
-                <xpath expr="//field[@name='parent_id']" position="replace">
-                    <field name="parent_id" 
-                        options="{'no_create': True, 'no_create_edit': True}"
-                        domain="[('is_company', '=', True), ('id', '!=', id)]"
-                        placeholder="Entreprise parente"/>
-                </xpath>
-                
-                <!-- Remplacement du bloc pays/région -->
-                <field name="country_id" position="before">
-                    <field name="region_id" 
-                           options="{'no_create': True}"
-                           domain="[('country_id', '=', country_id)]"
-                           invisible="country_id != %(base.fr)d"
-                           force_save="1"/>
-                </field>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="parent_id" 
+                                options="{'no_create': True, 'no_create_edit': True}"
+                                domain="[('is_company', '=', True), ('id', '!=', id)]"
+                                placeholder="Entreprise parente"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page name="contact_addresses" string="Adresses">
+                            <group>
+                                <field name="child_ids" context="{'default_parent_id': active_id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="email"/>
+                                        <field name="phone"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <group name="delivery_addresses" string="Adresses de livraison">
+                                    <field name="address_ids" 
+                                        widget="many2many_tags" 
+                                        options="{'no_create': True, 'no_create_edit': True}"
+                                        context="{'default_type': 'delivery'}"
+                                        string="Contacts clients"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
             </field>
         </record>
 
@@ -32,11 +49,12 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_tree"/>
             <field name="arch" type="xml">
-                <field name="country_id" position="before">
-                    <field name="region_id"
-                        optional="show"
-                        column_invisible="context.get('country_code') != 'FR'"/>
-                </field>
+                <tree>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="country_id"/>
+                </tree>
             </field>
         </record>
 
@@ -46,16 +64,33 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.res_partner_kanban_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//div[hasclass('oe_kanban_details')]//div[last()]" position="after">
-                    <div invisible="1">
-                        <field name="country_id"/>
-                    </div>
-                    <div t-if="record.region_id.raw_value and record.country_id.raw_value == 'FR'">
-                        <field name="region_id"/>
-                    </div>
-                </xpath>
+                <kanban>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="country_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div t-if="record.email.raw_value">
+                                        <field name="email"/>
+                                    </div>
+                                    <div t-if="record.phone.raw_value">
+                                        <field name="phone"/>
+                                    </div>
+                                    <div t-if="record.country_id.raw_value">
+                                        <field name="country_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
             </field>
         </record>
-
     </data>
 </odoo>

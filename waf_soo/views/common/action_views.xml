@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+        <!-- Commenté temporairement - Dépendance sur waf_tempo -->
+        <!--
         <record id="action_calendar_holiday" model="ir.actions.act_window">
             <field name="name">Jours fériés</field>
             <field name="res_model">calendar.holiday</field>
@@ -24,6 +26,7 @@
                 </p>
             </field>
         </record>
+        -->
 
         <record id="action_societe" model="ir.actions.act_window">
             <field name="name">Sociétés</field>
@@ -58,6 +61,12 @@
                     Créer votre première commande de livraison
                 </p>
             </field>
+        </record>
+
+        <record id="action_stock_picking_type" model="ir.actions.act_window">
+            <field name="name">Types d'opérations</field>
+            <field name="res_model">stock.picking.type</field>
+            <field name="view_mode">tree,form</field>
         </record>
 
         <record id="action_stock_move" model="ir.actions.act_window">
@@ -101,24 +110,55 @@
 
         <!-- Action pour les dispatches -->
         <record id="action_sale_line_dispatch" model="ir.actions.act_window">
-            <field name="name">Dispatch des commandes</field>
+            <field name="name">Dispatches</field>
             <field name="res_model">sale.line.dispatch</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="search_view_id" ref="view_sale_line_dispatch_search"/>
-            <field name="context">{
-                'search_default_draft': 1,
-                'default_state': 'draft'
-            }</field>
+            <field name="view_mode">tree,form,kanban</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    Créer votre premier dispatch de commande
-                </p>
-                <p>
-                    Le dispatch des commandes permet de répartir les quantités 
-                    commandées entre différentes parties prenantes.
+                    Créer votre premier dispatch
                 </p>
             </field>
         </record>
+
+        <!-- Action pour les adresses -->
+        <record id="action_partner_address" model="ir.actions.act_window">
+            <field name="name">Adresses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.address</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_partner_address_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Ajouter une nouvelle adresse
+                </p>
+            </field>
+        </record>
+
+
+        <record id="action_general_settings" model="ir.actions.act_window">
+            <field name="name">Paramètres généraux</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Configurez les paramètres généraux de votre système
+                </p>
+            </field>
+        </record>
+
+        <!-- Action pour archiver un dispatch -->
+        <record id="action_archive_sale_line_dispatch" model="ir.actions.server">
+            <field name="name">Archiver les dispatches</field>
+            <field name="model_id" ref="model_sale_line_dispatch"/>
+            <field name="binding_model_id" ref="model_sale_line_dispatch"/>
+            <field name="state">code</field>
+            <field name="code">
+                records.action_archive()
+            </field>
+        </record>
+
+        
 
     </data>
 </odoo>

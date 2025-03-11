@@ -1,2 +1,2 @@
-from . import calendar_holiday
-from . import calendar_region
+# from . import calendar_holiday
+# from . import calendar_region

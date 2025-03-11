@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Client principal -->
+        <record id="partner_demo_cmh" model="res.partner">
+            <field name="name">Comptoir Mécanographique</field>
+            <field name="email">contact@cmh.fr</field>
+            <field name="phone">+33 1 23 45 67 89</field>
+            <field name="street">123 Avenue des Tests</field>
+            <field name="city">Montpellier</field>
+            <field name="zip">34008</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="company_type">company</field>
+            <field name="customer_rank">1</field>
+            <field name="website">www.cmh.fr</field>
+        </record>
+
+        <!-- Adresses de livraison -->
+        <record id="partner_address_depot1" model="res.partner">
+            <field name="name">Dépôt Principal</field>
+            <field name="parent_id" ref="partner_demo_cmh"/>
+            <field name="type">delivery</field>
+            <field name="street">45 Rue de l'Entrepôt</field>
+            <field name="city">Paris</field>
+            <field name="zip">75011</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="phone">+33 1 98 76 54 32</field>
+            <field name="email">depot.principal@cmh.fr</field>
+        </record>
+
+        <record id="partner_address_depot2" model="res.partner">
+            <field name="name">Dépôt Secondaire</field>
+            <field name="parent_id" ref="partner_demo_cmh"/>
+            <field name="type">delivery</field>
+            <field name="street">78 Boulevard du Stock</field>
+            <field name="city">Paris</field>
+            <field name="zip">75015</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="phone">+33 1 45 67 89 01</field>
+            <field name="email">depot.secondaire@cmh.fr</field>
+        </record>
+
+        <!-- Adresses partner.address -->
+        <record id="partner_address_demo_1" model="partner.address">
+            <field name="name">Bar de la rotonde</field>
+            <field name="type">delivery</field>
+            <field name="street">15 Rue de la Logistique</field>
+            <field name="street2">Zone Industrielle Est</field>
+            <field name="zip">75011</field>
+            <field name="city">Paris</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="phone">+33 1 23 45 67 89</field>
+            <field name="email">entrepot.central@cmh.fr</field>
+            <field name="comment">Horaires de livraison : 8h-16h
+Accès poids lourds par l'entrée Nord
+Badge d'accès obligatoire
+Contact sur place : Jean Martin</field>
+            <field name="active" eval="True"/>
+            <field name="partner_ids" eval="[(6, 0, [ref('partner_demo_cmh')])]"/>
+        </record>
+
+        <record id="partner_address_demo_2" model="partner.address">
+            <field name="name">Pharmacie Galibère</field>
+            <field name="type">delivery</field>
+            <field name="street">42 Avenue des Transporteurs</field>
+            <field name="street2">Parc d'Activités Sud</field>
+            <field name="zip">69007</field>
+            <field name="city">Lyon</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="phone">+33 4 56 78 90 12</field>
+            <field name="email">plateforme.lyon@cmh.fr</field>
+            <field name="comment">Horaires de livraison : 6h-20h
+Quais de déchargement : 1 à 5
+Réservation obligatoire 24h à l'avance
+Contact : Marie Dupont</field>
+            <field name="active" eval="True"/>
+            <field name="partner_ids" eval="[(6, 0, [ref('partner_demo_cmh')])]"/>
+        </record>
+    </data>
+</odoo>

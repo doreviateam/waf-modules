@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue formulaire -->
+    <record id="view_equipment_form" model="ir.ui.view">
+        <field name="name">equipment.form</field>
+        <field name="model">equipment</field>
+        <field name="arch" type="xml">
+            <form string="Équipement">
+                <header>
+                    <button name="action_set_active" string="Mettre en service" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_set_disponible" string="Mettre disponible" type="object" class="oe_highlight" invisible="state not in ('draft', 'maintenance', 'repair')"/>
+                    <button name="action_start_maintenance" string="Démarrer maintenance" type="object" invisible="state not in ('service', 'draft')"/>
+                    <button name="action_start_repair" string="Démarrer réparation" type="object" invisible="state not in ('service', 'maintenance')"/>
+                    <button name="action_set_inactive" string="Mettre hors service" type="object" invisible="state in ('inactive', 'draft')"/>
+                    <button name="action_set_draft" string="Remettre en brouillon" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,disponible,service,maintenance,repair,inactive"/>
+                </header>
+                <sheet>
+                    <field name="image_1920" widget="image" class="oe_avatar" nolabel="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nom de l'équipement"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="serial_number"/>
+                            <field name="product_number"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="is_refurbished" string="Reconditionné" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="partner_id"/>
+                            <field name="address_id"/>
+                            <field name="service_date_start"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Pièces détachées">
+                            <field name="spare_part_ids">
+                                <tree limit="50">
+                                    <field name="name"/>
+                                    <field name="default_code"/>
+                                    <field name="categ_id_name"/>
+                                    <field name="image_128" widget="image" string="Image"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Informations complémentaires">
+                            <group>
+                                <group>
+                                    <field name="manufacturer_id"/>
+                                    <field name="manufactured_date"/>
+                                    <field name="warranty_end_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue liste -->
+    <record id="view_equipment_tree" model="ir.ui.view">
+        <field name="name">equipment.tree</field>
+        <field name="model">equipment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="serial_number"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="service_date_start"/>
+                <field name="warranty_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue recherche -->
+    <record id="view_equipment_search" model="ir.ui.view">
+        <field name="name">equipment.search</field>
+        <field name="model">equipment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="serial_number"/>
+                <field name="product_id"/>
+                <field name="owner_id"/>
+                <field name="partner_id"/>
+                <field name="address_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <separator/>
+                <filter string="En service" name="service" domain="[('state', '=', 'service')]"/>
+                <filter string="En maintenance" name="maintenance" domain="[('state', '=', 'maintenance')]"/>
+                <filter string="En réparation" name="repair" domain="[('state', '=', 'repair')]"/>
+                <filter string="Hors service" name="inactive" domain="[('state', '=', 'inactive')]"/>
+                <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <filter string="Garantie active" name="warranty_active" domain="[('warranty_status', '=', 'active')]"/>
+                <filter string="Garantie expirée" name="warranty_expired" domain="[('warranty_status', '=', 'expired')]"/>
+                <filter string="Sans garantie" name="no_warranty" domain="[('warranty_status', '=', 'no_warranty')]"/>
+            </search>
+        </field>
+    </record>
+</odoo> 

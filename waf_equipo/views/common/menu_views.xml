@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Équipements -->
+    <menuitem 
+            id="menu_waf_equipo_equipment" 
+            name="Équipements"
+            parent="waf_soo.menu_waf_soo_product"
+            action="waf_equipo.action_equipment"
+            sequence="2"/>
+
+    <!-- Menu Pièces détachées -->
+    <menuitem 
+            id="menu_waf_equipo_spare_part" 
+            name="Pièces détachées"
+            parent="waf_soo.menu_waf_soo_product"
+            action="waf_equipo.action_product_spare_parts"
+            sequence="3"/>
+
+
+
+        <menuitem id="menu_waf_equipo_partner_blaz"
+                name="Partenaires Blaz"
+                parent="waf_soo.menu_waf_soo_configuration"
+                action="waf_equipo.action_partner_blaz"
+                sequence="30"/>
+</odoo> 

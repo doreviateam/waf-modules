@@ -19,11 +19,12 @@
             <field name="is_company" eval="True"/>
             <field name="company_type">company</field>
             <field name="image_1920" type="base64" file="waf_soo/data/img/logo_cm.png"/>
-            <field name="region_id" model="res.country.state" 
+            <!-- Commenté temporairement - Dépendance sur waf_tempo -->
+            <!--<field name="region_id" model="res.country.state" 
                    eval="obj().env['res.country.state'].search([
                        ('code', '=', 'OCC'),
                        ('country_id.code', '=', 'FR')
-                   ], limit=1).id"/>
+                   ], limit=1).id"/>-->
             <field name="active" eval="True"/>
             <field name="property_payment_term_id" ref="account.account_payment_term_30days"/>
         </record>
@@ -47,11 +48,12 @@
             <field name="parent_id" ref="partner_cm_siege"/>
             <field name="image_1920" type="base64" file="waf_soo/data/img/logo_cm.png"/>
             <field name="type">other</field>
-            <field name="region_id" model="res.country.state" 
+            <!-- Commenté temporairement - Dépendance sur waf_tempo -->
+            <!--<field name="region_id" model="res.country.state" 
                    eval="obj().env['res.country.state'].search([
                        ('code', '=', 'OCC'),
                        ('country_id.code', '=', 'FR')
-                   ], limit=1).id"/>
+                   ], limit=1).id"/>-->
             <field name="active" eval="True"/>
         </record>
 
@@ -74,11 +76,12 @@
             <field name="parent_id" ref="partner_cm_siege"/>
             <field name="image_1920" type="base64" file="waf_soo/data/img/logo_cm.png"/>
             <field name="type">other</field>
-            <field name="region_id" model="res.country.state" 
+            <!-- Commenté temporairement - Dépendance sur waf_tempo -->
+            <!--<field name="region_id" model="res.country.state" 
                    eval="obj().env['res.country.state'].search([
                        ('code', '=', 'OCC'),
                        ('country_id.code', '=', 'FR')
-                   ], limit=1).id"/>
+                   ], limit=1).id"/>-->
             <field name="active" eval="True"/>
         </record>
 
@@ -101,11 +104,12 @@
             <field name="parent_id" ref="partner_cm_siege"/>
             <field name="image_1920" type="base64" file="waf_soo/data/img/logo_cm.png"/>
             <field name="type">other</field>
-            <field name="region_id" model="res.country.state" 
+            <!-- Commenté temporairement - Dépendance sur waf_tempo -->
+            <!--<field name="region_id" model="res.country.state" 
                    eval="obj().env['res.country.state'].search([
                        ('code', '=', 'OCC'),
                        ('country_id.code', '=', 'FR')
-                   ], limit=1).id"/>
+                   ], limit=1).id"/>-->
             <field name="active" eval="True"/>
         </record>
 
@@ -128,11 +132,12 @@
             <field name="parent_id" ref="partner_cm_siege"/>
             <field name="image_1920" type="base64" file="waf_soo/data/img/logo_cm.png"/>
             <field name="type">other</field>
-            <field name="region_id" model="res.country.state" 
+            <!-- Commenté temporairement - Dépendance sur waf_tempo -->
+            <!--<field name="region_id" model="res.country.state" 
                    eval="obj().env['res.country.state'].search([
                        ('code', '=', 'OCC'),
                        ('country_id.code', '=', 'FR')
-                   ], limit=1).id"/>
+                   ], limit=1).id"/>-->
             <field name="active" eval="True"/>
         </record>
     </data>
