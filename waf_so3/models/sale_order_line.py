@@ -6,28 +6,28 @@ class SaleOrderLine(models.Model):
     dispatch_line_ids = fields.One2many(
         'sale.line.dispatch',
         'sale_order_line_id',
-        string='Lignes de dispatch'
+        string='Dispatch Lines'
     )
 
     dispatched_qty = fields.Float(
-        string='Quantité dispatchée',
+        string='Dispatched Quantity',
         compute='_compute_dispatch_quantities',
         store=True,
-        help="Quantité déjà dispatchée pour cette ligne"
+        help="Quantity already dispatched for this line"
     )
 
     remaining_qty = fields.Float(
-        string='Quantité restante à dispatcher',
+        string='Remaining Quantity to Dispatch',
         compute='_compute_dispatch_quantities',
         store=True,
-        help="Quantité restante à dispatcher"
+        help="Remaining quantity to dispatch"
     )
 
     dispatch_progress = fields.Float(
-        string='Progression dispatch',
+        string='Dispatch Progress',
         compute='_compute_dispatch_quantities',
         store=True,
-        help="Pourcentage de la quantité dispatchée"
+        help="Percentage of dispatched quantity"
     )
 
     @api.depends('product_uom_qty', 'dispatch_line_ids.state', 'dispatch_line_ids.product_uom_qty')

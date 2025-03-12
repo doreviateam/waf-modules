@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 import logging
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -9,7 +10,7 @@ class SaleOrder(models.Model):
     delivery_mode = fields.Selection([
         ('standard', 'Standard'),
         ('dispatch', 'Dispatch')
-    ], string='Mode de livraison', default='standard', required=True)
+    ], string='Delivery Mode', default='standard', required=True)
 
     dispatch_ids = fields.One2many(
         'sale.dispatch',
@@ -19,68 +20,97 @@ class SaleOrder(models.Model):
 
     active_dispatch_id = fields.Many2one(
         'sale.dispatch',
-        string='Dispatch en cours',
+        string='Current Dispatch',
         compute='_compute_active_dispatch'
     )
 
     dispatch_percent = fields.Float(
-        string='Progression dispatch',
+        string='Dispatch Progress',
         compute='_compute_dispatch_percent',
         store=True,
-        help="Pourcentage des quantités dispatchées"
+        help="Percentage of dispatched quantities"
     )
 
     dispatch_percent_global = fields.Float(
-        string='Progression dispatch globale',
+        string='Global Dispatch Progress',
         compute='_compute_dispatch_percent_global',
         store=True,
-        help="Pourcentage global des quantités dispatchées",
+        help="Global percentage of dispatched quantities",
         digits=(5, 2)
     )
 
+    picking_count_from_dispatch = fields.Integer(
+        string='Delivery Orders from Dispatch',
+        compute='_compute_picking_count_from_dispatch'
+    )
+
+    dispatch_line_count = fields.Integer(
+        string='Dispatch Lines Count',
+        compute='_compute_dispatch_line_count'
+    )
+
     def action_confirm(self):
-        """Surcharge de la confirmation de commande."""
+        """Override order confirmation."""
         if self.delivery_mode == 'dispatch':
             self.picking_ids.unlink()
             return self.write({'state': 'sale'})
         return super().action_confirm()
 
     def _action_launch_stock_rule(self, previous_product_uom_qty=False):
-        """Surcharge pour empêcher la création des pickings en mode dispatch."""
+        """Override to prevent picking creation in dispatch mode."""
         if self.delivery_mode == 'dispatch' or self.env.context.get('skip_delivery'):
-            _logger.info("Mode dispatch activé - Pas de création automatique du bon de livraison.")
+            _logger.info("Dispatch mode active - No automatic delivery order creation.")
             return True
         return super()._action_launch_stock_rule(previous_product_uom_qty=previous_product_uom_qty)
 
     def _create_delivery(self):
-        """Empêche la création automatique des BL en mode dispatch."""
+        """Prevent automatic delivery order creation in dispatch mode."""
         if self.delivery_mode == 'Dispatch' or self.env.context.get('skip_delivery'):
-            _logger.info("Mode dispatch activé - Pas de création automatique du bon de livraison.")
+            _logger.info("Dispatch mode active - No automatic delivery order creation.")
             return False
         return super()._create_delivery()
 
     def action_create_dispatch(self):
-        """Crée un nouveau dispatch."""
+        """Create a new dispatch."""
         self.ensure_one()
         return {
-            'name': _('Créer Dispatch'),
+            'name': _('Create Dispatch'),
             'view_mode': 'form',
             'res_model': 'sale.dispatch',
             'type': 'ir.actions.act_window',
             'context': {
                 'default_sale_order_id': self.id,
-                'default_stakeholder_id': self.partner_id.id,
+                'default_mandator_id': self.partner_id.id,
             },
+        }
+    
+    def action_show_dispatch(self):
+        """Display the current dispatch."""
+        self.ensure_one()
+        dispatch = self.env['sale.dispatch'].search([
+            ('sale_order_id', '=', self.id)
+        ], limit=1)
+        
+        if not dispatch:
+            raise UserError(_("No dispatch found for this order."))
+            
+        return {
+            'name': _('Show Dispatch'),
+            'view_mode': 'form',
+            'res_model': 'sale.dispatch',
+            'type': 'ir.actions.act_window',    
+            'res_id': dispatch.id,
+            'context': {'form_view_initial_mode': 'edit'},
         }
 
     def action_add_dispatch(self):
-        """Ouvre le dispatch en cours."""
+        """Open the current dispatch."""
         self.ensure_one()
         if not self.active_dispatch_id:
             return self.action_create_dispatch()
             
         return {
-            'name': _('Ajouter au Dispatch'),
+            'name': _('Add to Dispatch'),
             'view_mode': 'form',
             'res_model': 'sale.dispatch',
             'type': 'ir.actions.act_window',
@@ -124,3 +154,42 @@ class SaleOrder(models.Model):
 
             dispatched_qty = sum(order.order_line.mapped('dispatched_qty'))
             order.dispatch_percent_global = min(100.0, (dispatched_qty / total_qty) * 100)
+
+    @api.depends('dispatch_ids.picking_ids')
+    def _compute_picking_count_from_dispatch(self):
+        for order in self:
+            order.picking_count_from_dispatch = len(order.dispatch_ids.picking_ids)
+
+    def action_view_dispatch_pickings(self):
+        """Display delivery orders linked to dispatches."""
+        self.ensure_one()
+        pickings = self.dispatch_ids.picking_ids
+        action = {
+            'name': _('Dispatch Delivery Orders'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'stock.picking',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', pickings.ids)],
+        }
+        if len(pickings) == 1:
+            action.update({
+                'view_mode': 'form',
+                'res_id': pickings.id,
+            })
+        return action
+
+    @api.depends('dispatch_ids.line_ids')
+    def _compute_dispatch_line_count(self):
+        for order in self:
+            order.dispatch_line_count = len(order.dispatch_ids.line_ids)
+
+    def action_view_dispatch_lines(self):
+        """Display dispatch lines."""
+        self.ensure_one()
+        return {
+            'name': _('Dispatch Lines'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.line.dispatch',
+            'view_mode': 'tree,form',
+            'domain': [('dispatch_id', 'in', self.dispatch_ids.ids)],
+        }

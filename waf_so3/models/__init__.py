@@ -4,3 +4,5 @@ from . import sale_order_line
 from . import sale_line_dispatch
 from . import sale_dispatch
 from . import res_partner
+from . import stock_picking
+from . import dispatch_groupment

@@ -15,7 +15,7 @@
                         </div>
                         <div class="oe_title">
                             <h1>
-                                <field name="name" placeholder="Nom de l'adresse"/>
+                                <field name="name" placeholder="e.g. Hôtel de la Poste"/>
                             </h1>
                         </div>
                         <group>
@@ -27,22 +27,22 @@
                                 <field name="active" invisible="1"/>
                             </group>
                             <group>
-                                <label for="street" string="Adresse"/>
+                                <label for="street" string="Address"/>
                                 <div class="o_address_format">
-                                    <field name="street" placeholder="Rue..." class="o_address_street"/>
-                                    <field name="street2" placeholder="Rue 2..." class="o_address_street"/>
-                                    <field name="city" placeholder="Ville" class="o_address_city"/>
-                                    <field name="state_id" class="o_address_state" placeholder="État" 
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State" 
                                         options="{'no_open': True, 'no_create': True}"/>
-                                    <field name="zip" placeholder="Code postal" class="o_address_zip"/>
-                                    <field name="country_id" placeholder="Pays" class="o_address_country" 
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country" 
                                         options="{'no_open': True, 'no_create': True}"/>
                                 </div>
                             </group>
                         </group>
                         <notebook>
                             <page string="Notes">
-                                <field name="comment" placeholder="Notes internes..."/>
+                                <field name="comment" placeholder="Internal Notes..."/>
                             </page>
                         </notebook>
                     </sheet>
@@ -82,11 +82,11 @@
                     <field name="city"/>
                     <field name="zip"/>
                     <separator/>
-                    <filter string="Archivé" name="inactive" domain="[('active', '=', False)]"/>
-                    <group expand="0" string="Regrouper par">
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
                         <filter string="Type" name="type" context="{'group_by': 'type'}"/>
-                        <filter string="Ville" name="city" context="{'group_by': 'city'}"/>
-                        <filter string="Pays" name="country" context="{'group_by': 'country_id'}"/>
+                        <filter string="City" name="city" context="{'group_by': 'city'}"/>
+                        <filter string="Country" name="country" context="{'group_by': 'country_id'}"/>
                     </group>
                 </search>
             </field>
@@ -94,14 +94,14 @@
 
         <!-- Action -->
         <record id="action_partner_address" model="ir.actions.act_window">
-            <field name="name">Adresses de livraison</field>
+            <field name="name">Delivery Addresses</field>
             <field name="res_model">partner.address</field>
             <field name="view_mode">tree,form</field>
         </record>
 
         <!-- Menu -->
         <menuitem id="menu_partner_address"
-                  name="Adresses de livraison"
+                  name="Delivery Addresses"
                   action="action_partner_address"
                   parent="sale.menu_sale_config"
                   sequence="25"/>

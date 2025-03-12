@@ -6,24 +6,24 @@ _logger = logging.getLogger(__name__)
 
 class SaleDispatch(models.Model):
     _name = 'sale.dispatch'
-    _description = 'Dispatch de commande'
+    _description = 'Sale Order Dispatch'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
     name = fields.Char(
-        string='Référence',
+        string='Reference',
         required=True,
         copy=False,
         readonly=True,
-        default='Nouveau'
+        default='New'
     )
 
     state = fields.Selection([
-        ('draft', 'Brouillon'),
-        ('confirmed', 'Confirmé'),
-        ('done', 'Terminé'),
-        ('cancel', 'Annulé')
-    ], string='État', 
+        ('draft', 'Draft'),
+        ('confirmed', 'Confirmed'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled')
+    ], string='Status', 
        default='draft',
        tracking=True)
 
@@ -37,7 +37,7 @@ class SaleDispatch(models.Model):
 
     sale_order_id = fields.Many2one(
         'sale.order',
-        string='Commande',
+        string='Order',
         required=True,
         domain="[('delivery_mode', '=', 'dispatch')]"
     )
@@ -46,103 +46,119 @@ class SaleDispatch(models.Model):
         related='sale_order_id.currency_id',
         depends=['sale_order_id.currency_id'],
         store=True,
-        string='Devise'
+        string='Currency'
     )
 
     dispatch_percent_global = fields.Float(
-        string='Progression dispatch globale',
+        string='Global Dispatch Progress',
         related='sale_order_id.dispatch_percent_global',
         store=True,
-        help="Pourcentage global des quantités dispatchées",
+        help="Global percentage of dispatched quantities",
         digits=(5, 2)
     )
 
     dispatch_progress = fields.Float(
-        string='Progression',
+        string='Progress',
         compute='_compute_dispatch_progress',
         store=True,
-        help="Pourcentage global des quantités dispatchées"
+        help="Global percentage of dispatched quantities"
     )
 
     line_ids = fields.One2many(
         'sale.line.dispatch',
         'dispatch_id',
-        string='Lignes'
+        string='Lines'
     )
 
     company_id = fields.Many2one(
         'res.company',
-        string='Société',
+        string='Company',
         related='sale_order_id.company_id',
         store=True
     )
 
     picking_ids = fields.Many2many(
         'stock.picking',
-        string='Bons de livraison',
+        string='Delivery Orders',
         copy=False,
         readonly=True
     )
 
     picking_count = fields.Integer(
-        string='Nombre de BL',
+        string='Delivery Orders Count',
         compute='_compute_picking_count'
     )
 
     mandator_id = fields.Many2one(
         'res.partner',
         string='Mandator',
-        required=True)
+        required=True
+    )
 
     commitment_date = fields.Datetime(
-        string='Date promise',
+        string='Commitment Date',
         tracking=True,
-        help="Date de livraison promise au client"
+        help="This is the delivery date promised to the customer"
     )
+
+    # Champ calculé pour l'adresse de livraison (optionnel maintenant)
+    delivery_address_id = fields.Many2one(
+        'partner.address',
+        string='Delivery Address',
+        readonly=True,  # Maintenant en lecture seule car géré par les lignes
+        help="Shown for information only. Delivery addresses are managed at line level."
+    )
+
+    _sql_constraints = [
+        ('unique_sale_order', 
+         'UNIQUE(sale_order_id)',
+         'Only one dispatch is allowed per order!')
+    ]
 
     @api.model_create_multi
     def create(self, vals_list):
+        """Surcharge de create."""
         for vals in vals_list:
-            if vals.get('name', _('Nouveau')) == _('Nouveau'):
-                vals['name'] = self.env['ir.sequence'].next_by_code('sale.dispatch') or _('Nouveau')
+            if vals.get('name', _('New')) == _('New'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('sale.dispatch') or _('New')
         return super().create(vals_list)
 
     def action_confirm(self):
-        """Confirme le dispatch."""
+        """Confirm the dispatch."""
         for dispatch in self:
             if dispatch.state != 'draft':
-                raise UserError(_("Seuls les dispatches en brouillon peuvent être confirmés."))
+                raise UserError(_("Only draft dispatches can be confirmed."))
             dispatch.write({'state': 'confirmed'})
-            _logger.info(f"Dispatch {dispatch.name} confirmé.")
+            _logger.info(f"Dispatch {dispatch.name} confirmed.")
 
     def action_done(self):
-        """Termine le dispatch."""
+        """Mark the dispatch as done."""
         for dispatch in self:
             if dispatch.state != 'confirmed':
-                raise UserError(_("Seuls les dispatches confirmés peuvent être terminés."))
+                raise UserError(_("Only confirmed dispatches can be marked as done."))
             dispatch.write({'state': 'done'})
-            _logger.info(f"Dispatch {dispatch.name} terminé.")
+            _logger.info(f"Dispatch {dispatch.name} marked as done.")
 
     def action_cancel(self):
-        """Annule le dispatch."""
+        """Cancel the dispatch."""
         for dispatch in self:
             if dispatch.state not in ['draft', 'confirmed']:
-                raise UserError(_("Seuls les dispatches en brouillon ou confirmés peuvent être annulés."))
+                raise UserError(_("Only draft or confirmed dispatches can be cancelled."))
             dispatch.write({'state': 'cancel'})
-            _logger.info(f"Dispatch {dispatch.name} annulé.")
+            _logger.info(f"Dispatch {dispatch.name} cancelled.")
 
     def action_draft(self):
-        """Remet le dispatch en brouillon."""
+        """Set the dispatch back to draft."""
         for dispatch in self:
             if dispatch.state != 'cancel':
-                raise UserError(_("Seuls les dispatches annulés peuvent être remis en brouillon."))
+                raise UserError(_("Only cancelled dispatches can be set back to draft."))
             dispatch.write({'state': 'draft'})
 
     def action_view_pickings(self):
-        """Affiche les bons de livraison associés."""
+        """Display associated delivery orders."""
         self.ensure_one()
         return {
-            'name': _('Bons de livraison'),
+            'name': _('Delivery Orders'),
             'type': 'ir.actions.act_window',
             'res_model': 'stock.picking',
             'view_mode': 'tree,form',
@@ -157,19 +173,19 @@ class SaleDispatch(models.Model):
 
     @api.constrains('sale_order_id')
     def _check_sale_order(self):
-        """Vérifie que la commande est bien liée à un mode de livraison 'dispatch'."""
+        """Check if the order is linked to dispatch delivery mode."""
         for dispatch in self:
             if dispatch.sale_order_id.delivery_mode != 'dispatch':
                 raise ValidationError(_(
-                    "La commande doit être configurée pour le mode de livraison 'dispatch'."
+                    "The order must be configured for dispatch delivery mode."
                 ))
 
     @api.constrains('line_ids')
     def _check_lines(self):
-        """Vérifie qu'il y a au moins une ligne de dispatch."""
+        """Check if there is at least one dispatch line."""
         for dispatch in self:
             if not dispatch.line_ids:
-                raise ValidationError(_("Un dispatch doit avoir au moins une ligne."))
+                raise ValidationError(_("A dispatch must have at least one line."))
 
     @api.depends('line_ids.product_uom_qty', 'sale_order_id.order_line.product_uom_qty')
     def _compute_dispatch_progress(self):
@@ -195,7 +211,7 @@ class SaleDispatch(models.Model):
     @api.constrains('line_ids', 'sale_order_id')
     def _check_total_dispatch_quantity(self):
         for dispatch in self:
-            # Grouper les lignes par ligne de commande
+            # Group lines by order line
             lines_by_order_line = {}
             for line in dispatch.line_ids:
                 if line.state != 'cancel':
@@ -203,13 +219,17 @@ class SaleDispatch(models.Model):
                         lines_by_order_line[line.sale_order_line_id] = 0
                     lines_by_order_line[line.sale_order_line_id] += line.product_uom_qty
 
-            # Vérifier chaque ligne de commande
+            # Check each order line
             for order_line, total_qty in lines_by_order_line.items():
                 if total_qty > order_line.product_uom_qty:
                     raise ValidationError(_(
-                        "Le total des quantités dispatchées (%(dispatched)s) ne peut pas dépasser "
-                        "la quantité commandée (%(ordered)s) pour le produit %(product)s.",
+                        "Total dispatched quantity (%(dispatched)s) cannot exceed "
+                        "ordered quantity (%(ordered)s) for product %(product)s.",
                         dispatched=total_qty,
                         ordered=order_line.product_uom_qty,
                         product=order_line.product_id.display_name
                     ))
+
+    @api.constrains('stakeholder_id')
+    def _check_partner_shipping(self):
+        return True

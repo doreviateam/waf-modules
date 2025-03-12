@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_delivery_document_inherit_waf_so3" inherit_id="stock.report_delivery_document">
+        <!-- On remplace l'adresse de livraison standard -->
+        <xpath expr="//div[@name='div_sched_date']" position="after">
+            <div t-if="o.delivery_address_id" class="col-6">
+                <strong>Adresse de livraison :</strong>
+                <div class="mt-2">
+                    <span t-field="o.delivery_site_name" class="d-block"/>
+                    <span t-field="o.delivery_street" class="d-block"/>
+                    <span t-if="o.delivery_street2" t-field="o.delivery_street2" class="d-block"/>
+                    <span class="d-block">
+                        <span t-field="o.delivery_zip"/> <span t-field="o.delivery_city"/>
+                    </span>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo> 

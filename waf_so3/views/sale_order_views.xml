@@ -21,15 +21,22 @@
             <!-- Modification des boutons -->
             <xpath expr="//header/button[1]" position="before">
                 <button name="action_create_dispatch"
-                        string="Créer Dispatch"
+                        string="Create Dispatch"
                         type="object"
-                        class="btn-info"
-                        invisible="delivery_mode != 'dispatch' or dispatch_ids or state != 'sale'"/>
+                        class="oe_highlight"
+                        invisible="delivery_mode != 'dispatch' or dispatch_percent_global == 100"/>
                 <button name="action_add_dispatch"
-                        string="Ajouter Dispatch"
+                        string="Add to Dispatch"
                         type="object"
                         class="btn-info"
                         invisible="delivery_mode != 'dispatch' or not active_dispatch_id or state != 'sale'"/>
+            </xpath>
+            <xpath expr="//header/button[@id='create_invoice']" position="after">
+                <button name="action_show_dispatch"
+                        string="Show Dispatch"
+                        type="object"
+                        class="btn-primary"
+                        invisible="dispatch_percent_global != 100"/>
             </xpath>
 
             <!-- Mise à jour des champs de dispatch dans la ligne de commande -->
@@ -44,9 +51,27 @@
 
             <!-- Ajout du pourcentage global de dispatch -->
             <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="dispatch_percent_global" string="Progression" widget="progressbar" 
-                       max="100" help="Pourcentage global des quantités dispatchées"
+                <field name="dispatch_percent_global" string="Progress" widget="progressbar" 
+                       max="100" help="Global percentage of dispatched quantities"
                        invisible="delivery_mode != 'dispatch'"/>
+            </xpath>
+
+            <!-- Ajout du bouton "Voir les BL Dispatch" -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_dispatch_pickings"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        invisible="delivery_mode != 'dispatch'">
+                    <field name="picking_count_from_dispatch" widget="statinfo" string="Dispatch DOs"/>
+                </button>
+                <button name="action_view_dispatch_lines"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-list"
+                        invisible="delivery_mode != 'dispatch'">
+                    <field name="dispatch_line_count" widget="statinfo" string="Dispatch Lines"/>
+                </button>
             </xpath>
         </field>
     </record>

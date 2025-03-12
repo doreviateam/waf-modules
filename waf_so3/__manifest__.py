@@ -2,9 +2,9 @@
     'name': 'WAF SO3',
     'version': '1.0',
     'category': 'Sales',
-    'summary': 'Gestion des dispatches de vente',
+    'summary': 'Sales Dispatch Management',
     'description': """
-        Module de gestion des dispatches de vente
+        Sales Dispatch Management Module
     """,
     'author': 'Dorevia',
     'website': 'https://www.dorevia.com',
@@ -25,11 +25,15 @@
         'data/move_5000_data.xml',
         'data/client_data.xml',
 
+        # Reports
+        'reports/report_delivery_slip.xml',
+
         # Views
         'views/partner_address_views.xml',
         'views/sale_order_views.xml',
         'views/sale_line_dispatch_views.xml',
         'views/sale_dispatch_views.xml',
+        'views/stock_picking_views.xml',
     ],
     'installable': True,
     'application': True,

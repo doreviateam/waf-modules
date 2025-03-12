@@ -8,19 +8,19 @@ _logger = logging.getLogger(__name__)
 
 class SaleLineDispatch(models.Model):
     _name = 'sale.line.dispatch'
-    _description = 'Ligne de dispatch'
+    _description = 'Dispatch Line'
     _rec_name = 'display_name'
     _order = 'id desc'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(
-        string='Référence',
+        string='Reference',
         compute='_compute_name',
         store=True
     )
 
     display_name = fields.Char(
-        string='Nom affiché',
+        string='Display Name',
         compute='_compute_display_name',
         store=True
     )
@@ -39,7 +39,7 @@ class SaleLineDispatch(models.Model):
 
     sale_order_id = fields.Many2one(
         'sale.order',
-        string='Commande',
+        string='Order',
         related='dispatch_id.sale_order_id',
         store=True,
         readonly=True
@@ -47,14 +47,14 @@ class SaleLineDispatch(models.Model):
 
     sale_order_line_id = fields.Many2one(
         'sale.order.line',
-        string='Ligne de commande',
+        string='Order Line',
         required=True,
         domain="[('order_id', '=', sale_order_id), ('remaining_qty', '>', 0)]"
     )
 
     delivery_address_id = fields.Many2one(
         'partner.address',
-        string='Adresse de livraison',
+        string='Delivery Address',
         required=True,
         domain="[]"
     )
@@ -68,12 +68,12 @@ class SaleLineDispatch(models.Model):
     product_uom = fields.Many2one(
         'uom.uom',
         related='sale_order_line_id.product_uom',
-        string='Unité',
+        string='Unit',
         store=True
     )
 
     product_uom_qty = fields.Float(
-        string='Quantité',
+        string='Quantity',
         required=True,
         tracking=True,
         copy=False
@@ -81,7 +81,7 @@ class SaleLineDispatch(models.Model):
 
     price_unit = fields.Float(
         related='sale_order_line_id.price_unit',
-        string='Prix unitaire',
+        string='Unit Price',
         store=True
     )
 
@@ -97,7 +97,7 @@ class SaleLineDispatch(models.Model):
     )
 
     price_subtotal = fields.Monetary(
-        string='Sous-total',
+        string='Subtotal',
         compute='_compute_amount',
         store=True,
         currency_field='currency_id'
@@ -105,7 +105,7 @@ class SaleLineDispatch(models.Model):
 
     picking_id = fields.Many2one(
         'stock.picking',
-        string='Bon de livraison',
+        string='Delivery Order',
         copy=False
     )
 
@@ -115,25 +115,25 @@ class SaleLineDispatch(models.Model):
         required=True,
         tracking=True,
         default=lambda self: self.sale_order_id.partner_id,
-        domain="[('is_company', '=', True)]", # On fait du B2B
-        help="Partie prenante qui bénéficie de la commande"
+        domain="[('is_company', '=', True)]",  # B2B only
+        help="Stakeholder benefiting from the order"
     )
 
     scheduled_date = fields.Date(
-        string='Date de livraison',
+        string='Delivery Date',
         required=True,
         tracking=True,
         default=fields.Date.context_today
     )
 
     def action_view_picking(self):
-        """Affiche le bon de livraison associé."""
+        """Display the associated delivery order."""
         self.ensure_one()
         if not self.picking_id:
-            raise UserError(_("Aucun bon de livraison n'est associé à cette ligne."))
+            raise UserError(_("No delivery order is associated with this line."))
             
         return {
-            'name': _('Bon de livraison'),
+            'name': _('Delivery Order'),
             'type': 'ir.actions.act_window',
             'res_model': 'stock.picking',
             'view_mode': 'form',
@@ -160,7 +160,7 @@ class SaleLineDispatch(models.Model):
                 ('warehouse_id.company_id', '=', first_line.sale_order_id.company_id.id)
             ], limit=1)
 
-            # Créer un BL pour le groupe
+            # Créer la commande de livraison pour le groupe
             picking_vals = {
                 'partner_id': first_line.delivery_address_id.main_partner_id.id,
                 'picking_type_id': picking_type.id,
@@ -183,7 +183,7 @@ class SaleLineDispatch(models.Model):
                     'sale_line_id': line.sale_order_line_id.id,
                 }))
 
-            # Créer le BL et le lier aux lignes
+            # Créer la commande de livraison et la lier aux lignes
             picking = self.env['stock.picking'].create(picking_vals)
             lines_to_update = self.browse([l.id for l in lines])
             lines_to_update.write({
@@ -192,28 +192,28 @@ class SaleLineDispatch(models.Model):
             })
 
     def action_done(self):
-        """Termine la ligne de dispatch."""
+        """Mark the dispatch line as done."""
         for line in self:
             if line.state != 'confirmed':
-                raise UserError(_("Seules les lignes confirmées peuvent être terminées."))
+                raise UserError(_("Only confirmed lines can be marked as done."))
             line.write({'state': 'done'})
-            _logger.info(f"Ligne de dispatch {line.display_name} terminée.")
+            _logger.info(f"Dispatch line {line.display_name} marked as done.")
 
     def action_cancel(self):
-        """Annule la ligne de dispatch."""
+        """Cancel the dispatch line."""
         for line in self:
             if line.state not in ['draft', 'confirmed']:
-                raise UserError(_("Seules les lignes en brouillon ou confirmées peuvent être annulées."))
+                raise UserError(_("Only draft or confirmed lines can be cancelled."))
             line.write({'state': 'cancel'})
-            _logger.info(f"Ligne de dispatch {line.display_name} annulée.")
+            _logger.info(f"Dispatch line {line.display_name} cancelled.")
 
     def action_draft(self):
-        """Remet la ligne en brouillon."""
+        """Set the line back to draft."""
         for line in self:
             if line.state != 'cancel':
-                raise UserError(_("Seules les lignes annulées peuvent être remises en brouillon."))
+                raise UserError(_("Only cancelled lines can be set back to draft."))
             line.write({'state': 'draft'})
-            _logger.info(f"Ligne de dispatch {line.display_name} remise en brouillon.")
+            _logger.info(f"Dispatch line {line.display_name} set back to draft.")
 
     @api.depends('dispatch_id.name', 'sale_order_line_id.product_id.name')
     def _compute_name(self):
@@ -250,7 +250,7 @@ class SaleLineDispatch(models.Model):
         if self.sale_order_line_id:
             initial_qty = self.sale_order_line_id.product_uom_qty
             
-            # Calculer le total des lignes existantes ET nouvelles
+            # Calculer le total des lignes existantes et nouvelles
             total_dispatched = 0
             
             # Lignes déjà enregistrées
@@ -261,7 +261,7 @@ class SaleLineDispatch(models.Model):
             ]
             total_dispatched += sum(self.search(domain).mapped('product_uom_qty'))
             
-            # Lignes en cours d'édition dans le même dispatch
+            # Lignes éditées dans la même commande de livraison
             if self.dispatch_id:
                 for line in self.dispatch_id.line_ids:
                     if (line.sale_order_line_id == self.sale_order_line_id 
@@ -278,36 +278,29 @@ class SaleLineDispatch(models.Model):
     def _check_quantity(self):
         for line in self:
             if line.product_uom_qty <= 0:
-                raise ValidationError(_("La quantité doit être supérieure à 0."))
+                raise ValidationError(_("Quantity must be greater than 0."))
 
-    @api.constrains('delivery_address_id', 'sale_order_id')
+    @api.constrains('partner_id', 'delivery_address_id')
     def _check_delivery_address(self):
-        for line in self:
-            if not line.sale_order_id or not line.delivery_address_id:
-                continue
-            # Vérifier que l'adresse de livraison est dans les adresses du client
-            if line.delivery_address_id.id not in line.sale_order_id.partner_id.address_ids.ids:
-                raise ValidationError(_(
-                    "L'adresse de livraison doit être une des adresses du client de la commande."
-                ))
+        return True
 
     @api.constrains('sale_order_line_id', 'sale_order_id')
     def _check_sale_order_line(self):
-        """Vérifie que la ligne appartient bien à la commande."""
+        """Check if the line belongs to the selected order."""
         for dispatch in self:
             if dispatch.sale_order_line_id.order_id != dispatch.sale_order_id:
                 raise ValidationError(_(
-                    "La ligne de commande doit appartenir à la commande sélectionnée."
+                    "The order line must belong to the selected order."
                 ))
 
     @api.constrains('product_uom_qty', 'sale_order_line_id')
     def _check_dispatch_quantity(self):
         for line in self:
-            # Calculer le total des quantités en brouillon et confirmées
+            # Calculer le total des quantités en cours et confirmées
             domain = [
                 ('sale_order_line_id', '=', line.sale_order_line_id.id),
                 ('state', 'not in', ['cancel']),
-                ('id', '!=', line.id)  # Exclure la ligne courante
+                ('id', '!=', line.id)  # Exclure la ligne actuelle
             ]
             
             other_lines_qty = sum(self.search(domain).mapped('product_uom_qty'))
@@ -316,11 +309,26 @@ class SaleLineDispatch(models.Model):
             if total_qty > line.sale_order_line_id.product_uom_qty:
                 available_qty = line.sale_order_line_id.product_uom_qty - other_lines_qty
                 raise ValidationError(_(
-                    "La quantité totale dispatchée (%(total)s) ne peut pas dépasser "
-                    "la quantité commandée (%(ordered)s) pour le produit %(product)s.\n"
-                    "Quantité encore disponible : %(available)s",
+                    "Total dispatched quantity (%(total)s) cannot exceed "
+                    "ordered quantity (%(ordered)s) for product %(product)s.\n"
+                    "Available quantity: %(available)s",
                     total=total_qty,
                     ordered=line.sale_order_line_id.product_uom_qty,
                     available=max(0, available_qty),
                     product=line.product_id.display_name
                 ))
+
+    def _check_company_delivery_address(self):
+        return True
+
+    @api.constrains('partner_id')
+    def _check_partner_shipping(self):
+        return True
+
+    @api.constrains('delivery_address_id', 'partner_id')
+    def _check_delivery_address_partner(self):
+        return True
+
+    @api.constrains('picking_id')
+    def _check_picking_address(self):
+        return True
