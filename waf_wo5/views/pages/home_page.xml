@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="homepage" name="WAF Homepage" inherit_id="website.homepage" customize_show="True">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="wrapper-content">
+                <!-- Hero Section -->
+                <t t-call="waf_wo5.hero_layout"/>
+                
+                <!-- Section Services -->
+                <section class="services-overview py-5">
+                    <div class="container">
+                        <div class="row justify-content-center text-center mb-5">
+                            <div class="col-lg-9">
+                                <h2 class="section-title">Nos Solutions Monétiques</h2>
+                                <p class="section-subtitle">
+                                    <strong>Experts en solutions d'encaissement depuis plus de 15 ans</strong>, nous propulsons votre entreprise vers l'avenir. 
+                                    Nous vous proposons des systèmes de point de vente intégrés et sur-mesure, parfaitement adaptés à la suite E-Business d'Odoo. 
+                                    <span class="highlight">Optimisez votre gestion, fidélisez vos clients.</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4">
+                            <!-- Encaissement et monétique -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-credit-card"/>
+                                    </div>
+                                    <h3>Encaissement &amp; Monétique</h3>
+                                    <ul class="service-list">
+                                        <li>Terminaux de paiement</li>
+                                        <li>Caisses enregistreuses</li>
+                                        <li>Solutions de paiement mobile</li>
+                                        <li>Logiciels de gestion</li>
+                                    </ul>
+                                    <div class="btn-wrapper">
+                                        <a href="/encaissement" class="btn">En savoir plus</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Solutions métiers -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-shopping-cart"/>
+                                    </div>
+                                    <h3>Solutions Métiers</h3>
+                                    <ul class="service-list">
+                                        <li>Commerces de détail</li>
+                                        <li>Restaurants &amp; Bars</li>
+                                        <li>Boulangeries</li>
+                                        <li>Bureaux de tabac</li>
+                                    </ul>
+                                    <div class="btn-wrapper">
+                                        <a href="/services/solutions-metiers" class="btn btn-outline-primary">En savoir plus</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Odoo POS -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card featured">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-desktop"/>
+                                    </div>
+                                    <h3>Odoo POS</h3>
+                                    <ul class="service-list">
+                                        <li>Caisse tactile moderne</li>
+                                        <li>Gestion des stocks</li>
+                                        <li>Fidélité clients</li>
+                                        <li>Intégration complète ERP</li>
+                                    </ul>
+                                    <div class="btn-wrapper">
+                                        <a href="/services/odoo-pos" class="btn btn-outline-primary">Découvrir Odoo</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Services & Support -->
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-life-ring"/>
+                                    </div>
+                                    <h3>Services &amp; Support</h3>
+                                    <ul class="service-list">
+                                        <li>Installation sur site</li>
+                                        <li>Formation personnalisée</li>
+                                        <li>Assistance 7j/7</li>
+                                        <li>Maintenance préventive</li>
+                                    </ul>
+                                    <div class="btn-wrapper">
+                                        <a href="/services/support" class="btn btn-outline-primary">En savoir plus</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Points Forts -->
+                <section class="key-features py-5">
+                    <div class="container">
+                        <h2 class="section-title text-center mb-5">Nos Points Forts</h2>
+                        
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="feature-card text-center">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-users"/>
+                                    </div>
+                                    <h3>Expertise</h3>
+                                    <p>Une équipe certifiée Odoo</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-6">
+                                <div class="feature-card text-center">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-star"/>
+                                    </div>
+                                    <h3>Qualité</h3>
+                                    <p>Solutions premium intégrées</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-6">
+                                <div class="feature-card text-center">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-map-marker"/>
+                                    </div>
+                                    <h3>Proximité</h3>
+                                    <p>Service sur mesure adapté</p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-6">
+                                <div class="feature-card text-center">
+                                    <div class="icon-wrapper">
+                                        <i class="fa fa-phone"/>
+                                    </div>
+                                    <h3>Support</h3>
+                                    <p>Assistance disponible 7j/7</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </xpath>
+    </template>
+</odoo>

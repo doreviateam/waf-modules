@@ -27,9 +27,11 @@
 
         # Reports
         'reports/report_delivery_slip.xml',
+        'reports/report_delivery_slip_valorised.xml',
 
         # Views
         'views/partner_address_views.xml',
+        'views/res_partner_views.xml',
         'views/sale_order_views.xml',
         'views/sale_line_dispatch_views.xml',
         'views/sale_dispatch_views.xml',

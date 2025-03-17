@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_contact_form" model="mail.template">
+            <field name="name">Formulaire de Contact - Notification</field>
+            <field name="model_id" ref="model_waf_contact_message"/>
+            <field name="subject">Nouveau message de contact: ${ctx.get('subject', '')}</field>
+            <field name="email_from">noreply@example.com</field>
+            <field name="reply_to">${ctx.get('email', 'contact@example.com')}</field>
+            <field name="email_to">admin@example.com</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Bonjour,</p>
+                    <p>Un nouveau message a été reçu via le formulaire de contact :</p>
+                    <ul>
+                        <li><strong>Nom:</strong> ${ctx.get('name', '')}</li>
+                        <li><strong>Email:</strong> ${ctx.get('email', '')}</li>
+                        <li><strong>Sujet:</strong> ${ctx.get('subject', '')}</li>
+                    </ul>
+                    <p><strong>Message:</strong></p>
+                    <p>${ctx.get('message', '')}</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo> 

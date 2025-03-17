@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="hero_section" name="Hero Section">
+            <section id="hero" class="hero-section position-relative">
+                <!-- Overlay géré par CSS -->
+                <div class="hero-overlay"></div>
+                
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-lg-7">
+                            <h1>Simplifiez vos paiements</h1>
+                            <h2>Solutions monétiques modernes<br/>pour votre entreprise</h2>
+                            <a href="#" class="btn btn-primary">Découvrir nos solutions</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </template>
+    </data>
+</odoo>

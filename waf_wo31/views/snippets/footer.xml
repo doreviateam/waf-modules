@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Footer Template -->
+    <template id="s_footer" name="Modern Footer">
+        <section class="s_footer">
+            <div class="container">
+                <div class="row">
+                    <!-- Informations pratiques -->
+                    <div class="col-lg-4 col-md-6 footer-contact">
+                        <h4>INFORMATIONS PRATIQUES</h4>
+                        <p>
+                            93 Rue Du Rajol<br/>
+                            34130 Mauguio<br/>
+                            France<br/><br/>
+                            <strong>Tél:</strong> <a href="tel:+33123456789">+33 1 23 45 67 89</a><br/>
+                            <strong>Email:</strong> <a href="mailto:contact@dorevia.com">contact@dorevia.com</a>
+                        </p>
+                    </div>
+
+                    <!-- Solutions Monétiques -->
+                    <div class="col-lg-4 col-md-6 footer-links">
+                        <h4>NOS SOLUTIONS</h4>
+                        <ul>
+                            <li><i class="fa fa-chevron-right"></i> <a href="/terminaux">Terminaux de Paiement</a></li>
+                            <li><i class="fa fa-chevron-right"></i> <a href="/solutions">Solutions E-commerce</a></li>
+                            <li><i class="fa fa-chevron-right"></i> <a href="/maintenance">Maintenance &amp; SAV</a></li>
+                            <li><i class="fa fa-chevron-right"></i> <a href="/securite">Sécurité des Transactions</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Horaires -->
+                    <div class="col-lg-4 col-md-6 footer-hours">
+                        <h4>ASSISTANCE</h4>
+                        <div class="hours-list">
+                            <div class="hours-item">
+                                <span class="days">Support Technique</span>
+                                <span class="time">24h/24 - 7j/7</span>
+                            </div>
+                            <div class="hours-item">
+                                <span class="days">Bureau</span>
+                                <span class="time">Lun-Ven : 9h-18h</span>
+                            </div>
+                            <div class="hours-item support-urgence">
+                                <span class="days">Urgence</span>
+                                <span class="hotline">0800 123 456</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="copyright">
+                                &#169; 2024 <strong>DoreviaTeam</strong> - Solutions Monétiques &amp; Informatiques
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="footer-links-bottom text-md-end">
+                                <a href="/mentions-legales">Mentions légales</a> - 
+                                <a href="/cgv">CGV</a> - 
+                                <a href="/confidentialite">Confidentialité</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Inject Footer into Layout -->
+    <template id="layout_footer_custom" inherit_id="website.layout" name="WAF Custom Footer">
+        <xpath expr="//footer" position="replace">
+            <t t-call="waf_wo31.s_footer"/>
+        </xpath>
+    </template>
+</odoo> 

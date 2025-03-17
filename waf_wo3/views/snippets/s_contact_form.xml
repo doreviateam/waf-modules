@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Définition du snippet Formulaire de Contact -->
+    <template id="s_contact_form" name="Formulaire de Contact">
+        <section class="s_contact_form py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center mb-5">
+                        <h2>Contactez-nous</h2>
+                        <p class="lead">Une question ? Un projet ? Écrivez-nous !</p>
+                    </div>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <form action="/submit/contact" method="POST" class="contact-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <input type="text" name="name" class="form-control" placeholder="Votre nom" required="required"/>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <input type="email" name="email" class="form-control" placeholder="Votre email" required="required"/>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <input type="text" name="subject" class="form-control" placeholder="Sujet" required="required"/>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <textarea name="message" class="form-control" rows="5" placeholder="Votre message" required="required"></textarea>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fa fa-paper-plane me-2"></i>Envoyer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo> 

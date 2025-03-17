@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_header" name="Modern Header">
+        <!-- Top Bar -->
+        <div class="top-bar bg-light py-2 border-bottom">
+            <div class="container d-flex justify-content-between align-items-center">
+                <!-- Logo et Menu Principal -->
+                <div class="d-flex align-items-center">
+                    <a href="/" class="navbar-brand me-4">
+                        <img src="/waf_wo3/static/src/img/logo/icon.png" alt="Logo" height="40"/>
+                    </a>
+                    <!-- Menu Principal -->
+                    <ul class="navbar-nav d-flex flex-row">
+                        <li class="nav-item me-3"><a class="nav-link" href="/shop">Boutique</a></li>
+                        <li class="nav-item me-3"><a class="nav-link" href="/blog">Blog</a></li>
+                        <li class="nav-item me-3"><a class="nav-link" href="/about-us">À propos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Support, Login et Panier -->
+                <div class="d-flex align-items-center">
+                    <small class="me-4">Support client: +33 1 23 45 67 89</small>
+                    <a href="/my/account" class="btn btn-sm btn-link me-3" title="Mon compte">
+                        <i class="fa fa-user-circle fa-lg"></i>
+                    </a>
+                    <a href="/shop/cart" class="btn btn-sm btn-outline-primary">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="badge bg-primary" t-esc="website_sale_order and website_sale_order.cart_quantity or '0'"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar - Only in Shop -->
+        <t t-if="request.httprequest.path.startswith('/shop')">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+                <div class="container">
+                    <div class="flex-grow-1 mx-4">
+                        <form class="search-form" action="/shop/search" method="get">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Rechercher un produit..." name="search"/>
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </t>
+    </template>
+</odoo> 

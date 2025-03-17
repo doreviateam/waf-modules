@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="waf_header" name="WAF Header" inherit_id="website.layout">
+        <xpath expr="//header" position="replace">
+            <header id="top" class="o_header_standard" data-anchor="true">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="container">
+                        <!-- Logo avec texte -->
+                        <a href="/" class="navbar-brand d-flex align-items-center">
+                            <img src="/waf_wo5/static/src/img/logo.png" alt="Logo"/>
+                            <span class="brand-text ms-2">Doreviateam</span>
+                        </a>
+
+                        <!-- Toggle button for mobile -->
+                        <button class="navbar-toggler collapsed" 
+                                type="button" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#top_menu_collapse" 
+                                aria-controls="top_menu_collapse"
+                                aria-expanded="false" 
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"/>
+                        </button>
+
+                        <!-- Menu principal -->
+                        <div class="collapse navbar-collapse" 
+                             id="top_menu_collapse" 
+                             data-bs-parent="#top">
+                            <!-- Navigation gauche -->
+                            <ul class="navbar-nav me-auto">
+                                <li class="nav-item">
+                                    <a href="/" class="nav-link">Accueil</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/services" class="nav-link">Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/realisations" class="nav-link">Réalisations</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/contact" class="nav-link">Contact</a>
+                                </li>
+                            </ul>
+
+                            <!-- Navigation droite -->
+                            <ul class="navbar-nav ms-auto align-items-center">
+                                <li class="nav-item phone-number">
+                                    <a href="tel:0123456789" class="nav-link">
+                                        <i class="fa fa-phone"></i>
+                                        <span>01 23 45 67 89</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/shop/cart" class="nav-link">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="fa fa-user me-2"></i>
+                                        <t t-if="not user_id._is_public()">
+                                            <span class="user-name"><t t-esc="user_id.name"/></span>
+                                        </t>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <t t-if="not user_id._is_public()">
+                                            <a href="/my/home" class="dropdown-item">
+                                                <i class="fa fa-user me-2"></i>Mon compte
+                                            </a>
+                                            <a href="/web/session/logout" class="dropdown-item">
+                                                <i class="fa fa-sign-out me-2"></i>Se déconnecter
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                            <a href="/web/login" class="dropdown-item">
+                                                <i class="fa fa-sign-in me-2"></i>Se connecter
+                                            </a>
+                                            <a href="/web/signup" class="dropdown-item">
+                                                <i class="fa fa-user-plus me-2"></i>S'inscrire
+                                            </a>
+                                        </t>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+        </xpath>
+    </template>
+</odoo>

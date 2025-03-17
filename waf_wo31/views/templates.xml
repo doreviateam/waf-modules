@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template de la page d'accueil -->
+    <template id="waf_homepage" name="WAF Homepage" inherit_id="website.homepage">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap" class="wrapper-content">
+                <!-- Hero Section -->
+                <section id="hero" class="position-relative">
+                    <div class="container h-100">
+                        <div class="row h-100 align-items-center">
+                            <div class="col-lg-7">
+                                <h1>Simplifiez vos paiements</h1>
+                                <h2>Solutions monétiques modernes<br/>pour votre entreprise</h2>
+                                <a href="/demo" class="btn btn-primary">Découvrir nos solutions</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Autres sections -->
+                <div class="main-content">
+                    <!-- Ici vont les autres sections -->
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Template pour la page démo -->
+    <template id="demo_page" name="Demo Page">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_demo_page">
+                <!-- Hero Section -->
+                <section class="demo-hero py-5">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6" data-aos="fade-right">
+                                <h1 class="mb-4">Découvrez notre solution</h1>
+                                <p class="lead mb-4">Une démonstration interactive de notre solution monétique complète.</p>
+                                <a href="#demo-form" class="btn btn-primary btn-lg">Demander une démo</a>
+                            </div>
+                            <div class="col-lg-6" data-aos="fade-left">
+                                <img src="/waf_wo31/static/src/img/services/services-1.jpg" alt="Demo" class="img-fluid rounded shadow"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section class="demo-features py-5">
+                    <div class="container">
+                        <div class="row g-4">
+                            <div class="col-lg-4" data-aos="fade-up">
+                                <div class="feature-card p-4 rounded shadow-sm">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                    <h3>Terminaux de Paiement</h3>
+                                    <p>Gestion complète de votre parc de TPE, maintenance et suivi en temps réel.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                                <div class="feature-card p-4 rounded shadow-sm">
+                                    <i class="bi bi-shop"></i>
+                                    <h3>E-commerce</h3>
+                                    <p>Solutions de paiement en ligne sécurisées et intégrées à votre site web.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                                <div class="feature-card p-4 rounded shadow-sm">
+                                    <i class="bi bi-shield-check"></i>
+                                    <h3>Sécurité</h3>
+                                    <p>Protection maximale de vos transactions et conformité aux normes PCI DSS.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Demo Form Section -->
+                <section id="demo-form" class="demo-form py-5 bg-light">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8" data-aos="fade-up">
+                                <div class="form-container p-4 bg-white rounded shadow">
+                                    <h2 class="text-center mb-4">Demandez votre démonstration</h2>
+                                    <form action="/website/form/demo" method="post" class="s_website_form">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <input type="text" name="company" class="form-control" placeholder="Nom de l'entreprise" required="required"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="name" class="form-control" placeholder="Votre nom" required="required"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="email" name="email" class="form-control" placeholder="Email professionnel" required="required"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="tel" name="phone" class="form-control" placeholder="Téléphone"/>
+                                            </div>
+                                            <div class="col-12">
+                                                <select name="interest" class="form-select" required="required">
+                                                    <option value="">Je suis intéressé par...</option>
+                                                    <option value="tpe">Terminaux de Paiement</option>
+                                                    <option value="ecommerce">Solutions E-commerce</option>
+                                                    <option value="all">Solution Complète</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <textarea name="message" class="form-control" rows="4" placeholder="Message (optionnel)"></textarea>
+                                            </div>
+                                            <div class="col-12 text-center">
+                                                <button type="submit" class="btn btn-primary btn-lg">Demander ma démo</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ Section -->
+                <section class="faq py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 text-center mb-5">
+                                <h2 class="section-title" data-aos="fade-up">Questions Fréquentes</h2>
+                                <p class="section-description" data-aos="fade-up">Tout ce que vous devez savoir sur nos solutions</p>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="accordion" id="faqAccordion">
+                                    <!-- FAQ Item 1 -->
+                                    <div class="accordion-item" data-aos="fade-up">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                                Comment débuter avec votre solution ?
+                                            </button>
+                                        </h3>
+                                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Notre équipe vous accompagne pas à pas dans la mise en place de la solution. Après votre demande de démonstration, nous organisons une session personnalisée pour comprendre vos besoins et vous proposer la configuration adaptée.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- FAQ Item 2 -->
+                                    <div class="accordion-item" data-aos="fade-up" data-aos-delay="100">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                                Quels types de terminaux proposez-vous ?
+                                            </button>
+                                        </h3>
+                                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Nous proposons une gamme complète de terminaux adaptés à tous les besoins : terminaux fixes, mobiles, GPRS, et solutions de paiement mobile. Tous nos équipements sont certifiés et régulièrement mis à jour.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- FAQ Item 3 -->
+                                    <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
+                                        <h3 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                                Comment fonctionne le support technique ?
+                                            </button>
+                                        </h3>
+                                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Notre support technique est disponible 24h/24 et 7j/7. Vous pouvez nous contacter par téléphone, email ou via notre plateforme en ligne. Nous garantissons une intervention rapide en cas de besoin.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section class="cta py-5">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <div class="cta-content text-center p-5 rounded" data-aos="zoom-in">
+                                    <h2 class="mb-4">Prêt à transformer votre gestion des paiements ?</h2>
+                                    <p class="lead mb-4">Rejoignez les entreprises qui nous font confiance et optimisez vos transactions dès aujourd'hui.</p>
+                                    <div class="cta-buttons">
+                                        <a href="#demo-form" class="btn btn-primary btn-lg me-3">Demander une démo</a>
+                                        <a href="/contact" class="btn btn-outline-light btn-lg">Nous contacter</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template pour la page contact -->
+    <template id="contact_page" name="Contact Page">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_contact_page">
+                <!-- Hero Section -->
+                <section class="contact-hero py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6" data-aos="fade-right">
+                                <h1 class="mb-4">Contactez-nous</h1>
+                                <p class="lead">Notre équipe d'experts est à votre disposition pour répondre à toutes vos questions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contact Info & Form Section -->
+                <section class="contact-main py-5">
+                    <div class="container">
+                        <div class="row g-5">
+                            <!-- Contact Info -->
+                            <div class="col-lg-4" data-aos="fade-up">
+                                <div class="contact-info p-4 rounded shadow-sm">
+                                    <h3 class="mb-4">Nos Coordonnées</h3>
+                                    
+                                    <div class="info-item mb-4">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <h4>Adresse</h4>
+                                        <p>93 Rue Du Rajol<br/>34130 Mauguio<br/>France</p>
+                                    </div>
+
+                                    <div class="info-item mb-4">
+                                        <i class="bi bi-phone"></i>
+                                        <h4>Téléphone</h4>
+                                        <p>Support: +33 1 23 45 67 89<br/>Urgence: 0800 123 456</p>
+                                    </div>
+
+                                    <div class="info-item">
+                                        <i class="bi bi-clock"></i>
+                                        <h4>Horaires</h4>
+                                        <p>Support Technique 24h/24 - 7j/7<br/>Bureau: Lun-Ven : 9h-18h</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Form -->
+                            <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                                <div class="contact-form p-4 rounded shadow-sm">
+                                    <h3 class="mb-4">Envoyez-nous un message</h3>
+                                    <form action="/website/form/contact" method="post" class="s_website_form">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <input type="text" name="name" class="form-control" placeholder="Votre nom" required="required"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="email" name="email" class="form-control" placeholder="Votre email" required="required"/>
+                                            </div>
+                                            <div class="col-12">
+                                                <input type="text" name="subject" class="form-control" placeholder="Sujet" required="required"/>
+                                            </div>
+                                            <div class="col-12">
+                                                <textarea name="message" class="form-control" rows="6" placeholder="Votre message" required="required"></textarea>
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-primary">Envoyer le message</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo> 

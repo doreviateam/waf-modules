@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="waf_wo3_homepage" name="Homepage" customize_show="True">
+            <t t-call="website.layout">
+                <!-- Hero Section -->
+                <section class="hero-section" t-attf-style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/waf_wo3/static/src/img/hero-bg.jpg'); background-size: cover; background-position: center; padding: 120px 0;">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-3 fw-bold text-white mb-4" style="font-size: 3.5rem;">Solutions d'Encaissement Professionnelles</h1>
+                                <p class="lead text-white mb-5" style="font-size: 1.5rem;">Équipez votre commerce avec du matériel professionnel de qualité</p>
+                                <div class="d-flex justify-content-center gap-4">
+                                    <a href="/contact" class="btn btn-primary btn-lg px-5 py-3" style="font-size: 1.2rem;">Demander un devis</a>
+                                    <a href="/shop" class="btn btn-outline-light btn-lg px-5 py-3" style="font-size: 1.2rem;">Nos produits</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Featured Products -->
+                <section class="featured-products py-5">
+                    <div class="container">
+                        <h2 class="text-center mb-5" style="font-size: 2.5rem;">Nos Solutions Phares</h2>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="product-card position-relative">
+                                    <img src="/waf_wo3/static/src/img/product1.jpg" alt="Caisse enregistreuse" class="img-fluid rounded-3 mb-3" style="width: 100%; height: 300px; object-fit: cover;"/>
+                                    <h3 class="h4 mb-3">Caisses Enregistreuses</h3>
+                                    <p class="text-muted">Solutions complètes et personnalisables</p>
+                                    <a href="/shop" class="btn btn-outline-primary stretched-link">Découvrir</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="product-card position-relative">
+                                    <img src="/waf_wo3/static/src/img/product2.jpg" alt="Terminal CB" class="img-fluid rounded-3 mb-3" style="width: 100%; height: 300px; object-fit: cover;"/>
+                                    <h3 class="h4 mb-3">Terminaux de Paiement</h3>
+                                    <p class="text-muted">Paiements sécurisés et rapides</p>
+                                    <a href="/shop" class="btn btn-outline-primary stretched-link">Découvrir</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="product-card position-relative">
+                                    <img src="/waf_wo3/static/src/img/product3.jpg" alt="Vidéosurveillance" class="img-fluid rounded-3 mb-3" style="width: 100%; height: 300px; object-fit: cover;"/>
+                                    <h3 class="h4 mb-3">Vidéosurveillance</h3>
+                                    <p class="text-muted">Protection optimale de votre commerce</p>
+                                    <a href="/shop" class="btn btn-outline-primary stretched-link">Découvrir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Services -->
+                <section class="services-section py-5 bg-light">
+                    <div class="container">
+                        <h2 class="text-center mb-5" style="font-size: 2.5rem;">Nos Services</h2>
+                        <div class="row g-4">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card text-center p-4">
+                                    <i class="fa fa-tools fa-3x text-primary mb-4"></i>
+                                    <h3 class="h5 mb-3">Installation</h3>
+                                    <p class="text-muted mb-0">Configuration et mise en service sur site</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card text-center p-4">
+                                    <i class="fa fa-graduation-cap fa-3x text-primary mb-4"></i>
+                                    <h3 class="h5 mb-3">Formation</h3>
+                                    <p class="text-muted mb-0">Accompagnement et formation personnalisée</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card text-center p-4">
+                                    <i class="fa fa-headset fa-3x text-primary mb-4"></i>
+                                    <h3 class="h5 mb-3">Support</h3>
+                                    <p class="text-muted mb-0">Assistance technique 7j/7</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="service-card text-center p-4">
+                                    <i class="fa fa-sync fa-3x text-primary mb-4"></i>
+                                    <h3 class="h5 mb-3">Maintenance</h3>
+                                    <p class="text-muted mb-0">Entretien et dépannage rapide</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contact -->
+                <section class="contact-section py-5">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <h2 class="mb-4" style="font-size: 2.5rem;">Contactez-nous</h2>
+                                <p class="lead mb-5">Notre équipe est à votre disposition pour vous conseiller</p>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="contact-info">
+                                            <i class="fa fa-phone fa-2x text-primary mb-3"></i>
+                                            <h3 class="h5">Téléphone</h3>
+                                            <p class="text-muted">+33 1 23 45 67 89</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-info">
+                                            <i class="fa fa-envelope fa-2x text-primary mb-3"></i>
+                                            <h3 class="h5">Email</h3>
+                                            <p class="text-muted">contact@waf.fr</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-info">
+                                            <i class="fa fa-map-marker-alt fa-2x text-primary mb-3"></i>
+                                            <h3 class="h5">Adresse</h3>
+                                            <p class="text-muted">65 Rue Du Mail<br/>34130 Mauguio</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </t>
+        </template>
+
+        <!-- Page de confirmation -->
+        <template id="contact_thank_you" name="Merci">
+            <t t-call="website.layout">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 text-center">
+                            <i class="fa fa-check-circle text-success fa-5x mb-4"></i>
+                            <h1>Message envoyé !</h1>
+                            <p class="lead">Merci de nous avoir contacté. Nous vous répondrons dans les plus brefs délais.</p>
+                            <a href="/" class="btn btn-primary mt-4">Retour à l'accueil</a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Page d'erreur -->
+        <template id="contact_error" name="Erreur">
+            <t t-call="website.layout">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 text-center">
+                            <i class="fa fa-exclamation-triangle text-danger fa-5x mb-4"></i>
+                            <h1>Oups !</h1>
+                            <p class="lead">Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer plus tard.</p>
+                            <a href="/" class="btn btn-primary mt-4">Retour à l'accueil</a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Désactiver le footer par défaut -->
+        <template id="disable_powered_by" inherit_id="website.layout">
+            <xpath expr="//div[@id='footer']" position="attributes">
+                <attribute name="t-if">False</attribute>
+            </xpath>
+        </template>
+
+        <!-- Ajouter notre footer -->
+        <template id="layout_footer" inherit_id="website.layout">
+            <xpath expr="//footer" position="inside">
+                <t t-call="waf_wo3.s_footer"/>
+            </xpath>
+        </template>
+
+        <!-- Désactiver le header par défaut -->
+        <template id="disable_default_header" inherit_id="website.layout">
+            <xpath expr="//header" position="attributes">
+                <attribute name="t-if">False</attribute>
+            </xpath>
+        </template>
+
+        <!-- Ajouter notre header -->
+        <template id="layout_header" inherit_id="website.layout">
+            <xpath expr="//div[@id='wrapwrap']" position="before">
+                <t t-call="waf_wo3.s_header"/>
+            </xpath>
+        </template>
+
+        <!-- Autres templates si nécessaire -->
+
+        <!-- Route par défaut vers la page d'accueil -->
+        <record id="menu_homepage" model="website.menu">
+            <field name="name">Accueil</field>
+            <field name="url">/</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Page par défaut -->
+        <record id="homepage_page" model="website.page">
+            <field name="url">/</field>
+            <field name="website_published">True</field>
+            <field name="view_id" ref="waf_wo3_homepage"/>
+            <field name="track">True</field>
+        </record>
+
+        <!-- Template pour le menu de connexion -->
+        <template id="custom_user_sign_in" inherit_id="portal.placeholder_user_sign_in" name="Custom User Login">
+            <xpath expr="//a" position="replace">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa fa-user"/> Mon compte
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a href="/web/login" class="dropdown-item">
+                            <i class="fa fa-sign-in-alt me-2"/>Me connecter
+                        </a>
+                        <a href="/web/signup" class="dropdown-item">
+                            <i class="fa fa-user-plus me-2"/>Créer mon compte
+                        </a>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

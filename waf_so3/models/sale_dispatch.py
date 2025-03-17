@@ -128,6 +128,9 @@ class SaleDispatch(models.Model):
         for dispatch in self:
             if dispatch.state != 'draft':
                 raise UserError(_("Only draft dispatches can be confirmed."))
+            # TODO : Tant que la commande n'est pas confirmée, on ne peut pas confirmer le dispatch
+            if dispatch.sale_order_id.state != 'sale':
+                raise UserError(_("The order must be confirmed before confirming the dispatch."))   
             dispatch.write({'state': 'confirmed'})
             _logger.info(f"Dispatch {dispatch.name} confirmed.")
 
