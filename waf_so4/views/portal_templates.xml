@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Template pour la liste des commandes -->
-    <template id="portal_my_orders_inherit" inherit_id="sale.portal_my_orders">
+    <template id="portal_my_orders_inherit" inherit_id="sale.portal_my_orders" name="Portal My Orders Inherit">
         <xpath expr="//thead/tr/th[1]" position="after">
-            <th class="text-center">Delivery Mode</th>
+            <th class="text-center">Mode de livraison</th>
         </xpath>
 
         <xpath expr="//t[@t-foreach='orders']/tr/td[1]" position="after">
@@ -21,14 +21,60 @@
     </template>
 
     <!-- Template pour le détail d'une commande -->
-    <template id="sale_order_portal_content_inherit" inherit_id="sale.sale_order_portal_content">
+    <template id="sale_order_portal_content_inherit" inherit_id="sale.sale_order_portal_content" name="Sales Portal Content Inherit">
+        <xpath expr="//span[@id='shipping_address']" position="replace">
+            <span id="shipping_address" class="col-lg-6">
+                <t t-if="sale_order.delivery_mode == 'standard'">
+                    <h5 class="mb-1">Adresse d'expédition</h5>
+                    <hr class="my-0"/>
+                    <div t-field="sale_order.partner_shipping_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                </t>
+                <t t-if="sale_order.delivery_mode == 'dispatch'">
+                    <h5 class="mb-1 mt-4">Stakeholders</h5>
+                    <hr class="my-0"/>
+                    <div class="mt-2 stakeholders-container" style="height: 100px; overflow-y: auto; padding: 10px;">
+                        <t t-foreach="sale_order.stakeholder_ids" t-as="stakeholder">
+                            <span class="badge rounded-pill bg-primary me-2 mb-2"
+                                  t-att-data-bs-toggle="'tooltip'"
+                                  t-att-data-bs-placement="'top'"
+                                  t-att-data-bs-html="'true'"
+                                  t-att-title="stakeholder.street + 
+                                             (stakeholder.street2 and '\n' + stakeholder.street2 or '') + 
+                                             '\n' + stakeholder.zip + ' ' + stakeholder.city + 
+                                             (stakeholder.phone and '\nTel: ' + stakeholder.phone or '') + 
+                                             (stakeholder.email and '\nEmail: ' + stakeholder.email or '')">
+                                <i class="fa fa-building-o me-1"></i>
+                                <t t-esc="stakeholder.name"/>
+                            </span>
+                        </t>
+                    </div>
+                    <script>
+                        $(function () {
+                            // Initialisation des tooltips
+                            $('[data-bs-toggle="tooltip"]').tooltip({
+                                template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="white-space: pre-line;"></div></div>'
+                            });
+
+                            // Gestion de la bordure conditionnelle
+                            const container = document.querySelector('.stakeholders-container');
+                            if (container.scrollHeight > container.clientHeight) {
+                                container.style.border = '1px solid #dee2e6';
+                                container.style.borderRadius = '4px';
+                            }
+                        });
+                    </script>
+                </t>
+            </span>
+        </xpath>
+
         <xpath expr="//section[@id='details']" position="after">
             <t t-if="sale_order.delivery_mode == 'dispatch'">
                 <section class="mt-4">
+                    <h3 class="mb-3">Détail du dispatch</h3>
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h3 class="mb-0" style="color: #666;"><t t-esc="sale_order.dispatch_id.name"/></h3>
+                                <h5 class="mb-0" style="color: #666;"><t t-esc="sale_order.dispatch_id.name"/></h5>
                                 <div>
                                     <span class="badge rounded-pill bg-info me-2">
                                         <t t-esc="sale_order.dispatch_id.dispatch_progress"/>%
@@ -43,31 +89,24 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-sm table-hover mb-0">
+                                <table class="table table-sm" id="dispatch_details">
                                     <thead>
-                                        <tr class="table-light">
-                                            <th>Product</th>
+                                        <tr>
+                                            <th>Produit</th>
                                             <th>Stakeholder</th>
-                                            <th>Delivery Address</th>
-                                            <th>Scheduled Date</th>
-                                            <th class="text-end">Quantity</th>
+                                            <th>Adresse de livraison</th>
+                                            <th>Date prévue</th>
+                                            <th>Quantité</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <t t-foreach="sale_order.dispatch_id.line_ids" t-as="line">
                                             <tr>
-                                                <td><t t-esc="line.product_id.name"/></td>
-                                                <td><t t-esc="line.stakeholder_id.name"/></td>
-                                                <td>
-                                                    <t t-if="line.delivery_address_id">
-                                                        <t t-esc="line.delivery_address_id.name"/>
-                                                    </t>
-                                                </td>
-                                                <td><t t-esc="line.scheduled_date" t-options='{"widget": "date"}'/></td>
-                                                <td class="text-end">
-                                                    <span t-esc="line.product_uom_qty"/>
-                                                    <span t-esc="'Units'" class="text-muted"/>
-                                                </td>
+                                                <td><span t-field="line.product_id.name"/></td>
+                                                <td><span t-field="line.stakeholder_id.name"/></td>
+                                                <td><span t-field="line.delivery_contact_display"/></td>
+                                                <td><span t-field="line.scheduled_date"/></td>
+                                                <td><span t-field="line.product_uom_qty"/> <span t-field="line.product_uom.name"/></td>
                                             </tr>
                                         </t>
                                     </tbody>

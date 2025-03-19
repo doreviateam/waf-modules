@@ -1,4 +1,4 @@
-from odoo import http
+from odoo import http, _
 from odoo.addons.sale.controllers.portal import CustomerPortal
 from odoo.http import request
 
@@ -19,3 +19,12 @@ class CustomerPortalInherit(CustomerPortal):
 
         values['sale_order_count'] = order_count
         return values
+
+    def _prepare_portal_sale_order_values(self, order_sudo, **kwargs):
+        values = super()._prepare_portal_sale_order_values(order_sudo, **kwargs)
+        values.update({
+            'stakeholder_ids': order_sudo.stakeholder_ids,
+            'delivery_mode': order_sudo.delivery_mode,
+        })
+        return values
+    

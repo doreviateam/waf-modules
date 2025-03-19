@@ -9,6 +9,11 @@ class SaleDispatch(models.Model):
     _description = 'Sale Dispatch'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     _order = 'id desc'
+    _sql_constraints = [
+        ('unique_sale_order_dispatch', 
+         'UNIQUE(sale_order_id)',
+         'Une commande ne peut avoir qu\'un seul dispatch.')
+    ]
 
     name = fields.Char(
         string='Reference',
@@ -31,15 +36,7 @@ class SaleDispatch(models.Model):
         ('confirmed', 'Confirmed'),
         ('done', 'Done'),
         ('cancel', 'Cancelled')
-    ], string='Status', default='draft', required=True, tracking=True)
-
-    # Doit être géré à la ligne de dispatch
-    # scheduled_date = fields.Date(
-    #     string='Date de livraison',
-    #     required=True,
-    #     tracking=True,
-    #     default=fields.Date.context_today
-    # )
+    ], string='Status', compute='_compute_state', store=True, default='draft', tracking=True)
 
     currency_id = fields.Many2one(
         related='sale_order_id.currency_id',
@@ -100,42 +97,48 @@ class SaleDispatch(models.Model):
         help="This is the delivery date promised to the customer"
     )
 
-    # Garder un seul champ pour le progrès
     dispatch_progress = fields.Float(
         string='Progress',
-        compute='_compute_progress',
-        store=True
+        compute='_compute_dispatch_progress',
+        store=True,
+        help="Percentage of delivered quantities based on stock moves"
     )
 
-    # Renommer l'étiquette pour éviter le conflit
     partner_shipping_id = fields.Many2one(
         'res.partner',
-        string='Default Shipping Address',  # Changé de 'Delivery Address' à 'Default Shipping Address'
+        string='Default Shipping Address',
         help="Default shipping address for this dispatch. Can be overridden at line level."
     )
 
-    # Supprimer ces champs car ils sont gérés au niveau des lignes
-    # delivery_address_id = fields.Many2one('partner.address', string='Delivery Address')
     product_id = fields.Many2one('product.product', string='Product')
     product_uom_qty = fields.Float(string='Quantity')
     product_uom = fields.Many2one('uom.uom', string='Unit of Measure')
     stakeholder_id = fields.Many2one('res.partner', string='Stakeholder')
     scheduled_date = fields.Date(string='Scheduled Date')
 
-    _sql_constraints = [
-        ('unique_sale_order', 'unique(sale_order_id)', 'A sale order can only have one dispatch!')
-    ]
+    stakeholder_ids = fields.Many2many(
+        'res.partner',
+        'sale_dispatch_stakeholder_rel',
+        'dispatch_id',
+        'mandator_id',
+        string='Stakeholders',
+        domain="[('is_company', '=', True)]",
+        help="Liste des partenaires concernés par ce dispatch",
+        copy=True,
+        required=True
+    )
 
-    @api.depends('line_ids.state')
-    def _compute_progress(self):
+    @api.depends('picking_ids', 'picking_ids.state')
+    def _compute_state(self):
         for dispatch in self:
-            if not dispatch.line_ids:
-                dispatch.dispatch_progress = 0.0
+            if dispatch.state == 'cancel':
                 continue
-            
-            total_lines = len(dispatch.line_ids)
-            done_lines = len(dispatch.line_ids.filtered(lambda l: l.state == 'done'))
-            dispatch.dispatch_progress = (done_lines / total_lines) * 100 if total_lines > 0 else 0.0
+            elif not dispatch.picking_ids:
+                dispatch.state = 'draft'
+            elif all(p.state == 'done' for p in dispatch.picking_ids):
+                dispatch.state = 'done'
+            else:
+                dispatch.state = 'confirmed'
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -145,31 +148,85 @@ class SaleDispatch(models.Model):
         return super().create(vals_list)
 
     def action_confirm(self):
+        """Confirm the dispatch and create pickings."""
+        self.ensure_one()
+        if self.picking_ids:
+            raise UserError(_("This dispatch already has delivery orders."))
+            
+        if self.sale_order_id.state not in ['sale', 'done']:
+            raise UserError(_("The sales order must be confirmed before confirming the dispatch."))
+
+        # Create pickings for each stakeholder and delivery address combination
+        picking_vals_by_group = {}
+        
+        for line in self.line_ids:
+            key = (line.stakeholder_id.id, line.partner_shipping_id.id, line.scheduled_date)
+            if key not in picking_vals_by_group:
+                picking_vals_by_group[key] = {
+                    'partner_id': line.stakeholder_id.id,
+                    'partner_shipping_id': line.partner_shipping_id.id,
+                    'picking_type_id': self.env['stock.picking.type'].search([('code', '=', 'outgoing')], limit=1).id,
+                    'location_id': self.env['stock.location'].search([('usage', '=', 'internal')], limit=1).id,
+                    'location_dest_id': self.env['stock.location'].search([('usage', '=', 'customer')], limit=1).id,
+                    'origin': f"{self.sale_order_id.name}/{self.name}",
+                    'scheduled_date': line.scheduled_date,
+                    'move_ids': [],
+                    'company_id': self.company_id.id,
+                }
+            
+            move_vals = {
+                'name': f"{self.sale_order_id.name}/{self.name}: {line.product_id.name}",
+                'product_id': line.product_id.id,
+                'product_uom': line.product_uom.id,
+                'product_uom_qty': line.product_uom_qty,
+                'location_id': picking_vals_by_group[key]['location_id'],
+                'location_dest_id': picking_vals_by_group[key]['location_dest_id'],
+                'sale_line_id': line.sale_order_line_id.id,
+                'company_id': self.company_id.id,
+                'date': line.scheduled_date,
+            }
+            picking_vals_by_group[key]['move_ids'].append((0, 0, move_vals))
+
+        # Create pickings
+        pickings = self.env['stock.picking']
+        for picking_vals in picking_vals_by_group.values():
+            picking = pickings.create(picking_vals)
+            pickings |= picking
+
+        self.picking_ids = pickings
+        return True
+
+    @api.constrains('state', 'sale_order_id')
+    def _check_confirmation_requirements(self):
+        """Vérifie que le dispatch ne peut être confirmé que si la commande est confirmée."""
         for dispatch in self:
-            if dispatch.state != 'draft':
-                raise UserError(_("Only draft dispatches can be confirmed."))
-            dispatch.line_ids.action_confirm()
-            dispatch.write({'state': 'confirmed'})
+            if dispatch.state == 'confirmed' and dispatch.sale_order_id.state not in ['sale', 'done']:
+                raise ValidationError(_("Un dispatch ne peut être confirmé que si la commande liée est confirmée."))
 
     def action_done(self):
+        """Mark dispatch as done based on pickings state."""
         for dispatch in self:
             if dispatch.state != 'confirmed':
                 raise UserError(_("Only confirmed dispatches can be marked as done."))
-            dispatch.line_ids.action_done()
+                
+            if not all(picking.state == 'done' for picking in dispatch.picking_ids):
+                raise UserError(_("All delivery orders must be done to mark the dispatch as done."))
+            
             dispatch.write({'state': 'done'})
 
     def action_cancel(self):
         for dispatch in self:
-            if dispatch.state in ['done']:
-                raise UserError(_("Done dispatches cannot be cancelled."))
-            dispatch.line_ids.action_cancel()
+            if any(p.state == 'done' for p in dispatch.picking_ids):
+                raise UserError(_("Cannot cancel a dispatch with completed deliveries."))
+            dispatch.picking_ids.action_cancel()
             dispatch.write({'state': 'cancel'})
 
     def action_draft(self):
         for dispatch in self:
             if dispatch.state != 'cancel':
                 raise UserError(_("Only cancelled dispatches can be set back to draft."))
-            dispatch.line_ids.action_draft()
+            if dispatch.picking_ids:
+                raise UserError(_("Cannot reset to draft a dispatch with existing delivery orders."))
             dispatch.write({'state': 'draft'})
 
     def action_view_pickings(self):
@@ -214,8 +271,16 @@ class SaleDispatch(models.Model):
 
     @api.onchange('sale_order_id')
     def _onchange_sale_order(self):
-        if self.sale_order_id and self.sale_order_id.commitment_date:
-            self.commitment_date = self.sale_order_id.commitment_date
+        """Met à jour les stakeholders depuis la commande."""
+        if self.sale_order_id:
+            self.stakeholder_ids = [(6, 0, self.sale_order_id.stakeholder_ids.ids)]
+
+    @api.constrains('stakeholder_ids')
+    def _check_stakeholders(self):
+        """Vérifie qu'il y a au moins un partenaire concerné."""
+        for dispatch in self:
+            if not dispatch.stakeholder_ids:
+                raise ValidationError(_("Un dispatch doit avoir au moins un partenaire concerné."))
 
     def write(self, vals):
         res = super().write(vals)

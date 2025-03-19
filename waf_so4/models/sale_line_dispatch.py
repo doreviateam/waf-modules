@@ -59,9 +59,14 @@ class SaleLineDispatch(models.Model):
     partner_shipping_id = fields.Many2one(
         'res.partner',
         string='Delivery Address',
-        required=True,
-        tracking=True,
-        domain="[('type', '=', 'delivery')]"
+        domain="[('type', '=', 'delivery')]",
+        required=True
+    )
+
+    delivery_contact_display = fields.Char(
+        string='Delivery Contact',
+        compute='_compute_delivery_contact_display',
+        store=True
     )
 
     product_id = fields.Many2one(
@@ -364,3 +369,30 @@ class SaleLineDispatch(models.Model):
     def _compute_product_uom(self):
         for record in self:
             record.product_uom = record.sale_order_line_id.product_uom if record.sale_order_line_id else False
+
+    @api.depends('partner_shipping_id', 'partner_shipping_id.name', 'partner_shipping_id.zip', 'partner_shipping_id.city')
+    def _compute_delivery_contact_display(self):
+        for record in self:
+            if not record.partner_shipping_id:
+                record.delivery_contact_display = False
+                continue
+
+            # Récupérer le nom sans le nom du parent
+            name = record.partner_shipping_id.name
+            if record.partner_shipping_id.parent_id:
+                parent_name = record.partner_shipping_id.parent_id.name
+                if name.startswith(parent_name):
+                    name = name.replace(parent_name, '').strip(', ')
+
+            # Construire la partie localisation
+            location = []
+            if record.partner_shipping_id.city:
+                location.append(record.partner_shipping_id.city)
+            if record.partner_shipping_id.zip:
+                location.append(record.partner_shipping_id.zip)
+
+            # Assembler le tout
+            if location:
+                record.delivery_contact_display = f"{name} ({' '.join(location)})"
+            else:
+                record.delivery_contact_display = name

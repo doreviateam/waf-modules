@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Inheritance de la vue formulaire -->
-    <record id="view_order_form_inherit_waf_so3" model="ir.ui.view">
-        <field name="name">sale.order.form.inherit.waf.so3</field>
+    <record id="view_order_form_inherit_waf_so4" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.waf.so4</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='locked']" position="after">
-                <field name="dispatch_ids" invisible="1"/>
+            <field name="locked" position="after">
+                <field name="dispatch_id" invisible="1"/>
                 <field name="active_dispatch_id" invisible="1"/>
-            </xpath>
+            </field>
+
+            <field name="partner_id" position="after">
+                <field name="stakeholder_ids" 
+                       widget="many2many_tags"
+                       invisible="delivery_mode != 'dispatch'"
+                       options="{'no_create': True}"/>
+            </field>
+
+            <field name="partner_shipping_id" position="attributes">
+                <attribute name="invisible">delivery_mode == 'dispatch'</attribute>
+            </field>
+
             <!-- Ajout du champ delivery_mode avant partner_id -->
             <xpath expr="//field[@name='partner_id']" position="before">
                 <field name="delivery_mode" 
@@ -20,23 +32,16 @@
 
             <!-- Modification des boutons -->
             <xpath expr="//header/button[1]" position="before">
-                <button name="action_create_dispatch"
-                        string="Create Dispatch"
+                <button name="action_show_dispatch"
+                        string="Dispatch"
                         type="object"
                         class="oe_highlight"
-                        invisible="delivery_mode != 'dispatch' or dispatch_percent_global == 100"/>
-                <button name="action_add_dispatch"
-                        string="Add to Dispatch"
-                        type="object"
-                        class="btn-info"
-                        invisible="delivery_mode != 'dispatch' or not active_dispatch_id or state != 'sale'"/>
+                        invisible="delivery_mode != 'dispatch'"
+                        icon="fa-truck"/>
             </xpath>
+
+            <!-- Suppression du bouton redondant -->
             <xpath expr="//header/button[@id='create_invoice']" position="after">
-                <button name="action_show_dispatch"
-                        string="Show Dispatch"
-                        type="object"
-                        class="btn-primary"
-                        invisible="dispatch_percent_global != 100"/>
             </xpath>
 
             <!-- Mise à jour des champs de dispatch dans la ligne de commande -->
