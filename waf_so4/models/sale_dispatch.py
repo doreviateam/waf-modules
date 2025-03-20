@@ -12,7 +12,7 @@ class SaleDispatch(models.Model):
     _sql_constraints = [
         ('unique_sale_order_dispatch', 
          'UNIQUE(sale_order_id)',
-         'Une commande ne peut avoir qu\'un seul dispatch.')
+         'Un dispatch existe déjà pour cette commande. Une commande ne peut avoir qu\'un seul dispatch.')
     ]
 
     name = fields.Char(
@@ -262,12 +262,31 @@ class SaleDispatch(models.Model):
             if not dispatch.line_ids:
                 raise ValidationError(_("A dispatch must have at least one line."))
 
+    def _convert_qty_uom(self, qty, from_uom, to_uom):
+        """Convertit une quantité d'une unité de mesure à une autre."""
+        if not from_uom or not to_uom:
+            return qty
+        if from_uom == to_uom:
+            return qty
+        return from_uom._compute_quantity(qty, to_uom)
+
     @api.depends('line_ids.product_uom_qty', 'sale_order_id.order_line.product_uom_qty')
     def _compute_current_dispatch_progress(self):
         for dispatch in self:
-            total_qty = sum(dispatch.sale_order_id.order_line.mapped('product_uom_qty'))
-            dispatched_qty = sum(dispatch.line_ids.mapped('product_uom_qty'))
-            dispatch.current_dispatch_progress = (dispatched_qty / total_qty * 100) if total_qty else 0.0
+            total_qty = sum(line.product_uom_qty for line in dispatch.sale_order_id.order_line)
+            if not total_qty:
+                dispatch.current_dispatch_progress = 0.0
+                continue
+
+            dispatched_qty = sum(
+                dispatch._convert_qty_uom(
+                    line.product_uom_qty,
+                    line.product_uom,
+                    line.sale_order_line_id.product_uom
+                )
+                for line in dispatch.line_ids.filtered(lambda l: l.state != 'cancel')
+            )
+            dispatch.current_dispatch_progress = min(100.0, (dispatched_qty / total_qty) * 100)
 
     @api.onchange('sale_order_id')
     def _onchange_sale_order(self):
@@ -283,12 +302,24 @@ class SaleDispatch(models.Model):
                 raise ValidationError(_("Un dispatch doit avoir au moins un partenaire concerné."))
 
     def write(self, vals):
+        """Override write method"""
         res = super().write(vals)
+
+        # Synchronisation des stakeholders avec la commande
+        if 'stakeholder_ids' in vals:
+            for dispatch in self:
+                if dispatch.sale_order_id and not self.env.context.get('skip_order_sync'):
+                    dispatch.sale_order_id.with_context(skip_dispatch_sync=True).write({
+                        'stakeholder_ids': vals['stakeholder_ids']
+                    })
+
+        # Synchronisation de la date d'engagement
         if 'commitment_date' in vals:
             for record in self:
                 record.sale_order_id.write({
                     'commitment_date': vals['commitment_date']
                 })
+
         return res
 
     @api.constrains('line_ids', 'sale_order_id')
@@ -317,21 +348,10 @@ class SaleDispatch(models.Model):
     def _check_partner_shipping(self):
         return True
 
-    @api.depends('sale_order_id.order_line.dispatched_qty', 'sale_order_id.order_line.product_uom_qty')
+    @api.depends('sale_order_id.order_line.dispatched_qty_line', 'sale_order_id.order_line.product_uom_qty')
     def _compute_global_dispatch_progress(self):
         for dispatch in self:
-            order = dispatch.sale_order_id
-            if not order or not order.order_line:
-                dispatch.global_dispatch_progress = 0.0
-                continue
-
-            total_qty = sum(order.order_line.mapped('product_uom_qty'))
-            if not total_qty:
-                dispatch.global_dispatch_progress = 0.0
-                continue
-
-            dispatched_qty = sum(order.order_line.mapped('dispatched_qty'))
-            dispatch.global_dispatch_progress = min(100.0, (dispatched_qty / total_qty) * 100)
+            dispatch.global_dispatch_progress = dispatch.sale_order_id.dispatch_percent_global
 
     def action_create_delivery(self):
         """Crée les bons de livraison groupés par date/stakeholder."""
@@ -348,11 +368,12 @@ class SaleDispatch(models.Model):
         """Prépare les valeurs pour la création du bon de livraison groupé."""
         # ... code de _prepare_picking_values ...
 
-class SaleDispatchLine(models.Model):
-    _name = 'sale.dispatch.line'
-    _description = 'Sale Dispatch Line'
-
-    dispatch_id = fields.Many2one('sale.dispatch', string='Dispatch', required=True, ondelete='cascade')
-    product_id = fields.Many2one('product.product', string='Product', required=True)
-    product_uom_qty = fields.Float(string='Quantity', required=True)
-    product_uom = fields.Many2one('uom.uom', string='Unit of Measure', required=True)
+    def unlink(self):
+        """Empêche la suppression d'un dispatch lié à une commande."""
+        for dispatch in self:
+            if dispatch.sale_order_id:
+                raise UserError(_(
+                    "Vous ne pouvez pas supprimer un dispatch lié à une commande. "
+                    "Utilisez plutôt l'action 'Annuler' si nécessaire."
+                ))
+        return super().unlink()

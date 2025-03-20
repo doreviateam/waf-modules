@@ -12,6 +12,7 @@
         'base',
         'sale',
         'portal',
+        'sale_pdf_quote_builder',
         'sale_management',
         'sale_stock',
         'stock',
