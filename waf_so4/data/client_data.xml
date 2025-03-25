@@ -15,6 +15,7 @@
             <field name="customer_rank">1</field>
             <field name="website">https://creditmutuel.com</field>
             <field name="image_1920" type="base64" file="waf_so4/data/img/logo_cm.png"/>
+            <field name="property_payment_term_id" ref="account.account_payment_term_30days"/>
         </record>
 
 
@@ -31,6 +32,7 @@
             <field name="customer_rank">1</field>
             <field name="website">https://cmh34.com</field>
             <field name="image_1920" type="base64" file="waf_so4/data/img/logo_cmh.jpg"/>
+            <field name="property_payment_term_id" ref="account.account_payment_term_30days"/>
         </record>
 
         <!-- Adresses partner.address -->

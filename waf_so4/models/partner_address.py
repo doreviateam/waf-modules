@@ -191,9 +191,20 @@ class PartnerAddress(models.Model):
         # Si on modifie les partenaires
         if 'partner_ids' in vals:
             for record in self:
-                # Récupérer les anciens et nouveaux partenaires
+                # Récupérer les anciens partenaires
                 old_partners = record.partner_ids
-                new_partners = self.env['res.partner'].browse(vals['partner_ids'][0][2])
+                
+                # Récupérer les nouveaux partenaires en fonction du format des données
+                new_partner_ids = []
+                if isinstance(vals['partner_ids'], (list, tuple)):
+                    for item in vals['partner_ids']:
+                        if isinstance(item, (list, tuple)) and len(item) >= 3:
+                            if item[0] == 6:  # (6, 0, [ids])
+                                new_partner_ids = item[2]
+                            elif item[0] == 4:  # (4, id, 0)
+                                new_partner_ids.append(item[1])
+                
+                new_partners = self.env['res.partner'].browse(new_partner_ids)
                 
                 # Créer des contacts pour les nouveaux partenaires
                 for partner in new_partners - old_partners:
@@ -234,7 +245,7 @@ class PartnerAddress(models.Model):
 
     def unlink(self):
         # Vérification avant suppression
-        if self.env['sale.line.dispatch'].search_count([('delivery_address_id', 'in', self.ids)]):
+        if self.env['sale.line.dispatch'].search_count([('partner_shipping_id', 'in', self.ids)]):
             raise ValidationError(_("You cannot delete an address that has associated dispatches."))
         # Supprimer les contacts de livraison associés
         self.mapped('delivery_contact_id').unlink()
@@ -248,8 +259,8 @@ class PartnerAddress(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'sale.line.dispatch',
             'view_mode': 'tree,form',
-            'domain': [('delivery_address_id', '=', self.id)],
-            'context': {'default_delivery_address_id': self.id}
+            'domain': [('partner_shipping_id', '=', self.id)],
+            'context': {'default_partner_shipping_id': self.id}
         }
 
     def action_archive(self):

@@ -292,3 +292,42 @@ class SaleOrder(models.Model):
             'domain': [('dispatch_id', '=', self.dispatch_id.id)],
         }
 
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    dispatched_qty_line = fields.Float(
+        string='Quantité Dispatchée',
+        compute='_compute_dispatched_qty_line',
+        store=True,
+        help="Quantité totale dispatchée pour cette ligne de commande"
+    )
+
+    remaining_qty_line = fields.Float(
+        string='Quantité Restante',
+        compute='_compute_remaining_qty_line',
+        store=True,
+        help="Quantité restante à dispatcher"
+    )
+
+    @api.depends('dispatch_line_ids.product_uom_qty', 'dispatch_line_ids.state', 'product_uom_qty')
+    def _compute_dispatched_qty_line(self):
+        for line in self:
+            dispatched_qty = 0.0
+            dispatch_lines = self.env['sale.line.dispatch'].search([
+                ('sale_order_line_id', '=', line.id),
+                ('state', 'not in', ['cancel'])
+            ])
+            
+            for dispatch_line in dispatch_lines:
+                dispatched_qty += dispatch_line._convert_qty_uom(
+                    dispatch_line.product_uom_qty,
+                    dispatch_line.product_uom,
+                    line.product_uom
+                )
+            line.dispatched_qty_line = dispatched_qty
+
+    @api.depends('product_uom_qty', 'dispatched_qty_line')
+    def _compute_remaining_qty_line(self):
+        for line in self:
+            line.remaining_qty_line = max(0.0, line.product_uom_qty - line.dispatched_qty_line)
+

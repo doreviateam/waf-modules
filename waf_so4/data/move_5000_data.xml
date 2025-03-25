@@ -31,6 +31,9 @@
             <!-- Configuration de stock -->
             <field name="responsible_id" ref="base.user_admin"/>
             <field name="weight">0.583</field>
+
+            <!-- Configuration des taxes -->
+            <field name="taxes_id" eval="[(6, 0, [ref('waf_so4.tax_vat_sale_20')])]"/>
             
             <!-- Description -->
             <field name="description" type="html">

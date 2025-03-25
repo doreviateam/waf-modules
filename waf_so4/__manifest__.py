@@ -27,8 +27,10 @@
         # Data
         'data/ir_sequence_data.xml',
         'data/company_data.xml',
+        'data/tax_data.xml',
         'data/bobinette_data.xml',
         'data/move_5000_data.xml',
+        'data/reparation_service_data.xml',
         'data/client_data.xml',
 
         # Reports

@@ -1,5 +1,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
+from odoo.tools.float_utils import float_compare, float_round
+from odoo.tools import float_is_zero
 import logging
 from itertools import groupby
 from operator import itemgetter
@@ -7,12 +9,18 @@ from operator import itemgetter
 _logger = logging.getLogger(__name__)
 
 class SaleLineDispatch(models.Model):
+    """Modèle gérant les lignes de dispatch des commandes de vente.
+    
+    Une ligne de dispatch représente une partie d'une ligne de commande qui sera
+    livrée à une adresse spécifique, pour un stakeholder spécifique, à une date donnée.
+    """
     _name = 'sale.line.dispatch'
     _description = 'Dispatch Line'
     _rec_name = 'display_name'
     _order = 'id desc'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    # region Champs d'identification
     name = fields.Char(
         string='Reference',
         compute='_compute_name',
@@ -29,25 +37,19 @@ class SaleLineDispatch(models.Model):
         store=True
     )
 
-    state = fields.Selection([
-        ('draft', 'Draft'),
-        ('confirmed', 'Confirmed'),
-        ('done', 'Done'),
-        ('cancel', 'Cancelled')
-    ], string='Status', default='draft', required=True, tracking=True)
+    sequence = fields.Integer(
+        string='Sequence',
+        default=10
+    )
+    # endregion
 
+    # region Relations principales
     dispatch_id = fields.Many2one(
         'sale.dispatch',
         string='Dispatch',
         required=True,
-        ondelete='cascade'
-    )
-
-    dispatch_state = fields.Selection(
-        related='dispatch_id.state',
-        string='Dispatch Status',
-        store=True,
-        readonly=True
+        ondelete='cascade',
+        tracking=True
     )
 
     sale_order_id = fields.Many2one(
@@ -62,22 +64,20 @@ class SaleLineDispatch(models.Model):
         'sale.order.line',
         string='Order Line',
         required=True,
-        domain="[('order_id', '=', sale_order_id), ('remaining_qty', '>', 0)]"
+        domain="[('order_id', '=', sale_order_id), ('remaining_qty_line', '>', 0)]",
+        tracking=True
     )
 
-    partner_shipping_id = fields.Many2one(
-        'res.partner',
-        string='Delivery Address',
-        domain="[('type', '=', 'delivery')]",
-        required=True
+    picking_id = fields.Many2one(
+        'stock.picking',
+        string='Delivery Order',
+        copy=False,
+        readonly=True,
+        tracking=True
     )
+    # endregion
 
-    delivery_contact_display = fields.Char(
-        string='Delivery Point',
-        compute='_compute_delivery_contact_display',
-        store=True
-    )
-
+    # region Informations produit et quantités
     product_id = fields.Many2one(
         'product.product',
         string='Product',
@@ -104,12 +104,22 @@ class SaleLineDispatch(models.Model):
     price_unit = fields.Float(
         related='sale_order_line_id.price_unit',
         string='Unit Price',
-        store=True
+        store=True,
+        readonly=True
     )
 
     currency_id = fields.Many2one(
         related='sale_order_id.currency_id',
-        store=True
+        string='Currency',
+        store=True,
+        readonly=True
+    )
+
+    company_id = fields.Many2one(
+        related='sale_order_id.company_id',
+        string='Company',
+        store=True,
+        readonly=True
     )
 
     price_subtotal = fields.Monetary(
@@ -118,118 +128,114 @@ class SaleLineDispatch(models.Model):
         store=True,
         currency_field='currency_id'
     )
+    # endregion
 
-    picking_id = fields.Many2one(
-        'stock.picking',
-        string='Delivery Order',
-        copy=False
-    )
-
+    # region Partenaires et adresses
     stakeholder_id = fields.Many2one(
         'res.partner',
         string='Stakeholder',
         required=True,
         tracking=True,
-        default=lambda self: self.sale_order_id.partner_id,
         domain="[('is_company', '=', True)]",
         help="Stakeholder benefiting from the order"
     )
 
-    scheduled_date = fields.Date(
-        string='Scheduled Date',
+    partner_shipping_id = fields.Many2one(
+        'res.partner',
+        string='Delivery Address',
         required=True,
         tracking=True,
-        default=fields.Date.context_today
+        domain="[('type', '=', 'delivery'), ('parent_id', '=', stakeholder_id)]",
+        help="Delivery address for this line"
     )
 
-    sequence = fields.Integer(string='Sequence', default=10)
+    delivery_contact_display = fields.Char(
+        string='Delivery Point',
+        compute='_compute_delivery_contact_display',
+        store=True
+    )
+    # endregion
 
-    company_id = fields.Many2one(
-        'res.company',
-        related='sale_order_id.company_id',
+    # region États et suivi
+    state = fields.Selection([
+        ('draft', 'Brouillon'),
+        ('confirmed', 'Confirmé'),
+        ('picking_created', 'BL Créé'),
+        ('picking_assigned', 'BL Réservé'),
+        ('picking_done', 'BL Terminé'),
+        ('done', 'Terminé'),
+        ('cancel', 'Annulé')
+    ], string='État',
+       default='draft',
+       required=True,
+       tracking=True,
+       copy=False,
+       help="États de la ligne de dispatch:\n"
+            "- Brouillon: Ligne nouvellement créée\n"
+            "- Confirmé: Ligne validée\n"
+            "- BL Créé: Bon de livraison créé\n"
+            "- BL Réservé: Stock réservé\n"
+            "- BL Terminé: Livraison effectuée\n"
+            "- Terminé: Processus terminé\n"
+            "- Annulé: Ligne annulée"
+    )
+
+    dispatch_state = fields.Selection(
+        related='dispatch_id.state',
+        string='État du dispatch',
         store=True,
-        tracking=True
+        readonly=True
     )
 
-    remaining_qty = fields.Float(
-        string='Remaining Quantity',
-        compute='_compute_remaining_qty',
-        store=True,
-        help="Remaining quantity that can be dispatched"
+    # region Livraison et planification
+    scheduled_date = fields.Date(
+        string='Date prévue',
+        required=True,
+        tracking=True,
+        # default=fields.Date.context_today
     )
+    # endregion
 
-    @api.depends('dispatch_id.name', 'sale_order_line_id.product_id.name')
-    def _compute_name(self):
-        for line in self:
-            if line.dispatch_id and line.sale_order_line_id:
-                line.name = f"{line.dispatch_id.name}/{line.sale_order_line_id.product_id.name}"
-            else:
-                line.name = "/"
+    # region Autres informations
+    # endregion
 
-    @api.depends('product_id', 'partner_shipping_id', 'product_uom_qty')
-    def _compute_display_name(self):
-        for line in self:
-            parts = []
-            if line.product_id:
-                parts.append(line.product_id.name)
-            if line.product_uom_qty:
-                parts.append(str(line.product_uom_qty))
-            if line.partner_shipping_id:
-                parts.append(line.partner_shipping_id.display_name)
-            line.display_name = " - ".join(filter(None, parts)) or "/"
+    # region Compute methods
+    @api.depends('sale_order_line_id.product_id')
+    def _compute_product_id(self):
+        for record in self:
+            record.product_id = record.sale_order_line_id.product_id
+
+    @api.depends('sale_order_line_id.product_uom')
+    def _compute_product_uom(self):
+        for record in self:
+            record.product_uom = record.sale_order_line_id.product_uom
 
     @api.depends('product_uom_qty', 'price_unit')
     def _compute_amount(self):
+        """Calcule le sous-total de la ligne."""
         for line in self:
             line.price_subtotal = line.product_uom_qty * line.price_unit
 
-    @api.depends('partner_shipping_id', 'partner_shipping_id.name', 'partner_shipping_id.zip', 'partner_shipping_id.city', 'partner_shipping_id.parent_id')
+    @api.depends('partner_shipping_id')
     def _compute_delivery_contact_display(self):
-        """Calcule l'affichage formaté de l'adresse de livraison.
-        Format: "Contact Name (34000 Montpellier)" ou "Contact Name" si pas de localisation
-        Pour les contacts liés à une société, le nom de la société est retiré du nom du contact.
-        """
         for record in self:
-            if not record.partner_shipping_id:
-                record.delivery_contact_display = False
-                continue
-
-            # Récupération et formatage du nom du contact
-            contact = record.partner_shipping_id
-            name = contact.name or ''
-
-            # Si c'est un contact d'une société, on retire le nom de la société
-            if contact.parent_id and contact.parent_id.name:
-                parent_name = contact.parent_id.name.strip()
-                if name.startswith(parent_name):
-                    # Retire le nom de la société et nettoie les caractères spéciaux restants
-                    name = name.replace(parent_name, '', 1).strip(' ,-/')
-                    # Si le nom est vide après nettoyage, utiliser le nom original
-                    if not name:
-                        name = contact.name
-
-            # Construction de la partie localisation
-            location_parts = []
-            if contact.zip:
-                location_parts.append(contact.zip.strip())
-            if contact.city:
-                location_parts.append(contact.city.strip())
-
-            # Assemblage du résultat final
-            if location_parts:
-                record.delivery_contact_display = f"{name} ({' '.join(location_parts)})"
+            if record.partner_shipping_id:
+                record.delivery_contact_display = record.partner_shipping_id.display_name
             else:
-                record.delivery_contact_display = name
+                record.delivery_contact_display = False
 
-    @api.depends('sale_order_line_id')
-    def _compute_product_id(self):
+    @api.depends('dispatch_id.name', 'sale_order_line_id.product_id.display_name')
+    def _compute_name(self):
         for record in self:
-            record.product_id = record.sale_order_line_id.product_id if record.sale_order_line_id else False
+            if record.dispatch_id and record.sale_order_line_id.product_id:
+                record.name = f"{record.dispatch_id.name}/{record.sale_order_line_id.product_id.display_name}"
+            else:
+                record.name = _('New')
 
-    @api.depends('sale_order_line_id')
-    def _compute_product_uom(self):
+    @api.depends('name', 'sale_order_id.name', 'product_id.display_name')
+    def _compute_display_name(self):
         for record in self:
-            record.product_uom = record.sale_order_line_id.product_uom if record.sale_order_line_id else False
+            record.display_name = f"{record.sale_order_id.name} - {record.product_id.display_name}"
 
     @api.onchange('sale_order_id')
     def _onchange_sale_order_id(self):
@@ -238,52 +244,23 @@ class SaleLineDispatch(models.Model):
 
     @api.onchange('sale_order_line_id')
     def _onchange_sale_order_line_id(self):
-        if self.sale_order_line_id:
-            # Calculer la quantité déjà dispatchée pour cette ligne de commande
-            domain = [
-                ('sale_order_line_id', '=', self.sale_order_line_id.id),
-                ('state', 'not in', ['cancel']),
-                ('dispatch_id', '!=', self.dispatch_id.id)  # Exclure le dispatch actuel
-            ]
-            
-            # Récupérer les lignes existantes dans la base de données (autres dispatches)
-            existing_lines = self.env['sale.line.dispatch'].search(domain)
-            
-            # Récupérer les lignes du dispatch actuel (sauf la ligne en cours)
-            current_dispatch_lines = self.dispatch_id.line_ids.filtered(
-                lambda l: l.sale_order_line_id == self.sale_order_line_id 
-                and l.state != 'cancel'
-                and l != self
-            )
-            
-            # Calculer la quantité totale dispatchée
-            dispatched_qty = 0.0
-            
-            # Ajouter les quantités des autres dispatches
-            for line in existing_lines:
-                dispatched_qty += self._convert_qty_uom(
-                    line.product_uom_qty,
-                    line.product_uom,
-                    self.sale_order_line_id.product_uom
-                )
-            
-            # Ajouter les quantités du dispatch actuel
-            for line in current_dispatch_lines:
-                dispatched_qty += self._convert_qty_uom(
-                    line.product_uom_qty,
-                    line.product_uom,
-                    self.sale_order_line_id.product_uom
-                )
-            
-            # Calculer la quantité restante
-            remaining = self.sale_order_line_id.product_uom_qty - dispatched_qty
-            self.product_uom_qty = max(0, remaining)
+        """Met à jour la quantité proposée en fonction de la quantité restante à dispatcher."""
+        if not self.sale_order_line_id:
+            self.product_uom_qty = 0.0
+            return
 
-    @api.constrains('product_uom_qty')
-    def _check_quantity(self):
-        for line in self:
-            if line.product_uom_qty <= 0:
-                raise ValidationError(_("Quantity must be greater than 0."))
+        # Calculer la quantité déjà dispatchée dans le dispatch courant
+        current_dispatch_qty = sum(
+            line.product_uom_qty
+            for line in self.dispatch_id.line_ids
+            if line.sale_order_line_id == self.sale_order_line_id
+            and line.state != 'cancel'
+            and not line._origin.id  # Seulement les nouvelles lignes pas encore sauvegardées
+        )
+
+        # Calculer la quantité restante en tenant compte des lignes en cours
+        remaining = self.sale_order_line_id.remaining_qty_line - current_dispatch_qty
+        self.product_uom_qty = max(0.0, remaining)
 
     @api.constrains('partner_shipping_id', 'stakeholder_id')
     def _check_partner_shipping_address(self):
@@ -401,16 +378,7 @@ class SaleLineDispatch(models.Model):
     def _check_delivery_address_partner(self):
         for record in self:
             if record.partner_shipping_id and not record.partner_shipping_id.parent_id:
-                raise ValidationError(_('The delivery address must be a contact of a company.'))
-
-    @api.constrains('state', 'dispatch_id')
-    def _check_dispatch_state(self):
-        """Vérifie la cohérence des états entre la ligne et son dispatch."""
-        for line in self:
-            if line.state in ['confirmed', 'done'] and line.dispatch_id.state == 'draft':
-                raise ValidationError(_("Cannot have confirmed or done lines in a draft dispatch."))
-            if line.state == 'done' and line.dispatch_id.state != 'done':
-                raise ValidationError(_("Cannot have done lines in a non-done dispatch."))
+                raise ValidationError(_("The delivery address must be a contact of a company."))
 
     def _check_access_rights(self, operation):
         """Vérifie les droits d'accès pour une opération donnée."""
@@ -432,71 +400,14 @@ class SaleLineDispatch(models.Model):
         }
 
     def action_confirm(self):
-        self._check_access_rights('write')
-        
-        # Vérifier l'état du dispatch parent
+        """Confirme la ligne de dispatch."""
         for line in self:
-            if line.dispatch_id.state != 'draft':
-                raise UserError(_("Cannot confirm lines when dispatch is not in draft state."))
-
-        # Supprimer silencieusement les lignes avec quantité nulle
-        lines_to_unlink = self.filtered(lambda l: l.product_uom_qty <= 0)
-        if lines_to_unlink:
-            lines_to_unlink.unlink()
-            # Si toutes les lignes ont été supprimées, arrêter ici
-            if not (self - lines_to_unlink):
-                return True
-
-        def groupby_key(line):
-            return (line.partner_shipping_id.id, line.scheduled_date, line.sale_order_id.id)
-        
-        # Ne traiter que les lignes non supprimées
-        remaining_lines = self - lines_to_unlink
-        sorted_lines = remaining_lines.sorted(key=lambda l: (l.partner_shipping_id.id, l.scheduled_date, l.sale_order_id.id))
-        
-        for (address_id, scheduled_date, order_id), lines in groupby(sorted_lines, key=groupby_key):
-            lines = list(lines)
-            if not lines:
-                continue
-
-            first_line = lines[0]
-            picking_type = self.env['stock.picking.type'].search([
-                ('code', '=', 'outgoing'),
-                ('warehouse_id.company_id', '=', first_line.sale_order_id.company_id.id)
-            ], limit=1)
-
-            if not picking_type:
-                raise UserError(_("No outgoing picking type found for company %s") % first_line.sale_order_id.company_id.name)
-
-            picking_vals = {
-                'partner_id': first_line.partner_shipping_id.id,
-                'picking_type_id': picking_type.id,
-                'location_id': picking_type.default_location_src_id.id,
-                'location_dest_id': picking_type.default_location_dest_id.id,
-                'scheduled_date': scheduled_date,
-                'origin': f"{first_line.sale_order_id.name}/{first_line.dispatch_id.name}",
-                'move_ids': [],
-                'company_id': first_line.company_id.id,
-            }
-
-            for line in lines:
-                picking_vals['move_ids'].append((0, 0, {
-                    'name': line.product_id.name,
-                    'product_id': line.product_id.id,
-                    'product_uom_qty': line.product_uom_qty,
-                    'product_uom': line.product_uom.id,
-                    'location_id': picking_type.default_location_src_id.id,
-                    'location_dest_id': picking_type.default_location_dest_id.id,
-                    'sale_line_id': line.sale_order_line_id.id,
-                    'company_id': line.company_id.id,
-                }))
-
-            picking = self.env['stock.picking'].create(picking_vals)
-            lines_to_update = self.browse([l.id for l in lines])
-            lines_to_update.write({
-                'picking_id': picking.id,
-                'state': 'confirmed'
-            })
+            if line.state == 'draft':
+                line.write({'state': 'confirmed'})
+                # Vérifier si toutes les lignes du dispatch sont confirmées
+                if all(l.state in ['confirmed', 'done', 'cancel'] for l in line.dispatch_id.line_ids):
+                    line.dispatch_id.write({'state': 'confirmed'})
+        return True
 
     def action_done(self):
         self._check_access_rights('write')
@@ -509,38 +420,168 @@ class SaleLineDispatch(models.Model):
             _logger.info(f"Dispatch line {line.display_name} marked as done.")
 
     def action_cancel(self):
-        self._check_access_rights('write')
+        """Annule la ligne de dispatch."""
         for line in self:
-            if line.state not in ['draft', 'confirmed']:
-                raise UserError(_("Only draft or confirmed lines can be cancelled."))
-            if line.picking_id and line.picking_id.state not in ['draft', 'cancel']:
-                raise UserError(_("Cannot cancel a line with an active delivery order."))
-            line.write({'state': 'cancel'})
-            _logger.info(f"Dispatch line {line.display_name} cancelled.")
+            if line.state not in ['done', 'cancel']:
+                line.write({'state': 'cancel'})
+                # Vérifier si toutes les lignes du dispatch sont annulées
+                if all(l.state == 'cancel' for l in line.dispatch_id.line_ids):
+                    line.dispatch_id.write({'state': 'cancel'})
+        return True
 
-    def action_draft(self):
-        self._check_access_rights('write')
+    def action_set_to_draft(self):
+        """Remet la ligne en brouillon."""
         for line in self:
+            if line.state == 'done':
+                raise ValidationError(_(
+                    "La ligne %(name)s est terminée (état: %(state)s) et ne peut pas être remise en brouillon.",
+                    name=line.display_name,
+                    state=dict(line._fields['state'].selection).get(line.state)
+                ))
             if line.state != 'cancel':
-                raise UserError(_("Only cancelled lines can be set back to draft."))
+                raise ValidationError(_(
+                    "Seules les lignes annulées peuvent être remises en brouillon. "
+                    "La ligne %(name)s est dans l'état %(state)s.",
+                    name=line.display_name,
+                    state=dict(line._fields['state'].selection).get(line.state)
+                ))
+            
             line.write({'state': 'draft'})
-            _logger.info(f"Dispatch line {line.display_name} set back to draft.")
+            # Remettre le dispatch en brouillon si au moins une ligne est en brouillon
+            if line.dispatch_id.state == 'cancel':
+                line.dispatch_id.write({'state': 'draft'})
+        return True
 
     @api.onchange('product_uom_qty')
     def _onchange_product_uom_qty(self):
         """Suppression de la méthode qui générait le message d'avertissement"""
         pass
 
+    @api.onchange('stakeholder_id')
+    def _onchange_stakeholder_id(self):
+        """Reset delivery address when stakeholder changes"""
+        self.partner_shipping_id = False
+        if self.stakeholder_id:
+            return {
+                'domain': {
+                    'partner_shipping_id': [
+                        ('type', '=', 'delivery'),
+                        ('parent_id', '=', self.stakeholder_id.id)
+                    ]
+                }
+            }
+        return {'domain': {'partner_shipping_id': [('type', '=', 'delivery')]}}
+
+    @api.model
+    def _valid_field_parameter(self, field, name):
+        return name == 'options' or super()._valid_field_parameter(field, name)
+
+    @api.onchange('dispatch_id')
+    def _onchange_dispatch_id(self):
+        """Définit automatiquement le stakeholder quand il n'y en a qu'un seul disponible."""
+        if self.dispatch_id and len(self.dispatch_id.stakeholder_ids) == 1:
+            self.stakeholder_id = self.dispatch_id.stakeholder_ids[0]
+
+    remaining_qty = fields.Float(
+        string='Remaining Quantity',
+        related='sale_order_line_id.remaining_qty_line',
+        store=True,
+        readonly=True
+    )
+
+    def _get_protected_states(self):
+        """États dans lesquels la suppression est interdite."""
+        return ['confirmed', 'done']
+
     @api.model_create_multi
     def create(self, vals_list):
+        """Surcharge de la création pour initialiser l'état."""
+        for vals in vals_list:
+            # S'assurer que les nouvelles lignes sont toujours en brouillon
+            vals['state'] = 'draft'
         return super().create(vals_list)
 
     def write(self, vals):
-        return super().write(vals)
+        """Surcharge de l'écriture pour empêcher la modification des lignes non-draft."""
+        # Liste des champs techniques qui peuvent être modifiés quel que soit l'état
+        technical_fields = {
+            'picking_id',    # Lien avec le bon de livraison
+            'state',         # État de la ligne
+            'display_name',  # Champ calculé
+            'message_ids',   # Chatter
+            'message_follower_ids',  # Followers
+            'activity_ids',  # Activités
+        }
 
-    def unlink(self):
-        """Gère la suppression des lignes de dispatch."""
+        # Si on ne modifie que des champs techniques, on laisse passer
+        if all(field in technical_fields for field in vals.keys()):
+            return super().write(vals)
+
+        # Pour toute autre modification, on vérifie l'état
         for line in self:
             if line.state != 'draft':
-                raise UserError(_("Vous ne pouvez supprimer que les lignes en brouillon."))
+                # On retire les champs techniques de la liste des champs modifiés
+                business_fields = set(vals.keys()) - technical_fields
+                if business_fields:
+                    # Liste des champs qu'on essaie de modifier
+                    field_labels = []
+                    for field in business_fields:
+                        field_label = self._fields[field].string if field in self._fields else field
+                        field_labels.append(field_label)
+
+                    raise ValidationError(_(
+                        "La ligne %(name)s est dans l'état %(state)s et ne peut pas être modifiée.\n"
+                        "Champs concernés : %(fields)s",
+                        name=line.display_name,
+                        state=dict(line._fields['state'].selection).get(line.state),
+                        fields=', '.join(field_labels)
+                    ))
+
+        res = super().write(vals)
+        if 'state' in vals:
+            self._sync_dispatch_state()
+        return res
+
+    def _sync_dispatch_state(self):
+        """Synchronise l'état du dispatch parent en fonction de l'état des lignes."""
+        dispatches = self.mapped('dispatch_id')
+        for dispatch in dispatches:
+            if dispatch:
+                states = dispatch.line_ids.mapped('state')
+                if all(state == 'done' for state in states):
+                    dispatch.write({'state': 'done'})
+                elif all(state == 'cancel' for state in states):
+                    dispatch.write({'state': 'cancel'})
+                elif any(state == 'confirmed' for state in states):
+                    dispatch.write({'state': 'confirmed'})
+                elif all(state == 'draft' for state in states):
+                    dispatch.write({'state': 'draft'})
+
+    def unlink(self):
+        """Surcharge de la suppression pour empêcher la suppression des lignes non brouillon."""
+        for line in self:
+            if line.state != 'draft':
+                raise ValidationError(_(
+                    "La ligne %(name)s est dans l'état %(state)s et ne peut pas être supprimée.",
+                    name=line.display_name,
+                    state=dict(line._fields['state'].selection).get(line.state)
+                ))
+            
+            # Mettre à jour la quantité sur la ligne de commande
+            if line.sale_order_line_id and line.product_uom_qty:
+                # Convertir la quantité dans l'unité de mesure de la ligne de commande
+                qty_to_add = line.product_uom._compute_quantity(
+                    line.product_uom_qty,
+                    line.sale_order_line_id.product_uom,
+                    rounding_method='HALF-UP'
+                )
+                # Mettre à jour la quantité disponible sur la ligne de commande
+                line.sale_order_line_id.write({
+                    'remaining_qty_line': line.sale_order_line_id.remaining_qty_line + qty_to_add
+                })
+                _logger.info(
+                    f"Updated remaining quantity for order line {line.sale_order_line_id.name}: "
+                    f"added {qty_to_add} {line.sale_order_line_id.product_uom.name}"
+                )
+        
         return super().unlink()

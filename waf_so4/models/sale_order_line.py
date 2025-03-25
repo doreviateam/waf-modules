@@ -61,7 +61,7 @@ class SaleOrderLine(models.Model):
     # ------------------------
     # Onchange Methods
     # ------------------------
-    @api.onchange('dispatch_line_ids', 'dispatch_line_ids.state', 'dispatch_line_ids.product_uom_qty')
+    @api.onchange('dispatch_line_ids')
     def _onchange_dispatch_lines(self):
         """Déclenche le recalcul des quantités lors des changements de dispatch"""
         self._compute_dispatch_quantity_line()

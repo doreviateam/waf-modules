@@ -4,30 +4,27 @@
         <field name="name">stock.picking.form.inherit.waf.so3</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
-        <field name="arch" type="xml">
-            <!-- <xpath expr="//field[@name='partner_id']" position="replace">
-                <field name="partner_id" 
-                       string="Stakeholder" 
-                       context="{'show_address': 1}"/>
-            </xpath> -->
-
-            <field name="partner_id" position="after">
-                <field name="delivery_address_id" string="Delivery Location"/>
-                <field name="mandator_id" readonly="1"/>
-            </field>
+        <field name="arch" type="xml">            
 
             <notebook position="inside">
                 <page string="Informations de livraison" name="delivery_info">
                     <group>
-                        <group string="Adresse de livraison">
+                        <group string="Stakeholders" name="stakeholders">
+                            <field name="stakeholder_id"/>
+                            <field name="delivery_address_id"/>
+                            <field name="mandator_id" readonly="1"/>
+                        </group>
+                        <group string="Delivery Address" name="delivery_address">
                             <field name="delivery_site_name" readonly="1"/>
                             <field name="delivery_street" readonly="1"/>
+                            <field name="delivery_street2" readonly="1"/>
                             <field name="delivery_city" readonly="1"/>
                             <field name="delivery_zip" readonly="1"/>
                         </group>
                     </group>
                 </page>
             </notebook>
+            
         </field>
     </record>
 </odoo> 

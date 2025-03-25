@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Menu principal -->
+        <menuitem id="menu_waf_so4_root"
+                  name="WAF SO4"
+                  web_icon="waf_so4,static/description/icon.png"
+                  sequence="10"/>
+
+        <!-- Sous-menus -->
+        <menuitem id="menu_waf_so4_sales"
+                  name="Ventes"
+                  parent="menu_waf_so4_root"
+                  sequence="10"/>
+
+        <menuitem id="menu_waf_so4_dispatch"
+                  name="Expéditions"
+                  parent="menu_waf_so4_root"
+                  sequence="20"/>
+
+        <menuitem id="menu_waf_so4_config"
+                  name="Configuration"
+                  parent="menu_waf_so4_root"
+                  sequence="100"/>
+
+        <!-- Actions dans les sous-menus -->
+        <menuitem id="menu_sale_order_action"
+                  name="Commandes"
+                  parent="menu_waf_so4_sales"
+                  action="sale.action_orders"
+                  sequence="10"/>
+
+        <menuitem id="menu_sale_dispatch_action"
+                  name="Expéditions"
+                  parent="menu_waf_so4_dispatch"
+                  action="action_sale_dispatch"
+                  sequence="10"/>
+
+        <menuitem id="menu_partner_address_action"
+                  name="Adresses de livraison"
+                  parent="menu_waf_so4_config"
+                  action="action_partner_address"
+                  sequence="10"/>
+    </data>
+</odoo> 

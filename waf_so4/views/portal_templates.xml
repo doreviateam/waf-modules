@@ -29,7 +29,7 @@
                     <hr class="my-0"/>
                     <div t-field="sale_order.partner_shipping_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
                 </t>
-                <t t-if="sale_order.delivery_mode == 'dispatch'">
+                <t t-if="sale_order.delivery_mode == 'dispatch' and sale_order.stakeholder_ids">
                     <h5 class="mb-1 mt-4">Stakeholders</h5>
                     <hr class="my-0"/>
                     <div class="mt-2 stakeholders-container" style="height: 100px; overflow-y: auto; padding: 10px;">
@@ -67,52 +67,68 @@
             </span>
         </xpath>
 
+        <!-- Position du détail du dispatch après la section details -->
         <xpath expr="//section[@id='details']" position="after">
             <t t-if="sale_order.delivery_mode == 'dispatch'">
-                <section class="mt-4">
+                <section class="mt-4" id="dispatch">
                     <h3 class="mb-3">Détail du dispatch</h3>
                     <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0" style="color: #666;"><t t-esc="sale_order.dispatch_id.name"/></h5>
-                                <div>
-                                    <span class="badge rounded-pill bg-info me-2">
-                                        <t t-esc="sale_order.dispatch_id.dispatch_progress"/>%
-                                    </span>
-                                    <span t-field="sale_order.dispatch_id.state" 
-                                          t-attf-class="badge rounded-pill #{sale_order.dispatch_id.state == 'draft' and 'bg-secondary' or 
-                                                       sale_order.dispatch_id.state == 'confirmed' and 'bg-info' or 
-                                                       sale_order.dispatch_id.state == 'done' and 'bg-success' or 
-                                                       sale_order.dispatch_id.state == 'cancel' and 'bg-danger'}"/>
+                        <t t-if="sale_order.state in ['draft', 'sent']">
+                            <div class="card-body text-center text-muted py-5">
+                                <p class="mb-0">Le détail du dispatch sera disponible après la confirmation de la commande.</p>
+                            </div>
+                        </t>
+                        <t t-elif="not sale_order.dispatch_id">
+                            <div class="card-body text-center text-muted py-5">
+                                <p class="mb-0">Aucun dispatch n'est encore créé pour cette commande.</p>
+                            </div>
+                        </t>
+                        <t t-elif="not sale_order.dispatch_id.line_ids">
+                            <div class="card-body text-center text-muted py-5">
+                                <p class="mb-0">Aucune ligne de dispatch n'est configurée pour cette commande.</p>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0" style="color: #666;">
+                                    Réf : 
+                                        <small class="text-muted"><t t-esc="sale_order.dispatch_id.name"/></small>
+                                    </h5>
+                                    <div>
+                                        <span class="badge rounded-pill bg-secondary">
+                                            Brouillon
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-sm" id="dispatch_details">
-                                    <thead>
-                                        <tr>
-                                            <th>Produit</th>
-                                            <th>Stakeholder</th>
-                                            <th>Point de livraison</th>
-                                            <th>Date prévue</th>
-                                            <th>Quantité</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <t t-foreach="sale_order.dispatch_id.line_ids" t-as="line">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-sm" id="dispatch_details">
+                                        <thead>
                                             <tr>
-                                                <td><span t-field="line.product_id.name"/></td>
-                                                <td><span t-field="line.stakeholder_id.name"/></td>
-                                                <td><span t-field="line.delivery_contact_display"/></td>
-                                                <td><span t-field="line.scheduled_date"/></td>
-                                                <td><span t-field="line.product_uom_qty"/> <span t-field="line.product_uom.name"/></td>
+                                                <th>Produit</th>
+                                                <th>Stakeholder</th>
+                                                <th>Point de livraison</th>
+                                                <th>Date prévue</th>
+                                                <th>Quantité</th>
                                             </tr>
-                                        </t>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="sale_order.dispatch_id.line_ids" t-as="line">
+                                                <tr>
+                                                    <td><span t-field="line.product_id.name"/></td>
+                                                    <td><span t-field="line.stakeholder_id.name"/></td>
+                                                    <td><span t-field="line.delivery_contact_display"/></td>
+                                                    <td><span t-field="line.scheduled_date"/></td>
+                                                    <td><span t-field="line.product_uom_qty"/> <span t-field="line.product_uom.name"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+                        </t>
                     </div>
                 </section>
             </t>
