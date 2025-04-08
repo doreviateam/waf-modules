@@ -20,3 +20,7 @@ resources/static/img/dashboard_icon.pngwatergile_core/
 waf_preso/*
 *.Identifier*
 
+# Ignorer tout sauf les fichiers qui commencent par waf_*
+*
+!waf_*
+

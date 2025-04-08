@@ -16,7 +16,6 @@ class SaleDispatch(models.Model):
     ]
 
     name = fields.Char(
-        string='Reference',
         required=True,
         copy=False,
         readonly=True,
@@ -25,7 +24,6 @@ class SaleDispatch(models.Model):
 
     sale_order_id = fields.Many2one(
         'sale.order',
-        string='Sale Order',
         required=True,
         ondelete='cascade',
         tracking=True
@@ -36,24 +34,21 @@ class SaleDispatch(models.Model):
         ('confirmed', 'Confirmed'),
         ('done', 'Done'),
         ('cancel', 'Cancelled')
-    ], string='Status', default='draft', tracking=True)
+    ], default='draft', tracking=True)
 
     currency_id = fields.Many2one(
         related='sale_order_id.currency_id',
         depends=['sale_order_id.currency_id'],
-        store=True,
-        string='Currency'
+        store=True
     )
 
     current_dispatch_progress = fields.Float(
-        string='Current Dispatch Progress',
         compute='_compute_current_dispatch_progress',
         store=True,
         help="Percentage of quantities in this dispatch"
     )
 
     global_dispatch_progress = fields.Float(
-        string='Global Dispatch Progress',
         compute='_compute_global_dispatch_progress',
         store=True,
         help="Global percentage of dispatched quantities across all dispatches",
@@ -62,43 +57,36 @@ class SaleDispatch(models.Model):
 
     line_ids = fields.One2many(
         'sale.line.dispatch',
-        'dispatch_id',
-        string='Dispatch Lines'
+        'dispatch_id'
     )
 
     company_id = fields.Many2one(
         'res.company',
-        string='Company',
         related='sale_order_id.company_id',
         store=True
     )
 
     picking_ids = fields.Many2many(
         'stock.picking',
-        string='Delivery Orders',
         copy=False,
         readonly=True
     )
 
     picking_count = fields.Integer(
-        string='Delivery Orders Count',
         compute='_compute_picking_count'
     )
 
     mandator_id = fields.Many2one(
         'res.partner',
-        string='Mandator',
         required=True
     )
 
     commitment_date = fields.Datetime(
-        string='Commitment Date',
         tracking=True,
         help="This is the delivery date promised to the customer"
     )
 
     dispatch_progress = fields.Float(
-        string='Progress',
         compute='_compute_dispatch_progress',
         store=True,
         help="Percentage of delivered quantities based on stock moves"
@@ -106,22 +94,20 @@ class SaleDispatch(models.Model):
 
     partner_shipping_id = fields.Many2one(
         'res.partner',
-        string='Default Shipping Address',
         help="Default shipping address for this dispatch. Can be overridden at line level."
     )
 
-    product_id = fields.Many2one('product.product', string='Product')
-    product_uom_qty = fields.Float(string='Quantity')
-    product_uom = fields.Many2one('uom.uom', string='Unit of Measure')
-    stakeholder_id = fields.Many2one('res.partner', string='Stakeholder')
-    scheduled_date = fields.Date(string='Scheduled Date')
+    product_id = fields.Many2one('product.product')
+    product_uom_qty = fields.Float()
+    product_uom = fields.Many2one('uom.uom')
+    stakeholder_id = fields.Many2one('res.partner')
+    scheduled_date = fields.Date()
 
     stakeholder_ids = fields.Many2many(
         'res.partner',
         'sale_dispatch_stakeholder_rel',
         'dispatch_id',
         'mandator_id',
-        string='Stakeholders',
         domain="[('is_company', '=', True)]",
         help="Liste des partenaires concernés par ce dispatch",
         copy=True,
@@ -129,24 +115,20 @@ class SaleDispatch(models.Model):
     )
 
     stakeholder_count = fields.Integer(
-        string='Stakeholder Count',
         compute='_compute_stakeholder_count',
         store=True
     )
 
     note = fields.Text(
-        string='Notes',
         help="Notes internes pour ce dispatch"
     )
 
     draft_line_count = fields.Integer(
-        string='Draft Lines Count',
         compute='_compute_line_counts',
         store=True
     )
 
     confirmed_line_count = fields.Integer(
-        string='Confirmed Lines Count',
         compute='_compute_line_counts',
         store=True
     )
@@ -156,8 +138,7 @@ class SaleDispatch(models.Model):
         ('assigned', 'Réservé'),
         ('done', 'Terminé'),
         ('cancel', 'Annulé')
-    ], string='État des BL',
-       compute='_compute_picking_state',
+    ], compute='_compute_picking_state',
        store=True)
 
     @api.depends('picking_ids', 'picking_ids.state')
@@ -220,6 +201,13 @@ class SaleDispatch(models.Model):
             # Grouper les lignes par stakeholder et adresse de livraison
             lines_by_delivery = {}
             for line in dispatch.line_ids.filtered(lambda l: l.state == 'confirmed'):
+                # S'assurer que nous avons un stakeholder valide
+                if not line.stakeholder_id:
+                    raise ValidationError(_(
+                        "La ligne de dispatch %(line)s n'a pas de stakeholder défini.",
+                        line=line.display_name
+                    ))
+                
                 key = (line.stakeholder_id.id, line.partner_shipping_id.id)
                 if key not in lines_by_delivery:
                     lines_by_delivery[key] = []
@@ -239,8 +227,14 @@ class SaleDispatch(models.Model):
 
             # Créer un BL par groupe
             for (stakeholder_id, shipping_id), lines in lines_by_delivery.items():
-                # Récupérer le partenaire d'expédition
+                # Récupérer le partenaire d'expédition et le stakeholder
                 shipping_partner = self.env['res.partner'].browse(shipping_id)
+                stakeholder = self.env['res.partner'].browse(stakeholder_id)
+                
+                if not stakeholder.exists():
+                    raise ValidationError(_(
+                        "Le stakeholder n'existe pas ou a été supprimé."
+                    ))
                 
                 # S'assurer que la date est un datetime
                 scheduled_date = lines[0].scheduled_date
@@ -249,8 +243,8 @@ class SaleDispatch(models.Model):
                 
                 # Créer l'en-tête du BL
                 picking_vals = {
-                    'partner_id': shipping_id,  # Adresse de livraison
-                    'stakeholder_id': stakeholder_id,  # Stakeholder
+                    'partner_id': stakeholder_id,  # Le stakeholder comme partenaire principal
+                    'stakeholder_id': stakeholder_id,  # Le stakeholder
                     'picking_type_id': picking_type_out.id,
                     'location_id': picking_type_out.default_location_src_id.id,
                     'location_dest_id': picking_type_out.default_location_dest_id.id,
@@ -259,13 +253,7 @@ class SaleDispatch(models.Model):
                     'company_id': dispatch.company_id.id,
                     'mandator_id': dispatch.mandator_id.id,
                     'dispatch_id': dispatch.id,  # Lien vers le dispatch
-                    'delivery_site_name': shipping_partner.name,
-                    'delivery_street': shipping_partner.street,
-                    'delivery_street2': shipping_partner.street2,
-                    'delivery_city': shipping_partner.city,
-                    'delivery_zip': shipping_partner.zip,
-                    'partner_shipping_id': shipping_id,  # Adresse de livraison
-                    'stakeholder_id': stakeholder_id  # Stakeholder
+                    'partner_shipping_id': shipping_id,  # Contact de livraison (res.partner)
                 }
 
                 # Vérifier que les emplacements sont bien définis
@@ -281,6 +269,16 @@ class SaleDispatch(models.Model):
 
                 # Créer les mouvements de stock avec la date planifiée
                 for line in lines:
+                    # Récupérer l'adresse de livraison pour cette ligne spécifique
+                    delivery_address = self.env['partner.address'].search([
+                        ('delivery_contact_id', '=', line.partner_shipping_id.id)
+                    ], limit=1)
+
+                    if delivery_address:
+                        picking.write({
+                            'delivery_address_id': delivery_address.id,
+                        })
+
                     move_vals = {
                         'name': line.sale_order_line_id.name,
                         'product_id': line.product_id.id,
@@ -501,10 +499,7 @@ class SaleDispatch(models.Model):
         """Empêche la suppression d'un dispatch lié à une commande."""
         for dispatch in self:
             if dispatch.sale_order_id:
-                raise UserError(_(
-                    "Vous ne pouvez pas supprimer un dispatch lié à une commande. "
-                    "Utilisez plutôt l'action 'Annuler' si nécessaire."
-                ))
+                return False
         return super().unlink()
 
     @api.depends('stakeholder_ids')

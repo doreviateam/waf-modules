@@ -162,7 +162,7 @@ class StockPicking(models.Model):
         readonly=True
     )
 
-    @api.depends('dispatch_id.stakeholder_id')
+    @api.depends('dispatch_id', 'dispatch_id.stakeholder_id')
     def _compute_stakeholder_id(self):
         for picking in self:
             if picking.dispatch_id:

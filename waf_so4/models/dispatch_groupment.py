@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, tools
 from odoo.exceptions import ValidationError, UserError
 from itertools import groupby
 import logging
@@ -28,7 +28,7 @@ class DispatchGroupment(models.Model):
             )
 
         sorted_lines = lines.sorted(key=groupby_key)
-        grouped = groupby(sorted_lines, key=groupby_key)
+        grouped = tools.groupby(sorted_lines, key=groupby_key)
 
         # 3. Création des BL
         pickings = self.env['stock.picking']
@@ -166,7 +166,7 @@ class DispatchGroupment(models.Model):
                 self._log_delivery_performance()
             except Exception as e:
                 _logger.error("Erreur validation BL : %s", str(e))
-                raise UserError(_("Erreur lors de la validation : %s") % str(e))
+                raise UserError(_("Erreur lors de la validation : {}").format(str(e)))
 
     def _log_delivery_performance(self):
         """Journalise les performances de livraison"""
