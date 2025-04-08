@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <template id="assets_frontend" inherit_id="web.assets_frontend">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" type="text/css" href="/waf_wo3/static/src/css/style.css"/>
-        </xpath>
-    </template>
-</odoo> 

@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_waf_user_all,access_waf_user_all,base.model_res_users,waf_web.group_waf_user,1,0,0,0
-access_waf_manager_all,access_waf_manager_all,base.model_res_users,waf_web.group_waf_manager,1,1,0,0
-access_waf_admin_all,access_waf_admin_all,base.model_res_users,waf_web.group_waf_admin,1,1,1,1

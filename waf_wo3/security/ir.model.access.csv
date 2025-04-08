@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_waf_contact_message,access.waf.contact.message,model_waf_contact_message,base.group_user,1,1,1,1
-access_waf_contact_message_public,waf.contact.message.public,model_waf_contact_message,,1,1,1,0
-access_waf_contact_message_user,waf.contact.message.user,model_waf_contact_message,base.group_user,1,1,1,1
